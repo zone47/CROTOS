@@ -1,0 +1,28 @@
+/* / */
+/* Display max 800px" */
+#bl_titre{
+	width:220px;	
+}
+h1{
+	display:block;
+	line-height:normal;
+	width:108px;
+	text-align:center;
+	margin:3px 0 5px 0;
+	
+} 
+#recherche{
+	margin-left:140px;
+}
+#recherche input{
+	font-size:1.5em;	
+	
+}
+#topic_title{
+	margin-right:0em;
+	width:300px;
+}
+.navhaut{
+	margin-right:0;
+}
+
