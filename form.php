@@ -102,9 +102,9 @@ for ($i=0;$i<count($p31_list);$i++){
 			</select>
     
             <div id="slider">
-                <input type="text" id="amount1" value="<?php echo $y1; ?>" data-index="0" class="sliderValue" size="3" name="y1" />
+                <input type="text" id="amount1" value="<?php echo $y1; ?>" data-index="0" class="sliderValue" name="y1" />
                 <div id="slider-range"></div>
-                <input type="text" id="amount2" value="<?php echo $y2; ?>" data-index="1" class="sliderValue"  size="3" name="y2" />
+                <input type="text" id="amount2" value="<?php echo $y2; ?>" data-index="1" class="sliderValue"  name="y2" />
                 <input type="submit" id="ok2" value=" " />
             </div>
             

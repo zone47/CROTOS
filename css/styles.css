@@ -252,6 +252,9 @@ h1{
 #tout{
 	color:#4F4F4F;	
 }
+#amount1,#amount2{
+	width:3.5em;
+}
 #slider{
 	display:inline-block;
 	margin-left:15px;	
