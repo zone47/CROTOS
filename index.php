@@ -72,6 +72,8 @@ foreach($tab_check as $key=>$value)
 	if ($value!="")
 		$liennav.="&amp;$key=".$value;
 if ($s!="") $liennav.="&amp;s=".$s;
+if ($y1!="") $liennav.="&amp;y1=".$y1;
+if ($y2!="") $liennav.="&amp;y2=".$y2;
 
 include "text_nav.php";
 ?><!doctype html>
@@ -384,7 +386,7 @@ while($data = mysql_fetch_assoc($rep)) {
 		}
 		$commons_artist = esc_dblq(htmlentities(preg_replace("/<\/?div[^>]*\>/i", "", $data['commons_artist'])));
 		$commons_link="http://commons.wikimedia.org/wiki/File:".htmlentities(str_replace("?","%3F",str_replace(" ","_",$data['P18'])));
-		$commons_credit = esc_dblq(htmlentities(preg_replace("/<\/?div[^>]*\>/i", "", $data['commons_credit'])));
+		$commons_credit = esc_dblq(htmlentities(preg_replace("/<img[^>]+\>/i", "",preg_replace("/<\/?div[^>]*\>/i", "", $data['commons_credit']))));
 		$credits=$commons_artist;
 		if (($credits!="")&&($license!=""))
 			$credits.=" | ";
@@ -392,7 +394,7 @@ while($data = mysql_fetch_assoc($rep)) {
 		if (($credits!="")&&($commons_credit!=""))
 			$credits.=" | ";
 		$credits.=$commons_credit;
-		
+				
 		$content.="		<a href=\"".$commons_link."\" data-file=\"".esc_dblq($data['large'])."\" class=\"yox\"><img src=\"".esc_dblq($data['thumb'])."\" alt=\"".esc_dblq($titre)."\" data-credit=\"&lt;b&gt;".esc_dblq($titre)."&lt;/b&gt;&lt;br /&gt;".$credits."\"/></a>\n";
 	}
 	else 
