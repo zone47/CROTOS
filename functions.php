@@ -154,4 +154,7 @@ function translate($lg,$term){
 	else
 		return $trads["en"][$term];
 }
+function esc_dblq($text){
+	return str_replace("\"","\\\"",$text);
+}
 ?>

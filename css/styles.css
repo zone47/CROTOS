@@ -93,9 +93,6 @@ ul span{
 	padding-top:30px;
 	margin-bottom:30px;
 }
-li#contenu div{
-	height:152px;
-}
 .nav{
 	clear:both;
 	margin-bottom:12px;
@@ -146,7 +143,7 @@ h1{
 }
 #params{
 	text-align:right;
-	padding-right:2em;
+	padding-right:22px;
 	margin-bottom:1.5em;
 }
 #lg{
@@ -164,7 +161,55 @@ h1{
 }
 #recherche input{
 	font-size:1.5em;	
-	
+}
+#recherche  #ok, #form_facets  #ok2{
+   border: 1px solid #000;
+   background: #d3d3d3;
+   background: -webkit-gradient(linear, left top, left bottom, from(#d3d3d3), to(#d3d3d3));
+   background: -webkit-linear-gradient(top, #d3d3d3, #d3d3d3);
+   background: -moz-linear-gradient(top, #d3d3d3, #d3d3d3);
+   background: -ms-linear-gradient(top, #d3d3d3, #d3d3d3);
+   background: -o-linear-gradient(top, #d3d3d3, #d3d3d3);
+   background-image: -ms-linear-gradient(top, #dedede 0%, #dedede 100%);
+   -webkit-border-radius: 4px;
+   -moz-border-radius: 4px;
+   border-radius: 4px;
+   color: #2f2f2f;
+   font-family:Arial, Helvetica, sans-serif;
+   font-weight:bold;
+   text-decoration: none;
+   vertical-align: middle;
+   cursor:pointer;
+}
+#recherche #ok{
+   height:2em;
+   font-size:1.2em;
+   padding-left:15px;
+   padding-right:15px;
+}
+#form_facets #ok2{
+	height:1.8em;
+	margin-left:12px;
+	background:#d3d3d3 url("../img/magnifying.png") center center no-repeat;
+	padding:0 9px;
+}
+#recherche #ok:hover,#recherche #ok:active,#form_facets #ok2:hover,#form_facets #ok2:active {
+   border: 1px solid #f3f3f3;
+   text-shadow: #31540c 0 0 0;
+   background: #444;
+   background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#444));
+   background: -webkit-linear-gradient(top, #444, #444);
+   background: -moz-linear-gradient(top, #444, #666);
+   background: -ms-linear-gradient(top, #444, #444);
+   background: -o-linear-gradient(top, #444, #444);
+   background-image: -ms-linear-gradient(top, #444 0%, #444 100%);
+   color: #f3f3f3;
+}
+#recherche #ok:hover,#recherche #ok:active{
+	background-image: -ms-linear-gradient(top, #444 0%, #444 100%);
+}
+#form_facets #ok2:hover,#form_facets #ok2:active {
+	background:#444 url("../img/magnifying_on.png") center center no-repeat;
 }
 #topic_title{
 	margin-right:0em;
@@ -183,18 +228,43 @@ h1{
 }
 .criteres{
 	color:#CCC;
-	padding-top:7px;
 	text-align:left;
-	padding-left:1px;
+	margin-right:15px;
 }
 .criteres img{
 	vertical-align:middle;
 	border:none;
 	margin-right:5px;
 }
+#facets{
+	clear:both;	
+	padding-top:10px;
+	text-align:right;
+	padding-right:22px;
+	position:relative
+}
+#form_facets{
+	display:inline-block;
+}
+#facets input{
+	text-align:right;	
+}
+#tout{
+	color:#4F4F4F;	
+}
+#slider{
+	display:inline-block;
+	margin-left:15px;	
+}
+#slider-range{
+	margin:0 10px;
+	width:300px;
+	display:inline-block;
+	vertical-align:middle;
+}
 #res_nav{
 	text-align:left;
-	margin-top:10px;
+	margin-top:15px;
 	margin-left:280px;
 	padding-left:21px;
 	font-weight:bold;
@@ -284,28 +354,12 @@ h1{
 	color:#999;
 }
 /* Blocs images */
-li#contenu {
-	float:left;
-	width:229px;
+.thumb{
 	text-align:center;
-	padding-bottom:10px;
-	height:210px;
-	padding:5px;
-}
-ul#contenu {
-	padding:0;
-	margin:0;	
-	color:#d4d4d4;
-	font-size:0.9em;
-	clear:both;
-}
-li#contenu div{
-	height:152px;
 }
 .cartel{
-	width: 202px;	
 	color:#fff;
-	padding-top:2px;
+	padding:2px 9px 0 9px;
 	margin-top:12px;
 	margin-bottom:15px;
 }
@@ -327,7 +381,6 @@ a.interne:hover,a.interne:focus,a.interne:active {
 	font-size:0.9em;
 }
 .notice{
-	margin-top:2px;
 	display:block;
 	background-color:#1E1E1E;
 	color:#fafafa;
@@ -347,9 +400,9 @@ a.interne:hover,a.interne:focus,a.interne:active {
 	z-index:47;
 }
 .act_not{
-	float :right;
-	padding-right:3px;	
-	padding-left:5px;
+	margin-bottom:2px;
+	padding-right:3px;
+	text-align:right;
 }
 .act_not img{
 	vertical-align:bottom;
@@ -357,8 +410,6 @@ a.interne:hover,a.interne:focus,a.interne:active {
 }
 .lgWP{
 	font-size:90%;	
-	/*padding-bottom:8px;
-	vertical-align:middle;*/
 }
 .lien_notice{
 	cursor:pointer;
@@ -389,7 +440,6 @@ a.interne:hover,a.interne:focus,a.interne:active {
 }
 .item { 
 	width: 220px;
-	padding-bottom:15px;
 	font-size:0.9em;
 }
 footer{
@@ -405,41 +455,6 @@ footer img{
 footer.marge{
 	margin-top:10em;	
 }	
-#recherche  #ok {
-   border: 1px solid #000;
-   background: #d3d3d3;
-   background: -webkit-gradient(linear, left top, left bottom, from(#d3d3d3), to(#d3d3d3));
-   background: -webkit-linear-gradient(top, #d3d3d3, #d3d3d3);
-   background: -moz-linear-gradient(top, #d3d3d3, #d3d3d3);
-   background: -ms-linear-gradient(top, #d3d3d3, #d3d3d3);
-   background: -o-linear-gradient(top, #d3d3d3, #d3d3d3);
-   background-image: -ms-linear-gradient(top, #dedede 0%, #dedede 100%);
-   -webkit-border-radius: 4px;
-   -moz-border-radius: 4px;
-   border-radius: 4px;
-   color: #2f2f2f;
-   font-family:Arial, Helvetica, sans-serif;
-   font-weight:bold;
-   height:2em;
-   font-size:1.2em;
-   padding-left:15px;
-   padding-right:15px;
-   text-decoration: none;
-   vertical-align: middle;
-   cursor:pointer;
-}
-#recherche  #ok:hover,#recherche  #ok:active {
-   border: 1px solid #f3f3f3;
-   text-shadow: #31540c 0 0 0;
-   background: #444;
-   background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#444));
-   background: -webkit-linear-gradient(top, #444, #444);
-   background: -moz-linear-gradient(top, #444, #666);
-   background: -ms-linear-gradient(top, #444, #444);
-   background: -o-linear-gradient(top, #444, #444);
-   background-image: -ms-linear-gradient(top, #444 0%, #444 100%);
-   color: #f3f3f3;
-}
 #lg_rtl{
 	direction:rtl;	
 	padding-right:2em;
@@ -485,5 +500,4 @@ footer.marge{
 .update{
 	margin-top:10px;
 	font-size:0.85em;
-
 }

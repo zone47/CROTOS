@@ -8,7 +8,6 @@ mysql_query("SET NAMES 'utf8'");
 mysql_query("TRUNCATE `artworks`");
 mysql_query("TRUNCATE `artw_prop`");
 mysql_query("TRUNCATE `label_page`");
-mysql_query("TRUNCATE `missing`");
 mysql_query("TRUNCATE `p31`");
 mysql_query("TRUNCATE `p135`");
 mysql_query("TRUNCATE `p136`");
@@ -23,28 +22,25 @@ mysql_query("TRUNCATE `p941`");
 
 $tab_lg=array("ar","bn","br","ca","cs","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 
-$dirname = '/***/crotos/harvest/items/';
+$dirname = $fold_crotos.'harvest/items/';
 $dir = opendir($dirname); 
 $cpt=0;
 while($file = readdir($dir)) {
-	//if ($cpt==5) break;
+	//Test if ($cpt==5) break;  
 	if($file != '.' && $file != '..' && !is_dir($dirname.$file)){
 		$item=str_replace(".json","",$file);
 		$cpt++;
+		//Test echo $cpt." ".$item." | ";
 		
 		$tab_miss = array(
-			"m18"=> 0,// image
+			"m135"=> 0,// movement
+			"m136"=> 0,// genre
+			"m144"=> 0,// based on
+			"m180"=> 0,// depicts
 			"m170"=> 0,// creator
-			"m571"=> 0,// creator
 			"m186"=> 0,// material
 			"m195"=> 0,// collection
 			"m276"=> 0,// location
-			"m180"=> 0,// depicts
-			"m136"=> 0,// genre
-			"m135"=> 0,// movement
-			"m347"=> 0,// Joconde ID
-			"m217"=> 0,// inventory number
-			"m144"=> 0,// based on
 			"m921"=> 0,// subject heading
 			"m941"=> 0,// inspired by
 			"ar"=> 0,
@@ -91,52 +87,134 @@ $data = json_decode($datafic,true);
 $varlab=$data["entities"]["Q".$item];
 $claims=$varlab["claims"];
 
-//P18 Image
-$P18="";
-if ($claims["P18"])
-	foreach ($claims["P18"] as $value){
-		if ($P18=="")
-		   $P18=$value["mainsnak"]["datavalue"]["value"];
-		else
-		 	break;
+
+$tab_prop = array(
+	"P18"=> "",  // Image
+	"P214"=> "", // VIAF ID
+	"P217"=> "", // Inventory number
+	"P347"=> "", // Joconde ID
+	"P350"=> "", // RKDimages ID
+	"P373"=> "", // Commons Category
+	"P727"=> "", // Europeana ID
+	"P973"=> "", // described at URL
+	"P1212"=> "" // Atlas ID
+);
+
+foreach($tab_prop as $key=>$val){
+	if ($claims[$key]){
+		foreach ($claims[$key] as $value){
+			if ($tab_prop[$key]=="")
+			   $tab_prop[$key]=$value["mainsnak"]["datavalue"]["value"];
+			else
+				break;
+		}
+		if ($key!="P18")
+			$tab_prop[$key]=esc_dblquote($tab_prop[$key]);
 	}
-else
-	$tab_miss["m18"]=1;
+}
+$commons_artist="";
+$commons_credit="";
+$commons_license="";
+$thumb="";
+$large="";
+if ($tab_prop["P18"]!=""){
+	$sql="SELECT commons_artist,commons_credit,commons_license,thumb,large FROM commons_img WHERE P18=\"".esc_dblquote($tab_prop["P18"])."\"";
+	$rep=mysql_query($sql);
+	if (mysql_num_rows($rep)==0){
+		$img=str_replace(" ","_",$tab_prop["P18"]);
+		$tab_prop["P18"]=esc_dblq($tab_prop["P18"]);
+		
+		$urlapi="https://commons.wikimedia.org/w/api.php?action=query&prop=imageinfo&format=xml&iiprop=extmetadata&iilimit=10&titles=File:".urlencode($img);
+		$xml = simplexml_load_file($urlapi);
+		$commons_artist=$xml->xpath('//Artist/@value')[0];
+		$commons_credit=$xml->xpath('//Credit/@value')[0];
+		$commons_license=$xml->xpath('//License/@value')[0];
 	
-//P373 Commons Category
-$P373="";
-if ($claims["P373"])
-	foreach ($claims["P373"] as $value){
-		if ($P373=="")
-		   $P373=$value["mainsnak"]["datavalue"]["value"];
-		else
-		 	break;
+		$digest = md5($img);
+		$folder = $digest[0] . '/' . $digest[0] . $digest[1] . '/' . urlencode($img);
+		$urlimg = 'http://upload.wikimedia.org/wikipedia/commons/' . $folder;
+		
+		if (substr ($img,-3)=="svg"){
+			$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/200px-". urlencode($img).".png";
+			$size=getimagesize($thumb);
+			$width=$size[0];
+			$height=$size[1];
+			if ($width/$height>200/350)
+				$w_thumb=200;
+			else
+				$w_thumb=floor(350*$width/$height);
+			$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img).".png";
+			if ($width/$height>1400/900)
+				$w_large=1400;
+			else
+				$w_large=floor(900*$width/$height);
+			$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_large."px-". urlencode($img).".png";
+		}
+		else{
+			$size=getjpegsize($urlimg);
+			if (!(isset($size[1])));
+				$size=getimagesize($urlimg);
+			$width=$size[0];
+			$height=$size[1];
+			if(!((is_null($width))||($width==0))){
+				// thumb
+				if ($width/$height>200/350){
+					if ($width>200)
+						$w_thumb=200;
+					else
+						$w_thumb=$width;
+				}
+				else{
+					if ($height>350)
+						$w_thumb=floor(350*$width/$height);
+					else
+						$w_thumb=$width;
+				}
+				if ($w_thumb==$width)
+					$thumb=$urlimg;
+				else
+					$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img);
+			
+				// large
+				if ($width/$height>1400/900){
+					if ($width>1400)
+						$w_large=1400;
+					else
+						$w_large=$width;
+				}
+				else{
+					if ($height>900)
+						$w_large=floor(900*$width/$height);
+					else
+						$w_large=$width;
+				}
+				if ($w_large==$width)
+					$large=$urlimg;
+				else
+					$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_large."px-". urlencode($img);
+				
+			}
+			unset($size);
+		}
+		$commons_artist=esc_dblq($commons_artist);
+		$commons_credit=esc_dblq($commons_credit);
+		$commons_license=esc_dblq($commons_license);	
+		$thumb=esc_dblq($thumb);
+		$large=esc_dblq($large);
+		$sql="INSERT INTO commons_img (P18,commons_artist,commons_credit,commons_license,thumb,large) VALUES (\"".$tab_prop["P18"]."\",\"".$commons_artist."\",\"".$commons_credit."\",\"".$commons_license."\",\"".$thumb."\",\"".$large."\")";
+		$rep=mysql_query($sql);
 	}
-	
-//P217 Inventory number
-$P217="";
-if ($claims["P217"])
-	foreach ($claims["P217"] as $value){
-		if ($P217=="")
-		   $P217=$value["mainsnak"]["datavalue"]["value"];
-		else
-		 	break;
+	else{
+		$row = mysql_fetch_assoc($rep);
+		$commons_artist=esc_dblq($row['commons_artist']);
+		$commons_credit=esc_dblq($row['commons_credit']);
+		$commons_license=esc_dblq($row['commons_license']);
+		$thumb=esc_dblq($row['thumb']);
+		$large=esc_dblq($row['large']);
+		$tab_prop["P18"]=esc_dblq($tab_prop["P18"]);
 	}
-else
-	$tab_miss["m217"]=1;
-	
-//P347 Joconde ID
-$P347="";
-if ($claims["P347"])
-	foreach ($claims["P347"] as $value){
-		if ($P347=="")
-		   $P347=$value["mainsnak"]["datavalue"]["value"];
-		else
-		 	break;
-	}
-else
-	$tab_miss["m347"]=1;
-	
+}
+
 //date P571 or P585
 $year1 = NULL;
 $year2 = NULL;
@@ -194,25 +272,19 @@ for ($i=0;$i<count($tab_date);$i++){
 	}
 }
 
-if ($year1!=NULL){
-	if ($year2==0)
+if (($year1!=NULL)&&($year2==0))
 		$year2=-1;
-	}
-else
-	$tab_miss["m571"]=1;  
 	
 if (($year1==1)&&($precision<9))
 		$year2=10*floor($year2/10);
+if ($year1==NULL)
+	$year1="NULL";
+if ($year2==NULL)
+	$year2="NULL";
 
-$P18=esc_dblquote($P18);
-$P217=esc_dblquote($P217);
-$P347=esc_dblquote($P347);
-$P373=esc_dblquote($P373);
-if ($year1!=NULL)
-	$sql="INSERT INTO artworks (qwd,P18,P217,P347,P373,year1,year2,b_date) VALUES ($item,\"$P18\",\"$P217\",\"$P347\",\"$P373\",$year1,$year2,$b_date)";
-else
-	$sql="INSERT INTO artworks (qwd,P18,P217,P347,P373) VALUES ($item,\"$P18\",\"$P217\",\"$P347\",\"$P373\")";
+$sql="INSERT INTO artworks (qwd,P18,P214,P217,P347,P350,P373,P727,P973,P1212,year1,year2,b_date,commons_artist,commons_credit,commons_license,thumb,large) VALUES ($item,\"".$tab_prop["P18"]."\",\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$tab_prop["P973"]."\",\"".$tab_prop["P1212"]."\",$year1,$year2,\"".$b_date."\",\"".$commons_artist."\",\"".$commons_credit."\",\"".$commons_license."\",\"".$thumb."\",\"".$large."\")";
 $rep=mysql_query($sql);
+
 $sql="SELECT id FROM artworks WHERE qwd=\"$item\"";
 $rep=mysql_query($sql);
 $row = mysql_fetch_assoc($rep);
@@ -263,13 +335,16 @@ for ($i=0;$i<count($tab_multi);$i++){
 }
 
 // missing props
-$cols="";
-$values="";
+$sql="UPDATE artworks SET ";
 foreach($tab_miss as $key=>$value){
-	$cols.=",".$key;
-	$values.=",".$value;
+	if ($sql!="UPDATE artworks SET ")
+		$sql.=",";
+	if ((substr($key,0,1)=="m")&&($key!="mu"))
+		$sql.=$key."=".$value;
+	else
+		$sql.="lb".$key."=".$value;
 }
-$sql="INSERT INTO missing (ident".$cols.") VALUES ($id_artwork".$values.")";
+$sql.=" WHERE id=$id_artwork";
 $rep=mysql_query($sql);
 unset($tab_miss);
 

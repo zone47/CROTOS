@@ -5,6 +5,10 @@ $nb=20; // Nombre de résultats par défaut
 $p=1; // numéro de page par défaut
 $lgs=array("ar","bn","br","ca","cs","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 $random=false;
+$s=""; // Search
+$q="";
+$y1=-40000;
+$y2=2014;
 $tab_idx = array(
 	"p31" => "",// qwd type
 	"p135"=> "",// qwd mouvement
@@ -21,38 +25,49 @@ $tab_idx = array(
 $tab_miss = array(
 	"m1" => "",// label
 	"m18"=> "",// image
+	"m135"=> "",// movement
+	"m136"=> "",// genre
+	"m144"=> "",// based on
 	"m170"=> "",// creator
-	"m571"=> "",// date of creation
+	"m180"=> "",// depicts
 	"m186"=> "",// material
 	"m195"=> "",// collection
+	"m214"=> "",// VIAF ID
+	"m217"=> "",// inventory number
 	"m276"=> "",// location
-	"m180"=> "",// depicts
-	"m136"=> "",// genre
-	"m135"=> "",// movement
 	"m347"=> "",// Joconde Id
-	"m217"=> "",// Inventory number
-	"m144"=> "",// Based on
-	"m921"=> "",// Subject heading
-	"m941"=> ""// Inspired by
+	"m350"=> "",// RKDimages Id
+	"m373"=> "",// Commons category
+	"m571"=> "",// date of creation
+	"m727"=> "",// Europeana ID
+	"m921"=> "",// subject heading
+	"m941"=> "",// inspired by
+	"m973"=> "",// described at URL
+	"m1212"=> ""// Atlas ID
 );
 $tab_check = array(
 	"c1" => "",// label
 	"c18"=> "",// image
+	"c135"=> "",// movement
+	"c136"=> "",// genre
+	"c144"=> "",// based on
 	"c170"=> "",// creator
-	"c571"=> "",// date of creation
+	"c180"=> "",// depicts
 	"c186"=> "",// material
 	"c195"=> "",// collection
+	"c214"=> "",// VIAF ID
+	"c217"=> "",// inventory number
 	"c276"=> "",// location
-	"c180"=> "",// depicts
-	"c136"=> "",// genre
-	"c135"=> "",// movement
 	"c347"=> "",// Joconde Id
-	"c217"=> "",// Inventory number
-	"c144"=> "",// Based on
-	"c921"=> "",// Subject heading
-	"c941"=> ""// Inspired by
+	"c350"=> "",// RKDimages Id
+	"c373"=> "",// Commons category
+	"c571"=> "",// date of creation
+	"c727"=> "",// Europeana ID
+	"c921"=> "",// subject heading
+	"c941"=> "",// inspired by
+	"c973"=> "",// described at URL
+	"c1212"=> ""// Atlas ID
 );
-$s=""; // Search
 
 foreach($tab_idx as $key=>$value)
 	if (isset($_GET[$key]))
@@ -66,6 +81,10 @@ if ($mode==1){
 		if (isset($_GET[$key]))
 			$tab_check[$key]=$_GET[$key];
 }
+
+if (isset($_GET['q']))
+	if ($_GET['q']!="") 
+		$q=$_GET['q'];
 if (isset($_GET['nb']))
 	if ($_GET['nb']!="") 
 		$nb=intval($_GET['nb']);
@@ -77,5 +96,10 @@ if (isset($_GET['s'])){
 	$s=trim(str_replace("\"","",urldecode($s)));
 	/* Easter egg */ if (str_replace("!","",str_replace(" ","",strtolower($s)))=="houba"){ $s="";$l="mu";setcookie ("l","mu", time() + 31536000);}
 }
-
+if (isset($_GET['y1']))
+	if (is_int(intval($_GET['y1']))) 
+		$y1=intval($_GET['y1']);
+if (isset($_GET['y2']))
+	if (is_int(intval($_GET['y2']))) 
+		$y2=intval($_GET['y2']);
 ?>

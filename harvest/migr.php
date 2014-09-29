@@ -1,41 +1,31 @@
 <?php
 /* / */
-/* Harvest WD */
-$fic_sql="crotos_tmp.sql";
-$dossier="/***/bdd/";
-$source_file=$dossier.$fic_sql;
-$cmd="mysqldump -h ".$host." -u ".$user." -p".$pass." ".$db." > /***/bdd/".$fic_sql;
+/* FTP migration */
+$source_file=$fold_crotos."bdd/".$fic_sql;
+$fold_subclasses=$fold_crotos."subclasses/";
+$cmd=$mysqldump." -uroot crotos_tmp > ".$source_file;
 exec($cmd);
 
-// Création de la connexion
-$conn_id = ftp_connect("***") or die("Couldn't connect to ftp_server");
-
-// Authentification avec nom de compte et mot de passe
-$login_result = ftp_login($conn_id, "***", "***");
+$conn_id = ftp_connect($ftp_adresse) or die("Couldn't connect to ftp_server");
+$login_result = ftp_login($conn_id, $ftp_log, $ftp_pass);
 
 $msgftp="";
-// Vérification de la connexion
-if ((!$conn_id) || (!$login_result)) {
-		$msgftp.="La connexion FTP a échoué!";
-		die;
-	}
+// Connexion
+if ((!$conn_id) || (!$login_result)) 
+		echo  "FTP connexion fail";
 	else 
-	echo " ok ftp ";
-// Téléchargement d'un fichier.
-//echo $ftp_dossier.$name.".sql<br>".$source_file.".sql<br>;
-$upload = ftp_put($conn_id, "/***/bdd/".$fic_sql, $source_file, FTP_BINARY);
+		echo " FTP connexion ok ";
 
+// Upload
 
-// Vérification de téléchargement
-if (!$upload) {
-		$msgftp.="Le transfert par FTP a échoué!";
-	} else {
-		$msgftp.="Téléchargement de $source_file sur $ftp_adresse ";
-	}
+$upload = ftp_put($conn_id, $ftp_fold."bdd/".$fic_sql, $source_file, FTP_BINARY);
+$dir = opendir($fold_subclasses); 
+while($file = readdir($dir)) 
+	if($file != '.' && $file != '..')
+		$upload = ftp_put($conn_id,$ftp_fold."subclasses/".$file, $fold_subclasses.$file, FTP_BINARY);
 
-// Fermeture de la connexion FTP.
 ftp_quit($conn_id);	
 
-include('***');
+include($file_update);
 
 ?>

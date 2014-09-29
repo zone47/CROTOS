@@ -1,7 +1,7 @@
 Projet - CROTOS
-2014/04/24
-* Les métadonnées extraites de la Wikidata, contenues dans le fichier crotos.sql, sont sous Creative Commons 0 (CC0) — "No Rights Reserved".
-* Les bibliothèques JQuery (https://jquery.org/license/), Masonry (http://masonry.desandro.com/#mit-license) et ImagesLoaded (https://github.com/desandro/imagesloaded#mit-license) sont sous licence MIT.
+2014/09/29
+* Les métadonnées extraites de la Wikidata, contenues dans le fichier crotos.zip.sql, sont sous Creative Commons 0 (CC0) — "No Rights Reserved".
+* Les bibliothèques JQuery (https://jquery.org/license/), JQuery UI (http://jqueryui.com/about/) , Masonry (http://masonry.desandro.com/#mit-license), Yoxview (http://www.yoxigen.com/yoxview/) et ImagesLoaded (https://github.com/desandro/imagesloaded#mit-license) sont sous licence MIT. JSON.php est sous licence BSD (http://www.opensource.org/licenses/bsd-license.php)
 * Les logos des projets Wikimedia et Sémanticpédia sont protégées selon les formes définies (cf http://wikimediafoundation.org et http://www.semanticpedia.org/).
-* Les images d'œuvres, au format vignette (correspondant à dbpedia-owl:thumbnail), sont hébergées sur les serveurs de la Wikimedia Foundation. Pour l'utilisation de chaque image, il convient de se référer aux informations de la page Wikimedia Commons sur laquelle mène le lien image.
+* Les images d'œuvres sont hébergées sur les serveurs de la Wikimedia Foundation. Pour l'utilisation de chaque image, il convient de se référer aux informations mentionnées, informations que l'on retrouve la page Wikimedia Commons sur laquelle mène le lien image.
 * Les autres scripts produits pour ce projet sont sous Creative Commons 0 (CC0) — "No Rights Reserved"

@@ -22,6 +22,16 @@ h1{
 	margin-right:0em;
 	width:300px;
 }
+#form_facets{
+	display:block;
+}
+#slider{
+	display:block;
+	text-align:center;
+}
+#slider-range{
+	width:60%;
+}
 .navhaut{
 	margin-right:0;
 }

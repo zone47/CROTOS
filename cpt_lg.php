@@ -5,14 +5,9 @@ include "init.php";
 include "traduction.php";
 include "functions.php";
 include "config.php";
-ini_set("display_errors",0);error_reporting(0);
 $link = mysql_connect ($host,$user,$pass) or die ('Erreur : '.mysql_error());
 mysql_select_db($db) or die ('Erreur :'.mysql_error());
 mysql_query("SET NAMES 'utf8'");
-
-
-		
-
 
 ?><!doctype html>
 <html lang="en">
@@ -23,9 +18,6 @@ mysql_query("SET NAMES 'utf8'");
 	<script src="js/jquery.js"></script>
    	<script src="js/jquery.tablesorter.min.js"></script>
     <script>
-/*$(document).ready(function(){
-   $("#occ").tablesorter(); }
-);*/ 
 $(document).ready(function() 
     { 
         $("#occ").tablesorter( {sortList: [[2,1]]} ); 
