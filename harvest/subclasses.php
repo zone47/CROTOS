@@ -2,7 +2,7 @@
 /* / */
 /* Harvest sublasses */
 //$cmd="rm -f ".$fold_crotos."subclasses/*";
-$cmd="del /Q ".$fold_crotos."subclassses/*.*";
+$cmd="del /Q ".$fold_crotos."subclasses/*.*";
 
 $link = mysql_connect ($host,$user,$pass) or die ('Erreur : '.mysql_error());
 mysql_select_db($db) or die ('Erreur :'.mysql_error());
@@ -20,7 +20,7 @@ while($data = mysql_fetch_assoc($rep)) {
 		$data.=$value;
 	}
 	$data.="); ?>";
-	$fic = fopen($fold_crotos."subclassses/".$p31.".php", 'w');
+	$fic = fopen($fold_crotos."subclasses/".$p31.".php", 'w');
 	fputs($fic ,$data);
 	fclose($fic );
 }
