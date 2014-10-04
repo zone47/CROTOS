@@ -13,10 +13,12 @@ mysql_query("TRUNCATE `p135`");
 mysql_query("TRUNCATE `p136`");
 mysql_query("TRUNCATE `p144`");
 mysql_query("TRUNCATE `p170`");
+mysql_query("TRUNCATE `p179`");
 mysql_query("TRUNCATE `p180`");
 mysql_query("TRUNCATE `p186`");
 mysql_query("TRUNCATE `p195`");
 mysql_query("TRUNCATE `p276`");
+mysql_query("TRUNCATE `p361`");
 mysql_query("TRUNCATE `p921`");
 mysql_query("TRUNCATE `p941`");
 
@@ -37,10 +39,12 @@ while($file = readdir($dir)) {
 			"m136"=> 0,// genre
 			"m144"=> 0,// based on
 			"m180"=> 0,// depicts
+			"m179"=> 0,// series
 			"m170"=> 0,// creator
 			"m186"=> 0,// material
 			"m195"=> 0,// collection
 			"m276"=> 0,// location
+			"m361"=> 0,// part of
 			"m921"=> 0,// subject heading
 			"m941"=> 0,// inspired by
 			"ar"=> 0,
@@ -151,11 +155,11 @@ if ($tab_prop["P18"]!=""){
 			$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_large."px-". urlencode($img).".png";
 		}
 		else{
-			$size=getjpegsize($urlimg);
-			if (!(isset($size[1])));
-				$size=getimagesize($urlimg);
-			$width=$size[0];
-			$height=$size[1];
+			$urlapimagnus="https://tools.wmflabs.org/magnus-toolserver/commonsapi.php?image=".urlencode($img);
+			$xml = simplexml_load_file($urlapimagnus);
+			$width=intval($xml->xpath('//file/width/text()')[0]);
+			$height=intval($xml->xpath('//file/height/text()')[0]);
+	
 			if(!((is_null($width))||($width==0))){
 				// thumb
 				if ($width/$height>200/350){
@@ -294,7 +298,7 @@ $id_artwork=$row['id'];
 insert_label_page(1,$item,$id_artwork);
 
 // Other properties
-$tab_multi=array(170,31,276,195,136,135,180,186,144,921,941);	
+$tab_multi=array(170,31,276,195,136,135,179,180,186,144,361,921,941);	
 for ($i=0;$i<count($tab_multi);$i++){
 	if ($claims["P".$tab_multi[$i]])
 		foreach ($claims["P".$tab_multi[$i]] as $value){
