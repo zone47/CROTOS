@@ -114,37 +114,7 @@ for ($i=0;$i<count($p31_list);$i++){
     <?php
 if ($mode==1){
 	echo "<div id=\"miss_props\">";//<b>".translate($l,"missing")."</b> : ";
-	$missing_props=array(1,18,170,571,186,217,195,276);
-	for ($i=0;$i<count($missing_props);$i++){
-    	echo "<span><label>".translate($l,strval($missing_props[$i]))."</label> ";
-		echo "<input name=\"c".$missing_props[$i]."\" id=\"c".$missing_props[$i]."\" type=\"checkbox\" value=\"1\"";
-		if ($tab_check["c".strval($missing_props[$i])]==1)
-			echo " checked=\"checked\"";
-		echo " />✓";
-		echo "<input name=\"m".$missing_props[$i]."\" id=\"m".$missing_props[$i]."\" type=\"checkbox\" value=\"1\"";
-		if ($tab_miss["m".strval($missing_props[$i])]==1)
-			echo " checked=\"checked\"";
-		echo " />✗";
-		
-		echo "&nbsp;&nbsp;&nbsp;&nbsp;</span> ";
-	}
-	echo "<br/>\n";
-	$missing_props=array(136,135,921,144,941,180);
-	for ($i=0;$i<count($missing_props);$i++){
-    	echo "<span><label>".translate($l,strval($missing_props[$i]))."</label> ";
-		echo "<input name=\"c".$missing_props[$i]."\" id=\"c".$missing_props[$i]."\" type=\"checkbox\" value=\"1\"";
-		if ($tab_check["c".strval($missing_props[$i])]==1)
-			echo " checked=\"checked\"";
-		echo " />✓";
-		echo "<input name=\"m".$missing_props[$i]."\" id=\"m".$missing_props[$i]."\" type=\"checkbox\" value=\"1\"";
-		if ($tab_miss["m".strval($missing_props[$i])]==1)
-			echo " checked=\"checked\"";
-		echo " />✗";
-		
-		echo "&nbsp;&nbsp;&nbsp;&nbsp;</span> ";
-	}
-	echo "<br/>\n";
-	$missing_props=array(727,214,350,347,1212,973);
+	$missing_props=array(1,18,170,571,195,276,180);
 	for ($i=0;$i<count($missing_props);$i++){
     	echo "<span><label>".translate($l,strval($missing_props[$i]))."</label> ";
 		echo "<input name=\"c".$missing_props[$i]."\" id=\"c".$missing_props[$i]."\" type=\"checkbox\" value=\"1\"";

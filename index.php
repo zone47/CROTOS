@@ -331,6 +331,8 @@ while($data = mysql_fetch_assoc($rep)) {
 	$l_loc=
 	$type=txt_prop($id_artw,31,$l,"normal",0);
 	$material=txt_prop($id_artw,186,$l);
+	$series=txt_prop($id_artw,179,$l);
+	$partof=txt_prop($id_artw,361,$l);
 	$mouvement=txt_prop($id_artw,135,$l);
 	$genre=txt_prop($id_artw,136,$l);
 	$depicts=txt_prop($id_artw,180,$l);
@@ -386,7 +388,7 @@ while($data = mysql_fetch_assoc($rep)) {
 		}
 		$commons_artist = esc_dblq(htmlentities(preg_replace("/<\/?div[^>]*\>/i", "", $data['commons_artist'])));
 		$commons_link="http://commons.wikimedia.org/wiki/File:".htmlentities(str_replace("?","%3F",str_replace(" ","_",$data['P18'])));
-		$commons_credit = esc_dblq(htmlentities(preg_replace("/<img[^>]+\>/i", "",preg_replace("/<\/?div[^>]*\>/i", "", $data['commons_credit']))));
+		$commons_credit = esc_dblq(htmlentities(preg_replace("/<img[^>]+\>/i", "",preg_replace("/<\/?td[^>]*\>/i", "",preg_replace("/<\/?tr[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "", preg_replace("/<\/?ul[^>]*\>/i", "", preg_replace("/<\/?hr[^>]*\>/i", "", preg_replace("/<\/?p[^>]*\>/i", "", preg_replace("/<\/?div[^>]*\>/i", "", $data['commons_credit'])))))))))));
 		$credits=$commons_artist;
 		if (($credits!="")&&($license!=""))
 			$credits.=" | ";
@@ -454,6 +456,10 @@ while($data = mysql_fetch_assoc($rep)) {
 		$content.="<p>".$material."</p>";
 	if ($inv!="")
 		$content.="<p><span class=\"libelle\">".translate($l,"217")."</span>&nbsp;: ".$inv."</p>";
+	if ($series!="")
+		$content.="<p>".$series."</p>";
+	if ($partof!="")
+		$content.="<p>".$partof."</p>";
 		
 	if ($mouvement!="")
 		$content.="<p>".$mouvement."</p>";
