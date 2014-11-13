@@ -35,18 +35,6 @@ function label_item($qwd,$lg){
 	/* Easter egg */if ($lg=="mu") return "Houba"; else	
 	return $label;
 }
-function alias_item($qwd,$lg){
-    $sql="SELECT label from label_page WHERE qwd=$qwd AND lg='$lg' AND type=2";
-	//echo $sql;
-	$rep_alias=mysql_query($sql);
-	$aliases="";
-	while ($data_prop = mysql_fetch_assoc($rep_alias)){
-		if ($aliases!="")
-			$aliases.="<br />";
-		$aliases.=$data_prop['label'];
-	}
-	return $aliases;
-}
 function val_prop($id_artw,$prop){
 	$vals=array();
 	$sql="SELECT p".$prop.".qwd as prop_qwd from artw_prop,p".$prop." WHERE artw_prop.prop=".$prop." AND  artw_prop.id_artw=$id_artw AND  artw_prop.id_prop=p".$prop.".id";
@@ -168,17 +156,5 @@ function translate($lg,$term){
 }
 function esc_dblq($text){
 	return str_replace("\"","\\\"",$text);
-}
-function truncate($text, $chars =  56) {
-	if (strlen($text)>56)
-		$trunk=true;
-	else
-		$trunk=false;
-    $text = $text." ";
-    $text = substr($text,0,$chars);
-    $text = substr($text,0,strrpos($text,' '));
-    if ($trunk)
-		$text = $text."...";
-    return $text;
 }
 ?>

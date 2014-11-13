@@ -28,7 +28,7 @@ $dirname = $fold_crotos.'harvest/items/';
 $dir = opendir($dirname); 
 $cpt=0;
 while($file = readdir($dir)) {
-	//Test if ($cpt==20) break;  
+	//Test if ($cpt==5) break;  
 	if($file != '.' && $file != '..' && !is_dir($dirname.$file)){
 		$item=str_replace(".json","",$file);
 		$cpt++;
@@ -120,137 +120,93 @@ $commons_artist="";
 $commons_credit="";
 $commons_license="";
 $thumb="";
-$thumb_h="";
 $large="";
-$w_thumb_h=0;
 if ($tab_prop["P18"]!=""){
-	$sql="SELECT commons_artist,commons_credit,commons_license,thumb,thumb_h,width_h,large FROM commons_img WHERE P18=\"".esc_dblquote($tab_prop["P18"])."\"";
+	$sql="SELECT commons_artist,commons_credit,commons_license,thumb,large FROM commons_img WHERE P18=\"".esc_dblquote($tab_prop["P18"])."\"";
 	$rep=mysql_query($sql);
 	if (mysql_num_rows($rep)==0){
 		$img=str_replace(" ","_",$tab_prop["P18"]);
 		$tab_prop["P18"]=esc_dblq($tab_prop["P18"]);
 		
 		$urlapi="https://commons.wikimedia.org/w/api.php?action=query&prop=imageinfo&format=xml&iiprop=extmetadata&iilimit=10&titles=File:".urlencode($img);
-		$xml = simplexml_load_file_from_url($urlapi);
-		if ($xml){
-			$commons_artist=$xml->xpath('//Artist/@value')[0];
-			$commons_credit=$xml->xpath('//Credit/@value')[0];
-			$commons_license=$xml->xpath('//License/@value')[0];
+		$xml = simplexml_load_file($urlapi);
+		$commons_artist=$xml->xpath('//Artist/@value')[0];
+		$commons_credit=$xml->xpath('//Credit/@value')[0];
+		$commons_license=$xml->xpath('//License/@value')[0];
+	
+		$digest = md5($img);
+		$folder = $digest[0] . '/' . $digest[0] . $digest[1] . '/' . urlencode($img);
+		$urlimg = 'http://upload.wikimedia.org/wikipedia/commons/' . $folder;
 		
-			$digest = md5($img);
-			$folder = $digest[0] . '/' . $digest[0] . $digest[1] . '/' . urlencode($img);
-			$urlimg = 'http://upload.wikimedia.org/wikipedia/commons/' . $folder;
-			
-			if (substr ($img,-3)=="svg"){
-				$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/200px-". urlencode($img).".png";
-				$size=getimagesize($thumb);
-				$width_tmp=$size[0];
-				$height_tmp=$size[1];
-				if ($width_tmp/$height_tmp>200/350)
-					$w_thumb=200;
-				else
-					$w_thumb=floor(350*$width_tmp/$height_tmp);
-				$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img).".png";
-				if ($width_tmp/$height_tmp>1400/900)
-					$width=1400;
-				else
-					$width=floor(900*$width_tmp/$height_tmp);
-				$height=floor($height_tmp*$width/$width_tmp);
-				$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$width."px-". urlencode($img).".png";
-			}
-			else{
-				$urlapimagnus="https://tools.wmflabs.org/magnus-toolserver/commonsapi.php?image=".urlencode($img);
-				$xml = simplexml_load_file_from_url($urlapimagnus);
-				if ($xml){
-					$width=intval($xml->xpath('//file/width/text()')[0]);
-					$height=intval($xml->xpath('//file/height/text()')[0]);
+		if (substr ($img,-3)=="svg"){
+			$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/200px-". urlencode($img).".png";
+			$size=getimagesize($thumb);
+			$width=$size[0];
+			$height=$size[1];
+			if ($width/$height>200/350)
+				$w_thumb=200;
+			else
+				$w_thumb=floor(350*$width/$height);
+			$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img).".png";
+			if ($width/$height>1400/900)
+				$w_large=1400;
+			else
+				$w_large=floor(900*$width/$height);
+			$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_large."px-". urlencode($img).".png";
+		}
+		else{
+			$urlapimagnus="https://tools.wmflabs.org/magnus-toolserver/commonsapi.php?image=".urlencode($img);
+			$xml = simplexml_load_file($urlapimagnus);
+			$width=intval($xml->xpath('//file/width/text()')[0]);
+			$height=intval($xml->xpath('//file/height/text()')[0]);
+	
+			if(!((is_null($width))||($width==0))){
+				// thumb
+				if ($width/$height>200/350){
+					if ($width>200)
+						$w_thumb=200;
+					else
+						$w_thumb=$width;
 				}
 				else{
-					$size=getjpegsize($urlimg);
-					if (!(isset($size[1])))
-						$size=getimagesize($urlimg);
-					$width=$size[0];
-					$height=$size[1];
+					if ($height>350)
+						$w_thumb=floor(350*$width/$height);
+					else
+						$w_thumb=$width;
 				}
+				if ($w_thumb==$width)
+					$thumb=$urlimg;
+				else
+					$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img);
 			
-				if(!((is_null($width))||($width==0))){
-					// thumb vertical
-					if ($width/$height>200/350){
-						if ($width>200)
-							$w_thumb=200;
-						else
-							$w_thumb=$width;
-					}
-					else{
-						if ($height>350)
-							$w_thumb=floor(350*$width/$height);
-						else
-							$w_thumb=$width;
-					}
-					if ($w_thumb==$width)
-						$thumb=$urlimg;
+				// large
+				if ($width/$height>1400/900){
+					if ($width>1400)
+						$w_large=1400;
 					else
-						$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img);
-						
-					// thumb horizontal
-					if ($width/$height>320/240){
-						if ($width>320)
-							$w_thumb_h=320;
-						else
-							$w_thumb_h=$width;
-					}
-					else{
-						if ($height>240)
-							$w_thumb_h=floor(240*$width/$height);
-						else
-							$w_thumb_h=$width;
-					}
-					if ($w_thumb_h==$width)
-						$thumb_h=$urlimg;
+						$w_large=$width;
+				}
+				else{
+					if ($height>900)
+						$w_large=floor(900*$width/$height);
 					else
-						$thumb_h="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb_h."px-". urlencode($img);
+						$w_large=$width;
+				}
+				if ($w_large==$width)
+					$large=$urlimg;
+				else
+					$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_large."px-". urlencode($img);
 				
-					// large
-					if ($width/$height>1400/900){
-						if ($width>1400)
-							$w_large=1400;
-						else
-							$w_large=$width;
-					}
-					else{
-						if ($height>900)
-							$w_large=floor(900*$width/$height);
-						else
-							$w_large=$width;
-					}
-					if ($w_large==$width)
-						$large=$urlimg;
-					else
-						$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_large."px-". urlencode($img);
-				}
-				else {
-					$width=0;
-					$height=0;	
-					// no metadata on image -> no image
-					$tab_prop["P18"]="";
-				}
-	
-				unset($size);
 			}
-			$commons_artist=esc_dblq($commons_artist);
-			$commons_credit=esc_dblq($commons_credit);
-			$commons_license=esc_dblq($commons_license);	
-			$thumb=esc_dblq($thumb);
-			$thumb_h=esc_dblq($thumb_h);
-			$large=esc_dblq($large);
-			$sql="INSERT INTO commons_img (P18,commons_artist,commons_credit,commons_license,thumb,thumb_h,width_h,large,width,height) VALUES (\"".$tab_prop["P18"]."\",\"".$commons_artist."\",\"".$commons_credit."\",\"".$commons_license."\",\"".$thumb."\",\"".$thumb_h."\",$w_thumb_h,\"".$large."\",$width,$height)";
-			if ($width!=0)
-				$rep=mysql_query($sql);
+			unset($size);
 		}
-		else {
-			// no metadata on image -> no image
-			$tab_prop["P18"]="";
-		}
+		$commons_artist=esc_dblq($commons_artist);
+		$commons_credit=esc_dblq($commons_credit);
+		$commons_license=esc_dblq($commons_license);	
+		$thumb=esc_dblq($thumb);
+		$large=esc_dblq($large);
+		$sql="INSERT INTO commons_img (P18,commons_artist,commons_credit,commons_license,thumb,large) VALUES (\"".$tab_prop["P18"]."\",\"".$commons_artist."\",\"".$commons_credit."\",\"".$commons_license."\",\"".$thumb."\",\"".$large."\")";
+		$rep=mysql_query($sql);
 	}
 	else{
 		$row = mysql_fetch_assoc($rep);
@@ -258,8 +214,6 @@ if ($tab_prop["P18"]!=""){
 		$commons_credit=esc_dblq($row['commons_credit']);
 		$commons_license=esc_dblq($row['commons_license']);
 		$thumb=esc_dblq($row['thumb']);
-		$thumb_h=esc_dblq($row['thumb_h']);
-		$w_thumb_h=$row['width_h'];
 		$large=esc_dblq($row['large']);
 		$tab_prop["P18"]=esc_dblq($tab_prop["P18"]);
 	}
@@ -332,7 +286,7 @@ if ($year1==NULL)
 if ($year2==NULL)
 	$year2="NULL";
 
-$sql="INSERT INTO artworks (qwd,P18,P214,P217,P347,P350,P373,P727,P973,P1212,year1,year2,b_date,commons_artist,commons_credit,commons_license,thumb,thumb_h,width_h,large) VALUES ($item,\"".$tab_prop["P18"]."\",\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$tab_prop["P973"]."\",\"".$tab_prop["P1212"]."\",$year1,$year2,\"".$b_date."\",\"".$commons_artist."\",\"".$commons_credit."\",\"".$commons_license."\",\"".$thumb."\",\"".$thumb_h."\",$w_thumb_h,\"".$large."\")";
+$sql="INSERT INTO artworks (qwd,P18,P214,P217,P347,P350,P373,P727,P973,P1212,year1,year2,b_date,commons_artist,commons_credit,commons_license,thumb,large) VALUES ($item,\"".$tab_prop["P18"]."\",\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$tab_prop["P973"]."\",\"".$tab_prop["P1212"]."\",$year1,$year2,\"".$b_date."\",\"".$commons_artist."\",\"".$commons_credit."\",\"".$commons_license."\",\"".$thumb."\",\"".$large."\")";
 $rep=mysql_query($sql);
 
 $sql="SELECT id FROM artworks WHERE qwd=\"$item\"";

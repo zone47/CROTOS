@@ -44,17 +44,13 @@ body{
 	padding-left:0;
 	text-align:center;
 }
-#recherche{
+#topic_title{
 	clear:both;
-	display:inline-block;
+	display:block;
 	width:95%;
 	margin-left:2%;
+	
 }
-#ok{
-    display:block;
-	clear:both;
-	margin:auto;
-}/*
 .ui-helper-hidden-accessible{
 	display:inline-block;
 	font-size:1.2em;
@@ -62,7 +58,7 @@ body{
 	top:2.2em;;
 	right:8%;
 	color:#666;
-}*/
+}
 #ok{
 	margin-top:10px;	
 }
@@ -105,19 +101,13 @@ body{
 	display:inline;	
 }
 .item { 
+	width:47%;
 	padding-bottom:15px;
 	font-size:0.9em;
-	margin:auto;
-	float:none;
-	height:auto;
+	margin-left:2%;
+	margin-right:1%;
+	max-width:220px;
 }
-.thumb{
-	height:auto;
-}
-.thumb div{
-	top:auto;
-	transform:none;
-}/*
 .item.w2 {
 	margin-left:1%;
 	margin-right:2%;
@@ -136,4 +126,4 @@ body{
 	display:block;	
 	text-align:center;
 	margin-bottom:10px;
-}*/
+}

@@ -56,8 +56,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "تصنيف كومنز",
-	"everything"=> "كل شيء",
-	"alias"=> "تعرف أيضا باسم"
+	"everything"=> "كل شيء"
 ),
 "bn" => array(
 	"lang_code"=> "bn",
@@ -114,8 +113,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "কমন্স বিষয়শ্রেণী",
-	"everything"=> "সমস্তকিছু",
-	"alias"=> "আরও যে নামে পরিচিত"
+	"everything"=> "সমস্তকিছু"
 ),
 "br" => array(
 	"lang_code"=> "br",
@@ -172,8 +170,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	//"CommonsCat" => "Commons category",
-	"everything"=> "Pep tra",
-	"alias"=> "Anvet ivez"
+	"everything"=> "Pep tra"
 ),
 "ca" => array(
 	"lang_code"=> "ca",
@@ -230,8 +227,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	////"CommonsCat" => "Commons category",
-	"everything"=> "Tot",
-	"alias"=> "També conegut com"
+	"everything"=> "Tot"
 ),
 "cs" => array(
 	"lang_code"=> "cs",
@@ -288,8 +284,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "Kategorie na Commonsy",
-	"everything"=> "Všechno",
-	"alias"=> "Aliasy"
+	"everything"=> "Všechno"
 ),
 "de" => array(
 	"lang_code"=> "de",
@@ -346,8 +341,7 @@ $trads = array(
 	"Joconde" => "Base Joconde",
 	"Atlas" => "Base Atlas",
 	//"CommonsCat" => "Commons category",
-	"everything"=> "Alles",
-	"alias"=> "Auch bekannt als"
+	"everything"=> "Alles"
 ),
 "el" => array(
 	"lang_code"=> "el",
@@ -404,8 +398,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "Κατηγορία Commons",
-	"everything"=> "Καθετί",
-	"alias"=> "Γνωστό επίσης ως"
+	"everything"=> "Καθετί"
 ),
 "en" => array(
 	"lang_code"=> "en",
@@ -462,8 +455,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "Commons category",
-	"everything"=> "everything",
-	"alias"=> "Also known as"
+	"everything"=> "everything"
 ),
 "eo" => array(
 	"lang_code"=> "eo",
@@ -520,8 +512,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "Kategorio de Komunejoy",
-	"everything"=> "Ĉio",
-	"alias"=> "Kromnomita"
+	"everything"=> "Ĉio"
 ),
 "es" => array(
 	"lang_code"=> "es",
@@ -578,8 +569,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "Categoría de Commons",
-	"everything"=> "Todo",
-	"alias"=> "Alias"
+	"everything"=> "Todo"
 ),
 "fa" => array(
 	"lang_code"=> "fa",
@@ -636,8 +626,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "ویکی‌انبار-رده",
-	"everything"=> "همه چیز",
-	"alias"=> "نام(های) دیگر"
+	"everything"=> "همه چیز"
 ),
 "fi" => array(
 	"lang_code"=> "fi",
@@ -694,8 +683,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "Commons-luokka",
-	"everything"=> "Kaikki",
-	"alias"=> "Tunnetaan myös nimellä"
+	"everything"=> "Kaikki"
 ),
 "fr" => array(
 	"lang_code"=> "fr",
@@ -752,8 +740,7 @@ $trads = array(
 	"Joconde" => "Base Joconde",
 	"Atlas" => "Base Atlas",
 	"CommonsCat" => "Catégorie Commons",
-	"everything"=> "tout",
-	"alias"=> "Autre titre"
+	"everything"=> "tout"
 ),
 "he" => array(
 	"lang_code"=> "he",
@@ -810,8 +797,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	//"CommonsCat" => "Commons category",
-	"everything"=> "הכול",
-	"alias"=> "מכונה גם"
+	"everything"=> "הכול"
 ),
 "hi" => array(
 	"lang_code"=> "hi",
@@ -868,8 +854,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	//"CommonsCat" => "Commons category",
-	"everything"=> "सब कुछ",
-	"alias"=> "इस रूप में भी जाना जाता है"
+	"everything"=> "सब कुछ"
 ),
 "id" => array(
 	"lang_code"=> "id",
@@ -926,8 +911,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	//"CommonsCat" => "Commons category",
-	"everything"=> "Segalanya",
-	"alias"=> "Nama lain"
+	"everything"=> "Segalanya"
 ),
 "it" => array(
 	"lang_code"=> "it",
@@ -984,8 +968,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "Categoria su Commons",
-	"everything"=> "tutto",
-	"alias"=> "Anche conosciuto come"
+	"everything"=> "tutto"
 ),
 "ja" => array(
 	"lang_code"=> "ja",
@@ -1042,8 +1025,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	//"CommonsCat" => "Commons category",
-	"everything"=> "すべてのもの",
-	"alias"=> "別名"
+	"everything"=> "すべてのもの"
 ),
 "jv" => array(
 	"lang_code"=> "jv",
@@ -1100,8 +1082,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	//"CommonsCat" => "Commons category",
-	"everything"=> "Kabèh",
-	"alias"=> "Nama lain"
+	"everything"=> "Kabèh"
 ),
 "ko" => array(
 	"lang_code"=> "ko",
@@ -1158,8 +1139,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "공용 분류",
-	"everything"=> "모든 문서",
-	"alias"=> "다른 이름"
+	"everything"=> "모든 문서"
 ),
 "mu" => array(
 	"lang_code"=> "mu",
@@ -1198,7 +1178,7 @@ $trads = array(
 	"180" => "Houba",
 	"186" => "Houba",
 	"347" => "Houba",
-	"361" => "Houba",
+	"361" => "Houbaf",
 	"144" => "Houba",
 	"921" => "Houba",
 	"941" => "Houba",
@@ -1216,8 +1196,7 @@ $trads = array(
 	"Joconde" => "Houba",
 	"Atlas" => "Houba",
 	"CommonsCat" => "Houba",
-	"everything"=> "Houba",
-	"alias"=> "Houba"
+	"everything"=> "Houba"
 ),
 "nl" => array(
 	"lang_code"=> "nl",
@@ -1274,8 +1253,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "Categorie in Commons",
-	"everything"=> "Alles",
-	"alias"=> "Ook bekend als"
+	"everything"=> "Alles"
 ),
 "pa" => array(
 	"lang_code"=> "pa",
@@ -1332,8 +1310,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	//"CommonsCat" => "Commons category",
-	"everything"=> "ਸਭ ਕੁਝ",
-	"alias"=> "ਇਹ ਵੀ ਦੇ ਤੌਰ ਤੇ ਜਾਣਿਆ"
+	"everything"=> "ਸਭ ਕੁਝ"
 ),
 "pl" => array(
 	"lang_code"=> "pl",
@@ -1390,8 +1367,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "Kategoria na Commons",
-	"everything"=> "wszystko",
-	"alias"=> "Inne nazwy"
+	"everything"=> "wszystko"
 ),
 "pt" => array(
 	"lang_code"=> "pt",
@@ -1448,8 +1424,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "Categoria do Commons",
-	"everything"=> "Tudo",
-	"Nomes alternativos"=> "Alias"
+	"everything"=> "Tudo"
 ),
 "ru" => array(
 	"lang_code"=> "ru",
@@ -1506,8 +1481,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "Категория Викисклада",
-	"everything"=> "Все",
-	"alias"=> "Также известен как"
+	"everything"=> "Все"
 ),
 "sv" => array(
 	"lang_code"=> "sv",
@@ -1564,8 +1538,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "Commons-kategori",
-	"everything"=> "allt",
-	"alias"=> "Även känd som"
+	"everything"=> "allt"
 ),
 "sw" => array(
 	"lang_code"=> "sw",
@@ -1622,8 +1595,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	//"CommonsCat" => "Commons category",
-	"everything"=> "Zote",
-	"alias"=> "Pia inajulikana kama"
+	"everything"=> "Zote"
 ),
 "te" => array(
 	"lang_code"=> "te",
@@ -1680,8 +1652,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "కామన్స్ వర్గం",
-	"everything"=> "ప్రతిదీ",
-	"alias"=> "గా కూడా తెలిసిన"
+	"everything"=> "ప్రతిదీ"
 ),
 "th" => array(
 	"lang_code"=> "th",
@@ -1738,8 +1709,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	//"CommonsCat" => "Commons category",
-	"everything"=> "ทุกอย่าง",
-	"alias"=> "หรือที่เรียกว่า"
+	"everything"=> "ทุกอย่าง"
 ),
 "tr" => array(
 	"lang_code"=> "tr",
@@ -1796,8 +1766,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	//"CommonsCat" => "Commons category",
-	"everything"=> "Her şey",
-	"alias"=> "Şu şekilde de bilinir"
+	"everything"=> "Her şey"
 ),
 "uk" => array(
 	"lang_code"=> "uk",
@@ -1854,8 +1823,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	//"CommonsCat" => "Commons category",
-	"everything"=> "Всі",
-	"alias"=> "Додаткові назви"
+	"everything"=> "Всі"
 ),
 "vi" => array(
 	"lang_code"=> "vi",
@@ -1912,8 +1880,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "Thể loại Commons",
-	"everything"=> "Tất cả mọi thứ",
-	"alias"=> "Còn được gọi"
+	"everything"=> "Tất cả mọi thứ"
 ),
 "zh" => array(
 	"lang_code"=> "zh",
@@ -1970,8 +1937,7 @@ $trads = array(
 	"Joconde" => "Joconde",
 	"Atlas" => "Atlas",
 	"CommonsCat" => "維基共享資源分類頁",
-	"everything"=> "一切",
-	"alias"=> "别名"
+	"everything"=> "一切"
 )
 
 );
