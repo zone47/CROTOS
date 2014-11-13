@@ -130,7 +130,7 @@ if (($l=="ar")||($l=="fa")||($l=="he"))
     \"isOriginTop\": true\n";
 ?>
 		});
-	});*/
+	});
 <?php }
  else { ?>	
  $("#iconot1").attr("src","img/arrow_up.png");
