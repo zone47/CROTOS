@@ -1,7 +1,6 @@
 <?php 
 /* / */
 $script_name="index.php";
-$nb=20; // Nombre de résultats par défaut
 $p=1; // numéro de page par défaut
 $lgs=array("ar","bn","br","ca","cs","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 $random=false;
@@ -91,9 +90,6 @@ if ($mode==1){
 if (isset($_GET['q']))
 	if ($_GET['q']!="") 
 		$q=$_GET['q'];
-if (isset($_GET['nb']))
-	if ($_GET['nb']!="") 
-		$nb=intval($_GET['nb']);
 if (isset($_GET['p']))
 	if ($_GET['p']!="") 
 		$p=intval($_GET['p']);

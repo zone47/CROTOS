@@ -18,6 +18,15 @@ if (isset($_GET['l']))
 		setcookie ("l",$_GET['l'], time() + 31536000);
 		$l=$_GET['l'];
 	}
+$nb=20; 
+if (isset($_COOKIE['nb']))
+	$nb=$_COOKIE['nb'];
+if (isset($_GET['nb']))
+	if ($_GET['nb']!=""){ 
+		setcookie ("nb",$_GET['nb'], time() + 31536000);
+		$nb=$_GET['nb'];
+	}
+$nb=intval($nb);
 
 include "config.php";
 include "init.php";
@@ -85,8 +94,8 @@ include "text_nav.php";
 foreach($tab_idx as $key=>$value)
 	if ($value!="")
 		echo txt_prop(0,$value,$l,"normal",0,0)." - ";
-?>CROTOS</title>
-	<meta name="description" content="CROTOS<?php
+?>Crotos</title>
+	<meta name="description" content="Crotos<?php
 foreach($tab_idx as $key=>$value)
 	if ($value!="")
 		echo " - ".txt_prop(0,$value,$l,"normal",0,0);
@@ -108,24 +117,20 @@ echo " - ".$txt_res;
      <link rel="stylesheet" href="css/jquery-ui.css">
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery-ui.min.js"></script>
-    <script src="js/masonry.pkgd.min.js"></script>
     <script src="js/imagesloaded.pkgd.min.js"></script>
     <script src="js/yoxview/yoxview-init.js"></script>
     <script>
 $(document).ready(function() {
 <?php if ($num_rows>1){ ?>
-	$(".notice").css({ display: "none" });
-	var $container = $('#contenu').masonry();
-	$container.imagesLoaded( function() {
-	  $container.masonry({
-		  itemSelector: '.item'
+	function preload(arrayOfImages) { $(arrayOfImages).each(function () { $('<img />').attr('src',this).appendTo('body').css('display','none'); }); }
+	preload(['img/arrow_down.png','img/magnifying_on.png']);
 <?php
 if (($l=="ar")||($l=="fa")||($l=="he"))
 	echo ",\"isOriginLeft\": false,
     \"isOriginTop\": true\n";
 ?>
 		});
-	});
+	});*/
 <?php }
  else { ?>	
  $("#iconot1").attr("src","img/arrow_up.png");
@@ -253,13 +258,7 @@ else
 		?>
 	});
 });
-function preload(arrayOfImages) {
-    $(arrayOfImages).each(function(){
-        $('<img/>')[0].src = this;
-    });
-}
-preload(['img/arrow_down.png','img/magnifying_on.png']);
-	</script>
+</script>
     <style><?php
 	if (($l=="ar")||($l=="fa")||($l=="he"))
     	echo "
@@ -284,7 +283,7 @@ preload(['img/arrow_down.png','img/magnifying_on.png']);
 <div id="entete">
     <div id="bl_titre">
         <a href="/crotos/" title="CROTOS"><img src="img/crotos.jpg" alt="CROTOS" width="108" height="120" id="img_crotos"/></a>
-        <a href="/crotos/" title="CROTOS"><h1><?php /* Easter egg */if ($l=="mu") echo "HOUBA"; else echo "CROTOS"; ?></h1></a>
+        <a href="/crotos/" title="CROTOS"><h1><?php /* Easter egg */if ($l=="mu") echo "HOUBA"; else echo "Crotos"; ?></h1></a>
     </div>
 	<?php include "form.php" ?>    
 </div>
@@ -302,7 +301,7 @@ preload(['img/arrow_down.png','img/magnifying_on.png']);
 <div id="contenu" class="yoxview" >
 <?php
 $cpt=0;
-$nitem=1;
+// Masonry $nitem=1;
 while($data = mysql_fetch_assoc($rep)) {
 	$content="";
 	$cpt++;
@@ -312,6 +311,11 @@ while($data = mysql_fetch_assoc($rep)) {
 	$described_link=$data['P973'];
 	$titre="";
 	$titre=label_item($qwd_art,$l);
+	$trunc_title=truncate($titre);
+	$trunk=false;
+	if ($titre!=$trunc_title)
+		$trunk=true;
+	$alias=alias_item($qwd_art,$l);
 	$creator=txt_prop($id_artw,170,$l,"creator",false);
 	$pageWP=page_item($qwd_art,$l);
 	$lgWP="";
@@ -339,21 +343,21 @@ while($data = mysql_fetch_assoc($rep)) {
 	$based=txt_prop($id_artw,144,$l);
 	$subject=txt_prop($id_artw,921,$l);
 	$inspired=txt_prop($id_artw,941,$l);
+	
+	if (intval($data['width_h'])<201)
+		$width_item=202;
+	else
+		$width_item=intval($data['width_h'])+2;
 		
 	if ($num_rows>1){
-		$content.="	<div class=\"item";
-		if ($nitem==2) $content.= " w2";
+		$content.="	<div style=\"width:".$width_item."px\" class=\"item";
 		$content.= "\">\n";
 	}
 	else 
-		$content.="	<div class=\"solo\">\n";
-	if ($nitem==1) 
-		$nitem=2;
-	else
-		$nitem=1;
+		$content.="	<div class=\"solo\" style=\"width:".$width_item."px\">\n";
 		
-	$content.="<div class=\"thumb\">";
-	if ($data['thumb']!=""){
+	$content.="		<div class=\"thumb\"><div>";
+	if ($data['thumb_h']!=""){
 		$license=$data['commons_license'];
 		if ($license!=""){
 			if ($license=="pd")
@@ -396,17 +400,16 @@ while($data = mysql_fetch_assoc($rep)) {
 		if (($credits!="")&&($commons_credit!=""))
 			$credits.=" | ";
 		$credits.=$commons_credit;
-				
-		$content.="		<a href=\"".$commons_link."\" data-file=\"".esc_dblq($data['large'])."\" class=\"yox\"><img src=\"".esc_dblq($data['thumb'])."\" alt=\"".esc_dblq($titre)."\" data-credit=\"&lt;b&gt;".esc_dblq($titre)."&lt;/b&gt;&lt;br /&gt;".$credits."\"/></a>\n";
+		$content.="<a href=\"".$commons_link."\" data-file=\"".esc_dblq($data['large'])."\" class=\"yox\"><img src=\"".esc_dblq($data['thumb_h'])."\" alt=\"".esc_dblq($titre)."\" data-credit=\"&lt;b&gt;".esc_dblq($titre)."&lt;/b&gt;&lt;br /&gt;".$credits."\"/></a>";
 	}
 	else 
-		$content.="<img src=\"img/no_image.png\" alt=\"\">";
-	$content.="</div>";
+		$content.="<img src=\"img/no_image2.png\" alt=\"\" width=\"200\" height=\"240\">";
+	$content.="\n		</div></div>";
 		
-	$content.="		<div class=\"cartel\">\n";
+	$content.="\n		<div class=\"cartel\">";
 
 	
-	$content.="			<div class=\"entete\"><span>".$titre."</span>";
+	$content.="\n			<div class=\"entete\"><span>".$trunc_title."</span>";
 	if ($creator!="")
 		$content.="<br/>".$creator;
 	if ($location!=""){
@@ -416,12 +419,14 @@ while($data = mysql_fetch_assoc($rep)) {
 			$content.="<br />";
 		$content.=$location;
 	}
-	$content.="			</div>";	
+	$content.="\n			</div>";	
 	
-	$content.="			<div class=\"act_not\">";
+	$content.="\n			<div class=\"btn_notice\"><img id=\"iconot$cpt\" src=\"img/arrow_down.png\" alt=\"notice\" class=\"lien_notice\">\n			</div>";
+
+	$content.="\n			<div class=\"act_not\">";
 	$uri_link="https://www.wikidata.org/wiki/Q".$qwd_art;
-	$content.="	<a href=\"".$uri_link."\" title=\"".translate($l,"Wikidata")."\"><img src=\"img/wd_ico.png\" alt=\"\"/></a>";
-	if ($data['thumb']!="")
+	$content.="<a href=\"".$uri_link."\" title=\"".translate($l,"Wikidata")."\"><img src=\"img/wd_ico.png\" alt=\"\"/></a>";
+	if ($data['thumb_h']!="")
 		$content.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")."\"><img src=\"img/commons_ico.png\" alt=\"\"/></a>";
 	if ($described_link!="")
 		$content.="	<a href=\"".$described_link."\" title=\"".translate($l,"973")."\"><img src=\"img/site_link.png\" alt=\"\"/></a>";
@@ -436,12 +441,16 @@ while($data = mysql_fetch_assoc($rep)) {
 			$content.=" <a href=\"https://".$lgWP.".wikipedia.org/wiki/".str_replace(" ","_",str_replace("\"","",$pageWP))."\" class=\"lgWP\" title=\"".translate($l,"Wikipedia")."\">".$lgWP."</a>";
 	}
 
-	$content.="</div>";
-	$content.="<div style=\"text-align:center;clear:both\"><img id=\"iconot$cpt\" src=\"img/arrow_down.png\" alt=\"notice\" class=\"lien_notice\"></div>";
-	$content.="<div id=\"notice$cpt\" class=\"notice\">";
+	$content.="\n			</div>";
+	$content.="\n			<div id=\"notice$cpt\" class=\"notice\">";
+	
+	if ($trunk!="")
+		$content.="\n<p><b>".$titre."</b></p>";	
+	if ($alias!="")
+		$content.="\n<p><span class=\"libelle\">".translate($l,"alias")."</span>&nbsp;:<br/>".$alias."</p>";	
 		
 	if ((!(is_null($data['year2'])))||($data['year1']!=$data['year2'])){
-		$content.="<p>";
+		$content.="\n<p class=\"start_cartel\">";
 		if ($data['b_date']==1)
 			$content.="~&nbsp;&nbsp;";
 		if (!(is_null($data['year1'])))
@@ -449,34 +458,37 @@ while($data = mysql_fetch_assoc($rep)) {
 		if ((!(is_null($data['year2'])))&&($data['year1']!=$data['year2']))
 			$content.=" / ".$data['year2'];
 		$content.="</p>";
+		$content.="<p>";
 	}
-	if ($type!="")
-		$content.="<p>".$type."</p>";
+	else
+		$content.="\n<p class=\"start_cartel\">";
+		
+	$content.=$type."</p>";
 	if ($material!="")
-		$content.="<p>".$material."</p>";
+		$content.="\n<p>".$material."</p>";
 	if ($inv!="")
-		$content.="<p><span class=\"libelle\">".translate($l,"217")."</span>&nbsp;: ".$inv."</p>";
+		$content.="\n<p><span class=\"libelle\">".translate($l,"217")."</span>&nbsp;: ".$inv."</p>";
 	if ($series!="")
-		$content.="<p>".$series."</p>";
+		$content.="\n<p>".$series."</p>";
 	if ($partof!="")
-		$content.="<p>".$partof."</p>";
+		$content.="\n<p>".$partof."</p>";
 		
 	if ($mouvement!="")
-		$content.="<p>".$mouvement."</p>";
+		$content.="\n<p>".$mouvement."</p>";
 	if ($genre!="")
-		$content.="<p>".$genre."</p>";
+		$content.="\n<p>".$genre."</p>";
 	if ($based!="")
-		$content.="<p>".$based."</p>";
+		$content.="\n<p>".$based."</p>";
 	if ($subject!="")
-		$content.="<p>".$subject."</p>";
+		$content.="\n<p>".$subject."</p>";
 	if ($inspired!="")
-		$content.="<p>".$inspired."</p>";
+		$content.="\n<p>".$inspired."</p>";
 	if ($depicts!="")
-		$content.="<p>".$depicts."</p>";
+		$content.="\n<p>".$depicts."</p>";
 	
-	$content.="<div class=\"liens\">";
+	$content.="\n				<div class=\"liens\">";
 	if ($loc_link!="")
-		$content.="<p>".$loc_link."</p>";
+		$content.="\n<p>".$loc_link."</p>";
 	if ($data['P727']!="")
 		$content.="<p><a href=\"http://europeana.eu/portal/record/".$data['P727'].".html\"><img src=\"img/europeana.png\" alt=\"Europeana\"/></a> <a href=\"http://europeana.eu/portal/record/".$data['P727'].".html\" class=\"externe\">".translate($l,"Europeana")."</a></p>";
 	if ($data['P214']!="")
@@ -491,17 +503,18 @@ while($data = mysql_fetch_assoc($rep)) {
 		$content.="<p><a href=\"https://commons.wikimedia.org/wiki/Category:".str_replace(" ","_",$data['P373'])."\"><img src=\"img/commons.png\" alt=\"Commons\"/></a> <a href=\"https://commons.wikimedia.org/wiki/Category:".str_replace(" ","_",$data['P373'])."\" class=\"externe\">".translate($l,"CommonsCat")."</a></p>";
 
 	$url="http://tools.wmflabs.org/reasonator/?lang=".$l."&amp;q=".$qwd_art;	
-	$content.="<p> <a href=\"".$url."\"><img src=\"img/reasonator.png\" alt=\"Reasonator\"/></a> <a href=\"".$url."\" class=\"externe\">".translate($l,"reasonator")."</a></p>";
+	$content.="\n<p> <a href=\"".$url."\"><img src=\"img/reasonator.png\" alt=\"Reasonator\"/></a> <a href=\"".$url."\" class=\"externe\">".translate($l,"reasonator")."</a></p>";
 	
 	$url="http://zone47.com/crotos/?q=".$qwd_art;	
-	$content.="<p> <a href=\"".$url."\"><img src=\"img/crotos.png\" alt=\"CROTOS\"/></a> <a href=\"".$url."\">crotos/?q=".$qwd_art."</a></p>";
+	$content.="\n<p> <a href=\"".$url."\"><img src=\"img/crotos.png\" alt=\"CROTOS\"/></a> <a href=\"".$url."\">crotos/?q=".$qwd_art."</a></p>";
 
-	$content.="</div>";
+	$content.="\n				</div>";
 	
-	$content.="</div>";
+	$content.="\n			</div>";
 
-	$content.="		</div>\n";
-	$content.="	</div>\n";
+	$content.="\n		</div>";
+	$content.="\n	</div>";
+	$content.="\n	<script>document.getElementById('notice$cpt').style.display = 'none';</script>\n";
 	
 	echo $content;	
 }
