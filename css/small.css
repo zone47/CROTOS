@@ -1,8 +1,8 @@
 /* / */
 /* Display max 600px" */
-/*.nav a.nav_sec,.nav_sec{
+.nav a.nav_sec,.nav_sec{
 	display:none;	
-}*/
+}
 #bl_titre{
 	padding-left:2%;
 	width:auto;
