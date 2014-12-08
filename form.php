@@ -4,7 +4,7 @@
 <form action="index.php" method="get" id="form"  name="form"  accept-charset="UTF-8">
 	<div id="params">
     	<div>
-		<label for="lg"><?php echo translate($l,"language") ?></label>
+		<label for="lg" id="label_lg"><?php echo translate($l,"language") ?></label>
 		<select name="l" id="lg">
 <?php
 for ($i=0;$i<count($lgs);$i++){
@@ -12,7 +12,7 @@ for ($i=0;$i<count($lgs);$i++){
     echo "			<option value=\"".translate($lgs[$i],"lang_code")."\"";
 	if ($l==translate($lgs[$i],"lang_code"))
 		 echo " selected=\"selected\"";
-	echo " >".translate($lgs[$i],"lang_code")." - ".translate($lgs[$i],"lg")."</option>\n";	
+	echo " >".translate($lgs[$i],"lg")."</option>\n";	
 	/* Easter egg */if (($lgs[$i]=="mu")&&($l!="mu")) echo " -->";
 }
 ?>
@@ -26,6 +26,7 @@ foreach($tab_idx as $key=>$value)
 
 		<label for="nb"><?php echo translate($l,"img_page") ?></label>
 		<select name="nb" id="nb">
+        	<option value="10" <?php if ($nb==10) echo "selected=\"selected\""; ?>>10</option>
 			<option value="20" <?php if ($nb==20) echo "selected=\"selected\""; ?>>20</option>
     		<option value="40" <?php if ($nb==40) echo "selected=\"selected\""; ?>>40</option>
     		<option value="60" <?php if ($nb==60) echo "selected=\"selected\""; ?>>60</option>
@@ -33,7 +34,12 @@ foreach($tab_idx as $key=>$value)
             <option value="200" <?php if ($nb==200) echo "selected=\"selected\""; ?>>200</option>
 		</select>
         </div>
-		<div id="contrib"><span><?php
+		<?php
+	if ($mode==0)
+		echo "<div id=\"contrib\" class=\"mode_plus\"><span>";
+	else
+		echo "<div id=\"contrib\"><span>";
+		
 	if (($l=="ar")||($l=="fa")||($l=="he"))
 		echo "←";
 	else
@@ -66,28 +72,27 @@ if ($random)
     </div>
 
 	<div id="facets">
-		<span class="criteres"><?php
-foreach($tab_idx as $key=>$value)
-	if (($value!="")&&($key!="p31")){
-		echo txt_prop(0,$value,$l,"normal",0,0);
-		echo "			<a href=\"?l=".$l;
-		if ($nb!="20") echo "&amp;nb=".$nb;
-		foreach($tab_idx as $key2=>$value2)
-			if ($value2!="")
-				if ($key2!=$key)
-					echo "&amp;".$key2."=".$value2;
-		foreach($tab_miss as $key2=>$value2)
-			if ($value2!="")
-				if ($key2!=$key)
-					echo "&amp;".$key2."=".$value2;
-		if ($s!="") echo "&amp;s=".$s;
-		echo "\">";
-		echo "<img src=\"img/delete.png\" alt=\"\" width=\"16\" height=\"17\"/>";
-		echo "</a>";
-	}
-?></span>
-	<div id="form_facets">
-		<select name="p31" id="listp31">
+<?php
+if (($y1=="-40000")&&($y2=="2014"))		
+	echo "   		<div class=\"mode_plus\">";
+?>
+   		<div id="slider">
+            <input type="text" id="amount1" value="<?php echo $y1; ?>" data-index="0" class="sliderValue" name="y1" />
+            <div id="slider-range"></div>
+            <input type="text" id="amount2" value="<?php echo $y2; ?>" data-index="1" class="sliderValue"  name="y2" />
+            <input type="submit" id="ok2" value=" " />
+        </div>
+<?php
+if (($y1=="-40000")&&($y2=="2014"))		
+	echo "</div>";
+?>
+<?php
+if ($tab_idx["p31"]=="")	
+	echo "   		 <select name=\"p31\" id=\"listp31\" class=\"mode_plus\">";
+else 
+	echo "   		 <select name=\"p31\" id=\"listp31\">";
+	
+?>
     		<option value="" id="tout"><?php echo ucfirst(translate($l,"everything")) ?></option>
 <?php 
 $p31_list=array("3305213","860861","93184","11060274","133067","1473346","184296");
@@ -100,16 +105,36 @@ for ($i=0;$i<count($p31_list);$i++){
 	echo $option.">".ucfirst(label_item($p31_list[$i],$l))."</option>\n";
 }
 ?>
-			</select>
-    
-            <div id="slider">
-                <input type="text" id="amount1" value="<?php echo $y1; ?>" data-index="0" class="sliderValue" name="y1" />
-                <div id="slider-range"></div>
-                <input type="text" id="amount2" value="<?php echo $y2; ?>" data-index="1" class="sliderValue"  name="y2" />
-                <input type="submit" id="ok2" value=" " />
-            </div>
-            
-        </div>
+		</select>
+<?php
+$txt_crit="";
+foreach($tab_idx as $key=>$value)
+	if (($value!="")&&($key!="p31")){
+		$txt_crit.="<span class=\"libelle_criteres\">".translate($l,str_replace("p","",$key))." :</span> ";
+		$txt_crit.=txt_prop(0,$value,$l,"normal",0,0);
+		$txt_crit.="			<a href=\"?l=".$l;
+		if ($nb!="20") $txt_crit.="&amp;nb=".$nb;
+		foreach($tab_idx as $key2=>$value2)
+			if ($value2!="")
+				if ($key2!=$key)
+					$txt_crit.="&amp;".$key2."=".$value2;
+		foreach($tab_miss as $key2=>$value2)
+			if ($value2!="")
+				if ($key2!=$key)
+					$txt_crit.="&amp;".$key2."=".$value2;
+		if ($s!="") $txt_crit.="&amp;s=".$s;
+		$txt_crit.="\">";
+		$txt_crit.="<img src=\"img/delete.png\" alt=\"\" width=\"16\" height=\"17\"/>";
+		$txt_crit.="</a>";
+	}
+if ($q!="")
+	$txt_crit.="<span class=\"libelle_criteres\">".translate($l,"Wikidata")." :</span> <a href=\"https://www.wikidata.org/wiki/Q".$q."\" class=\"externe\">Q".$q."</a>";
+	
+if ($txt_crit!="")
+	echo "<span class=\"criteres\">".$txt_crit."</span>";
+?>
+	<!--<div id="form_facets">
+	</div>-->
     </div>
 
     <?php

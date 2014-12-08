@@ -28,7 +28,7 @@ $(document).ready(function()
 </head>
 <body>
 <table id="occ" class="tablesorter ">
-<caption><b>CROTOS</b> - Occurences des labels selon les langues</caption>
+<caption><b>CROTOS</b> - Occurences des libellés selon les langues</caption>
 <thead> 
 <tr> 
     <th>Code</th> 

@@ -10,7 +10,7 @@ if (isset($_GET['mode']))
 		$mode=$_GET['mode'];
 	}
 
-$l="fr"; 
+$l="en"; 
 if (isset($_COOKIE['l']))
 	$l=$_COOKIE['l'];
 if (isset($_GET['l']))
@@ -117,20 +117,58 @@ echo " - ".$txt_res;
      <link rel="stylesheet" href="css/jquery-ui.css">
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery-ui.min.js"></script>
+    <!-- Masonry <script src="js/masonry.pkgd.min.js"></script> -->
     <script src="js/imagesloaded.pkgd.min.js"></script>
     <script src="js/yoxview/yoxview-init.js"></script>
     <script>
+function loadSprite(id_link,src, callback) { 
+	var sprite = new Image();
+	sprite.onload = callback;
+	sprite.src = src; 
+	$("#"+id_link).children("img").attr("src",src);
+
+}
+function img_magnify(){ 
+	$(".yox,.solo").each(function( index ) {
+		id_link=$(this).attr('id');
+		fic=$("#"+id_link).attr("data-file");
+		loadSprite(id_link,fic, function() {});
+	});
+}
+function init_display(){ 
+	if ($(window).width()>700){
+		$(".yoxview").yoxview({
+			linkToOriginalContext:true,
+			cacheImagesInBackground:true,
+			renderInfoPin:false,
+			<?php 
+			echo "close_popin:\"".translate($l,"close")."\"";
+			if (($l=="ar")||($l=="fa")||($l=="he"))
+				echo ",
+			isRTL:true";
+			?>
+		});
+		$( ".item" ).each(function( index ) {
+			if (!($(this).hasClass("solo")))
+				$(this).css("width",$(this).attr("data-width"));
+		});
+		$( ".thumb a" ).each(function( index ) {
+			this.href=$(this).attr("data-commons");
+			if (!($(this).hasClass("linksolo")))
+				$(this).children("img").attr("src",$(this).children("img").attr("data-img"));
+		});
+	}
+	else{
+		$(".item").css("width","100%");
+		$( ".thumb a" ).each(function( index ) {
+			this.href=$(this).attr("data-file");
+		});
+	}
+}
 $(document).ready(function() {
 <?php if ($num_rows>1){ ?>
 	function preload(arrayOfImages) { $(arrayOfImages).each(function () { $('<img />').attr('src',this).appendTo('body').css('display','none'); }); }
 	preload(['img/arrow_down.png','img/magnifying_on.png']);
-<?php
-if (($l=="ar")||($l=="fa")||($l=="he"))
-	echo ",\"isOriginLeft\": false,
-    \"isOriginTop\": true\n";
-?>
-		});
-	});
 <?php }
  else { ?>	
  $("#iconot1").attr("src","img/arrow_up.png");
@@ -240,23 +278,25 @@ else
         }
         return 0;
     }
-
     $("input.sliderValue").change(function() {
         var $this = $(this);
 		pos=idxdate($this.data("index"),$this.val());
         $("#slider-range").slider("values", $this.data("index"),pos);
     });
-		$(".yoxview").yoxview({
-		linkToOriginalContext:true,
-		cacheImagesInBackground:true,
-		renderInfoPin:false,
-		<?php 
-		echo "close_popin:\"".translate($l,"close")."\"";
-		if (($l=="ar")||($l=="fa")||($l=="he"))
-			echo ",
-		isRTL:true";
-		?>
-	});
+
+	init_display();
+});
+$(window).bind('resize', function(e)
+{
+	init_display();
+	if ($(window).width()<=700){
+		img_magnify();
+	}
+});
+$(window).load(function() {
+	if ($(window).width()<=700){
+		img_magnify();
+	}
 });
 </script>
     <style><?php
@@ -298,7 +338,12 @@ else
 	</div>
 </div>
 
-<div id="contenu" class="yoxview" >
+<?php
+if ($num_rows>1)
+	echo "<div id=\"contenu\" class=\"yoxview\" >";
+else
+	echo "<div id=\"contenu\" class=\"yoxview contentsolo\" >";	
+?>
 <?php
 $cpt=0;
 // Masonry $nitem=1;
@@ -308,7 +353,7 @@ while($data = mysql_fetch_assoc($rep)) {
 	$id_artw=$data['id'];
 	$qwd_art=$data['qwd'];
 	$inv=$data['P217'];
-	$described_link=$data['P973'];
+	$described_link=$data['link'];
 	$titre="";
 	$titre=label_item($qwd_art,$l);
 	$trunc_title=truncate($titre);
@@ -324,15 +369,17 @@ while($data = mysql_fetch_assoc($rep)) {
 		$lgWP=substr($pageWP,0,$pos);
 		$pageWP=substr($pageWP,$pos+1,strlen($pageWP));
 	}
+	
 	$location=txt_prop($id_artw,276,$l,"location",0);
-	if ($location==""){
-		$location=txt_prop($id_artw,195,$l,"location",0);
-		$loc_link=local_link($id_artw,195,$l);
-	}
-	else
+	$collection=txt_prop($id_artw,195,$l,"location",0);
+	$coll_or_loc=$collection;
+	if ($coll_or_loc=="")
+		$coll_or_loc=$location;
+	
+	$loc_link=local_link($id_artw,195,$l);
+	if ($loc_link=="")
 		$loc_link=local_link($id_artw,276,$l);
 	
-	$l_loc=
 	$type=txt_prop($id_artw,31,$l,"normal",0);
 	$material=txt_prop($id_artw,186,$l);
 	$series=txt_prop($id_artw,179,$l);
@@ -350,13 +397,42 @@ while($data = mysql_fetch_assoc($rep)) {
 		$width_item=intval($data['width_h'])+2;
 		
 	if ($num_rows>1){
-		$content.="	<div style=\"width:".$width_item."px\" class=\"item";
-		$content.= "\">\n";
+		$content.="	<div style=\"width:".$width_item."px\" class=\"item\" data-width=\"".$width_item."px\" >\n";
 	}
-	else 
-		$content.="	<div class=\"solo\" style=\"width:".$width_item."px\">\n";
+	else{ 
+		if ($data['large']!=""){
+			$width_big_img=0;
+			
+			if (strpos($data['large'],"commons/thumb")){
+				preg_match('#/[0-9]*px-#',$data['large'],$matches);
+				if ($matches)
+					$width_big_img=intval(str_replace("/","",str_replace("px-","",$matches[0])));
+			}
+			else{
+				$sql="select width from commons_img where P18=\"".esc_dblq($data['P18'])."\"";
+				$rep_img=mysql_query($sql);
+				$num_rows = mysql_num_rows($rep_img);
+				if ($num_rows!=0){
+					$data_img = mysql_fetch_assoc($rep_img);
+					$width_big_img=intval($data_img['width']);
+				}
+				
+			}
+			if ($width_big_img<348)
+				$width_big_img=348;
+			$width_big_img+=2;	
+
+			$content.="	<div class=\"item solo\" style=\"width:100%;max-width:".$width_big_img."px;\" data-width=\"".$width_item."px\">\n";
+		}
+		else{
+			$content.="	<div class=\"item solo\" style=\"width:".$width_item."px\" data-width=\"".$width_item."px\">\n";
+		}
+	}
 		
-	$content.="		<div class=\"thumb\"><div>";
+	if ($num_rows>1)
+		$content.="		<div class=\"thumb multiimg\"><div>";
+	else
+		$content.="		<div class=\"thumb soloimg\"><div>";
 	if ($data['thumb_h']!=""){
 		$license=$data['commons_license'];
 		if ($license!=""){
@@ -400,7 +476,10 @@ while($data = mysql_fetch_assoc($rep)) {
 		if (($credits!="")&&($commons_credit!=""))
 			$credits.=" | ";
 		$credits.=$commons_credit;
-		$content.="<a href=\"".$commons_link."\" data-file=\"".esc_dblq($data['large'])."\" class=\"yox\"><img src=\"".esc_dblq($data['thumb_h'])."\" alt=\"".esc_dblq($titre)."\" data-credit=\"&lt;b&gt;".esc_dblq($titre)."&lt;/b&gt;&lt;br /&gt;".$credits."\"/></a>";
+		if ($num_rows>1)
+			$content.="<a href=\"".$commons_link."\" data-file=\"".esc_dblq($data['large'])."\" data-commons=\"".$commons_link."\" class=\"yox\" id=\"link$cpt\"><img src=\"".esc_dblq($data['thumb_h'])."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($data['thumb_h'])."\" data-credit=\"&lt;b&gt;".esc_dblq($titre)."&lt;/b&gt;&lt;br /&gt;".$credits."\"/></a>";
+		else
+			$content.="<a href=\"".$commons_link."\" data-file=\"".esc_dblq($data['large'])."\" data-commons=\"".$commons_link."\" class=\"linksolo\" id=\"link$cpt\"><img src=\"".esc_dblq($data['large'])."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($data['thumb_h'])."\" data-credit=\"&lt;b&gt;".esc_dblq($titre)."&lt;/b&gt;&lt;br /&gt;".$credits."\"/></a>";
 	}
 	else 
 		$content.="<img src=\"img/no_image2.png\" alt=\"\" width=\"200\" height=\"240\">";
@@ -412,12 +491,12 @@ while($data = mysql_fetch_assoc($rep)) {
 	$content.="\n			<div class=\"entete\"><span>".$trunc_title."</span>";
 	if ($creator!="")
 		$content.="<br/>".$creator;
-	if ($location!=""){
+	if ($coll_or_loc!=""){
 		if ($creator!="")
 			$content.=" - ";
 		else
 			$content.="<br />";
-		$content.=$location;
+		$content.=$coll_or_loc;
 	}
 	$content.="\n			</div>";	
 	
@@ -514,7 +593,8 @@ while($data = mysql_fetch_assoc($rep)) {
 
 	$content.="\n		</div>";
 	$content.="\n	</div>";
-	$content.="\n	<script>document.getElementById('notice$cpt').style.display = 'none';</script>\n";
+	if ($num_rows>1)
+		$content.="\n	<script>document.getElementById('notice$cpt').style.display = 'none';</script>\n";
 	
 	echo $content;	
 }
@@ -538,12 +618,12 @@ define ("t_end", (float)$g2_usec + (float)$g2_sec);
  print round (t_end-t_start, 1)." secondes"; ?>
 </div>
 <footer <?php if ($num_rows<6) echo "class=\"marge\"" ?>>
-	<span class="bl_foot">by <a href="https://twitter.com/shona_gon">/* / */</a>&nbsp;&nbsp; (<a href="/dozo/crotos-moteur-de-recherche-sur-les-oeuvres-dart-dans-wikidata" class="externe">info [fr]</a> , <a href="https://github.com/zone47/CROTOS" class="externe">source</a>, <a href="bdd/crotos.sql.zip">data</a> )&nbsp;&nbsp; with </span>
+	<span class="bl_foot">by <a href="https://twitter.com/shona_gon">/* / */</a>&nbsp;&nbsp; (<a href="/dozo/crotos-moteur-de-recherche-sur-les-oeuvres-dart-dans-wikidata" class="externe">info [fr]</a> , <a href="https://github.com/zone47/CROTOS" class="externe">source</a>, <a href="bdd/crotos.sql.zip">data</a> )&nbsp;&nbsp; with</span><span class="sep"> </span>
     <span class="bl_foot"><a href="http://www.wikidata.org" title="<?php echo translate($l,"Wikidata"); ?>"><img src="img/wikidata.png" alt="<?php echo translate($l,"Wikidata"); ?>"/></a>  <a href="http://commons.wikimedia.org" title="<?php echo translate($l,"Commons"); ?>"><img src="img/wikimedia-commons.png" alt="<?php echo translate($l,"Commons"); ?>" /></a>  <a href="http://www.semanticpedia.org/" title="Sémantipédia"><img src="img/semanticpedia.png" alt="Sémanticpédia" /></a>    <img src="img/photographer.png" alt="Photographers" />  al.</span>
     <span class="bl_foot"> and &lt;3</span>
     <div class="update">Last update:
 <?php
-$fp = fopen ("datemaj.txt", "r");
+$fp = fopen ("dateupdate.txt", "r");
 echo fgets ($fp, 255);
 fclose ($fp);
 ?></div>

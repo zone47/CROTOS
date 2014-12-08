@@ -38,12 +38,12 @@ if ($recordcount>$limit){
 		if ($lien_param!="") $txtnav.=$lien_param;
 		$txtnav.="\">1</a> ...&nbsp;&nbsp;\n";
 	}
-	if (($p==2)||($p==3)){
+	elseif ($p!=$prem){
 		$txtnav.="<span class=\"nav_small\"><a href=\"";
 		$txtnav.=$script_name."?p=1";
 		if ($lien_param!="") $txtnav.=$lien_param;
 		$txtnav.="\">1</a> ";
-		if ($p==3)
+		if ($p!=2)
 			$txtnav.="...&nbsp;";
 		$txtnav.="&nbsp;</span>\n";
 	}
@@ -92,7 +92,7 @@ else
 
 $txtnav=str_replace("\'","'",$txtnav);
 if ($random){
-	$txtnav= "<a href=\"".$script_name."?".$liennav."\" class=\"nav_sec\" class=\"random\">".mb_ucfirst(translate($l,"random"))."</a> \n";
+	$txtnav= "<a href=\"".$script_name."?".$liennav."\" class=\"random\">".mb_ucfirst(translate($l,"random"))."</a> \n";
 	$txtnav.= "<a href=\"".$script_name."?".$liennav."&amp;p=1\" class=\"nav_sec\">".translate($l,"chronology")."</a>\n";
 }
 ?>

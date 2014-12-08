@@ -1,7 +1,11 @@
 /* / */
 /* Display max 600px" */
-.nav a.nav_sec,.nav_sec{
+.nav a.nav_sec,.nav_sec,.mode_plus, #facets .mode_plus{
 	display:none;	
+}
+nav{
+	position:absolute;
+	top:-100px;		
 }
 #bl_titre{
 	padding-left:2%;
@@ -16,8 +20,12 @@ h1{
 	display:inline;
 	line-height:normal;
 } 
+a img{
+	border:0;
+}
 #params{
-	padding-right:5%;	
+	padding-right:5%;
+	margin-bottom:10px;	
 }
 #params label{
 	display:none;
@@ -30,19 +38,18 @@ h1{
 #lg{
 	margin-top:2px;
 	margin-right:0;
-	margin-bottom:1em;	
+	margin-bottom:8px;	
 }
 body{
 	padding:0;
 }
 #global{
-	max-width:440px;
 	margin:auto;	
 }
 #recherche{
 	margin-left:0;	
 	padding-left:0;
-	text-align:center;
+	text-align:left;
 }
 #recherche{
 	clear:both;
@@ -50,30 +57,27 @@ body{
 	width:95%;
 	margin-left:2%;
 }
-#ok{
-    display:block;
-	clear:both;
-	margin:auto;
-}/*
-.ui-helper-hidden-accessible{
-	display:inline-block;
-	font-size:1.2em;
-	position:absolute;
-	top:2.2em;;
-	right:8%;
-	color:#666;
-}*/
-#ok{
-	margin-top:10px;	
+#topic_title{
+	width:65%;
 }
 #facets{
-	pading-top:1px;	
+	padding-top:4px;
+}
+#listp31{
+	margin-left:2%;
+}
+.criteres{
+	padding-left:2%;	
 }
 #form_facets select,#form_facets input{
 	font-size:1.1em;
 }
 #slider{
 	margin-top:	8px;
+}
+#slider{
+	display:block;
+	text-align:center;
 }
 #slider input{
 	width:4em;	
@@ -90,7 +94,7 @@ body{
 	display:none;	
 }
 #res_nav{
-	margin-top:0;
+	margin-top:10px;
 	margin-left:0;	
 	padding:0 0 0 2%;
 	text-align:left;	
@@ -104,12 +108,18 @@ body{
 .nav_small{
 	display:inline;	
 }
+.contentsolo{
+	padding-right:0;
+}
 .item { 
 	padding-bottom:15px;
 	font-size:0.9em;
 	margin:auto;
 	float:none;
 	height:auto;
+	width:100%;
+	max-width:none;
+	min-width:none;
 }
 .thumb{
 	height:auto;
@@ -117,23 +127,11 @@ body{
 .thumb div{
 	top:auto;
 	transform:none;
-}/*
-.item.w2 {
-	margin-left:1%;
-	margin-right:2%;
 }
-.item img{
-	height:;auto;
+.thumb img{
 	width:100%;
 }
-.cartel{
-	width:100%;
+.sep{
+	display:block;
+	height:5px;	
 }
-.cartel img{
-	width:inherit;
-}
-.bl_foot{
-	display:block;	
-	text-align:center;
-	margin-bottom:10px;
-}*/

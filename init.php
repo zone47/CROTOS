@@ -89,12 +89,13 @@ if ($mode==1){
 
 if (isset($_GET['q']))
 	if ($_GET['q']!="") 
-		$q=$_GET['q'];
+		$q=str_replace("q","",$_GET['q']);
 if (isset($_GET['p']))
 	if ($_GET['p']!="") 
 		$p=intval($_GET['p']);
 if (isset($_GET['s'])){
 	$s=$_GET['s'];
+	$s= preg_replace('/\p{C}+/u', "", $s);
 	$s=trim(str_replace("\"","",urldecode($s)));
 	/* Easter egg */ if (str_replace("!","",str_replace(" ","",strtolower($s)))=="houba"){ $s="";$l="mu";setcookie ("l","mu", time() + 31536000);}
 }

@@ -7,11 +7,14 @@ body {
   margin: 0;
   padding: 0 0 1em 1em; /* Remettre à zéro si nécessaire. */
   font-family: Arial, Helvetica, FreeSans, sans-serif; 
-  font-size: .8em; /* À adapter pour la police choisie.  */
-  line-height: 1.4; /* À adapter au design. */
+  font-size: 13px; /* À adapter pour la police choisie.  */
+  line-height: 1.3; /* À adapter au design. */
   color: black;
   background:#1e1e1e;
   color:#FFF;
+  -webkit-font-smoothing: antialiased; 
+  -moz-font-smoothing: antialiased; 
+  -o-font-smoothing: antialiased;
 }
 /* Titres */
 h2, h3, h4, h5, h6 {
@@ -86,7 +89,7 @@ input, button, select {
 }
 /* / */
 ul span{
-	font-size:0.95em;
+	font-size:12px;
 }
 #bas{
 	clear:both;
@@ -138,7 +141,7 @@ ul#access {
 }
 h1{
 	display:inline;
-	font:bold 1.5em  Verdana, Geneva, sans-serif;
+	font:bold 20px  Verdana, Geneva, sans-serif;
 	line-height:2.5em;
 }
 #params{
@@ -162,7 +165,7 @@ h1{
 #recherche input{
 	font-size:1.5em;	
 }
-#recherche  #ok, #form_facets  #ok2{
+#recherche  #ok,  #ok2{
    border: 1px solid #000;
    background: #d3d3d3;
    background: -webkit-gradient(linear, left top, left bottom, from(#d3d3d3), to(#d3d3d3));
@@ -187,13 +190,13 @@ h1{
    padding-left:15px;
    padding-right:15px;
 }
-#form_facets #ok2{
+#ok2{
 	height:1.8em;
 	margin-left:12px;
 	background:#d3d3d3 url("../img/magnifying.png") center center no-repeat;
 	padding:0 9px;
 }
-#recherche #ok:hover,#recherche #ok:active,#form_facets #ok2:hover,#form_facets #ok2:active {
+#recherche #ok:hover,#recherche #ok:active,#ok2:hover,#ok2:active {
    border: 1px solid #f3f3f3;
    text-shadow: #31540c 0 0 0;
    background: #444;
@@ -208,7 +211,7 @@ h1{
 #recherche #ok:hover,#recherche #ok:active{
 	background-image: -ms-linear-gradient(top, #444 0%, #444 100%);
 }
-#form_facets #ok2:hover,#form_facets #ok2:active {
+#ok2:hover,#ok2:active {
 	background:#444 url("../img/magnifying_on.png") center center no-repeat;
 }
 #topic_title{
@@ -227,9 +230,16 @@ h1{
 	color:#666;
 }
 .criteres{
-	color:#CCC;
+	color:#fff;
 	text-align:left;
-	margin-right:15px;
+	vertical-align: baseline; 
+	position: relative; 
+	bottom: -2px;
+	font-weight:bold;
+}
+.libelle_criteres{
+	color:#efefef;
+	font-weight:normal;
 }
 .criteres img{
 	vertical-align:middle;
@@ -238,13 +248,15 @@ h1{
 }
 #facets{
 	clear:both;	
-	padding-top:10px;
-	text-align:right;
+	padding-top:12px;
+	text-align:left;
 	padding-right:22px;
-	position:relative
+	position:relative;
+	padding-left:1px;
 }
-#form_facets{
+#listp31{
 	display:inline-block;
+	margin-right:10px;
 }
 #facets input{
 	text-align:right;	
@@ -257,7 +269,9 @@ h1{
 }
 #slider{
 	display:inline-block;
+	float:right;
 	margin-left:15px;	
+	margin-top:-2px;
 }
 #slider-range{
 	margin:0 10px;
@@ -280,7 +294,7 @@ h1{
 	padding-top:3px;
 	clear:right;
 	float:right;
-	font-size:0.9em;
+	font-size:12px;
 	font-weight:bold;
 }
 #contrib span{
@@ -357,22 +371,30 @@ h1{
 	color:#999;
 }
 /* Blocs images */
+.contentsolo{
+	padding-right:20px;
+}
 .item { 
 	height:340px;
 	float:left;
-	font-size:0.9em;
+	font-size:12px;
 	margin-right:10px;
 	max-width:322px;
 	min-width:202px;
 }
 .thumb{
 	text-align:center;
+}
+.multiimg{
 	height:242px;
 }
-.thumb div {
+.multiimg div {
 	position:relative;
 	top: 50%;
 	transform: translateY(-50%);
+}
+.soloimg img{
+	width:100%;
 }
 .entete{
 	min-height:21px;	
@@ -397,6 +419,8 @@ a.interne:hover,a.interne:focus,a.interne:active {
 .solo{
 	margin:auto;
 	font-size:0.9em;
+	float:none;
+	height:inherit;
 }
 .btn_notice{
 	padding-top:6px;
@@ -445,7 +469,6 @@ a.interne:hover,a.interne:focus,a.interne:active {
 	font-weight:bold;
 	color:#fff;	
 	font-family:Arial, Helvetica, sans-serif;
-	font-size:1.1em;
 }
 .notice img{
 	vertical-align:middle;
@@ -473,7 +496,7 @@ footer img{
 	margin-right:5px;
 }
 footer.marge{
-	margin-top:10em;	
+	margin-top:3em;	
 }	
 #lg_rtl{
 	direction:rtl;	
@@ -519,5 +542,6 @@ footer.marge{
 }
 .update{
 	margin-top:10px;
-	font-size:0.85em;
+	font-size:10px;
+	margin-bottom:10px;
 }
