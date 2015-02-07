@@ -417,10 +417,10 @@ a.interne:hover,a.interne:focus,a.interne:active {
 	color: #9F9F9F;font-size:0.95em;
 }
 .solo{
-	margin:auto;
 	font-size:0.9em;
 	float:none;
 	height:inherit;
+	margin:auto;
 }
 .btn_notice{
 	padding-top:6px;
@@ -480,7 +480,14 @@ a.interne:hover,a.interne:focus,a.interne:active {
 .cartel img{
 	border:0;	
 }
-
+.credit_img{
+	float:left;	
+}
+.credit_txt{
+	margin-left:40px;
+	padding-top:5px;	
+	min-height:30px;
+}
 /* autocomplete */
 .ui-autocomplete-loading {
     background: white url('../img/ui-anim_basic_16x16.gif') right center no-repeat;

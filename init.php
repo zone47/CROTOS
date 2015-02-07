@@ -21,7 +21,8 @@ $tab_idx = array(
 	"p276"=> "",// qwd location
 	"p361"=> "",// qwd part of
 	"p921"=> "",// qwd subject heading
-	"p941"=> ""// qwd inspired by
+	"p941"=> "",// qwd inspired by
+	"p1639"=> ""// qwd pendant of
 );
 $tab_miss = array(
 	"m1" => "",// label
@@ -76,7 +77,7 @@ $tab_check = array(
 
 foreach($tab_idx as $key=>$value)
 	if (isset($_GET[$key]))
-		$tab_idx[$key]=$_GET[$key];	
+		$tab_idx[$key]=str_ireplace("q","",$_GET[$key]);	
 
 if ($mode==1){
 	foreach($tab_miss as $key=>$value)
@@ -89,7 +90,7 @@ if ($mode==1){
 
 if (isset($_GET['q']))
 	if ($_GET['q']!="") 
-		$q=str_replace("q","",$_GET['q']);
+		$q=str_ireplace("q","",$_GET['q']);
 if (isset($_GET['p']))
 	if ($_GET['p']!="") 
 		$p=intval($_GET['p']);

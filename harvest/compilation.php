@@ -21,6 +21,7 @@ mysql_query("TRUNCATE `p276`");
 mysql_query("TRUNCATE `p361`");
 mysql_query("TRUNCATE `p921`");
 mysql_query("TRUNCATE `p941`");
+mysql_query("TRUNCATE `p1639`");
 
 $tab_lg=array("ar","bn","br","ca","cs","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 
@@ -100,6 +101,7 @@ $tab_prop = array(
 	"P350"=> "", // RKDimages ID
 	"P373"=> "", // Commons Category
 	"P727"=> "", // Europeana ID
+	"P856"=> "", // Official website
 	"P973"=> "", // described at URL
 	"P1212"=> "" // Atlas ID
 );
@@ -123,6 +125,7 @@ $thumb="";
 $thumb_h="";
 $large="";
 $w_thumb_h=0;
+$new_img=0;
 if ($tab_prop["P18"]!=""){
 	$sql="SELECT commons_artist,commons_credit,commons_license,thumb,thumb_h,width_h,large FROM commons_img WHERE P18=\"".esc_dblquote($tab_prop["P18"])."\"";
 	$rep=mysql_query($sql);
@@ -227,6 +230,7 @@ if ($tab_prop["P18"]!=""){
 						$large=$urlimg;
 					else
 						$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_large."px-". urlencode($img);
+					$new_img=1; // new image
 				}
 				else {
 					$width=0;
@@ -332,7 +336,11 @@ if ($year1==NULL)
 if ($year2==NULL)
 	$year2="NULL";
 
-$sql="INSERT INTO artworks (qwd,P18,P214,P217,P347,P350,P373,P727,P973,P1212,year1,year2,b_date,commons_artist,commons_credit,commons_license,thumb,thumb_h,width_h,large) VALUES ($item,\"".$tab_prop["P18"]."\",\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$tab_prop["P973"]."\",\"".$tab_prop["P1212"]."\",$year1,$year2,\"".$b_date."\",\"".$commons_artist."\",\"".$commons_credit."\",\"".$commons_license."\",\"".$thumb."\",\"".$thumb_h."\",$w_thumb_h,\"".$large."\")";
+$offic_url=$tab_prop["P856"];
+if ($offic_url=="")
+	$offic_url=$tab_prop["P973"];
+
+$sql="INSERT INTO artworks (qwd,P18,P214,P217,P347,P350,P373,P727,link,P1212,year1,year2,b_date,commons_artist,commons_credit,commons_license,thumb,thumb_h,width_h,large,new_img) VALUES ($item,\"".$tab_prop["P18"]."\",\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$offic_url."\",\"".$tab_prop["P1212"]."\",$year1,$year2,\"".$b_date."\",\"".$commons_artist."\",\"".$commons_credit."\",\"".$commons_license."\",\"".$thumb."\",\"".$thumb_h."\",$w_thumb_h,\"".$large."\",$new_img)";
 $rep=mysql_query($sql);
 
 $sql="SELECT id FROM artworks WHERE qwd=\"$item\"";
@@ -344,19 +352,21 @@ $id_artwork=$row['id'];
 insert_label_page(1,$item,$id_artwork);
 
 // Other properties
-$tab_multi=array(170,31,276,195,136,135,179,180,186,144,361,921,941);	
+$tab_multi=array(170,31,276,195,136,135,179,180,186,144,361,921,941,1639);	
 for ($i=0;$i<count($tab_multi);$i++){
 	if ($claims["P".$tab_multi[$i]])
 		foreach ($claims["P".$tab_multi[$i]] as $value){
 			$val=intval($value["mainsnak"]["datavalue"]["value"]["numeric-id"]);
-			if (($tab_multi[$i]==195)||($tab_multi[$i]==276)){
+			/*if (($tab_multi[$i]==195)||($tab_multi[$i]==276)){
 				$sql="SELECT id FROM p".$tab_multi[$i]." WHERE qwd=$val";
 				$rep=mysql_query($sql);
 				if (mysql_num_rows($rep)==0)
-					$val=parent_cherche($val);
-			}
+					$val=parent_cherche($val);// Looking for uper-classes
+			}*/
 			$sql="SELECT id FROM p".$tab_multi[$i]." WHERE qwd=$val";
 			$rep=mysql_query($sql);
+			$newid="";
+			$found=false;
 			if (mysql_num_rows($rep)==0){
 				//Value of property inserted
 				$sql="INSERT INTO p".$tab_multi[$i]." (qwd) VALUES ($val)";
@@ -367,20 +377,45 @@ for ($i=0;$i<count($tab_multi);$i++){
 				
 				$row = mysql_fetch_assoc($rep);
 				$id_prop=$row['id'];
+				$newid=$id_prop;
 				//Labels of property inserted
 				insert_label_page($tab_multi[$i],$val,$id_prop);
 				
 			}
 			else{			
 				$row = mysql_fetch_assoc($rep);
-				$id_prop=$row['id'];	
+				$id_prop=$row['id'];
+				$found=true;	
 			}
+			$insertok=true;
+			if (($tab_multi[$i]==195)||($tab_multi[$i]==276)){
+				// Looking for uper-classes
+				$sql="SELECT id,level FROM p".$tab_multi[$i]." WHERE qwd=$val";
+				$rep=mysql_query($sql);
+
+				$level=0;
+				if (mysql_num_rows($rep)>0){
+					$row = mysql_fetch_assoc($rep);
+					$level=$row['level'];
+				}
+				if ((!$found)||($level!=0))
+					parent_cherche($tab_multi[$i],$val,$id_artwork,$newid);
+					
+				$sql="SELECT id FROM artw_prop WHERE prop=".$tab_multi[$i]." and id_artw=$id_artwork and id_prop=$id_prop";
+				$rep=mysql_query($sql);
+				if (mysql_num_rows($rep)!=0)
+					$insertok=false;
+			}
+					
 			
-			$sql="INSERT INTO artw_prop (prop,id_artw,id_prop) VALUES (".$tab_multi[$i].",$id_artwork,$id_prop)";
-			$rep=mysql_query($sql);
+			if ($insertok){
+				$sql="INSERT INTO artw_prop (prop,id_artw,id_prop) VALUES (".$tab_multi[$i].",$id_artwork,$id_prop)";
+				//test if ($tab_multi[$i]=="276") echo "\n".$sql;
+				$rep=mysql_query($sql);
+			}
 		}
 	else
-		if ($tab_multi[$i]!="31")
+		if (!(($tab_multi[$i]=="31")||($tab_multi[$i]=="1639")))
 			$tab_miss["m".$tab_multi[$i]]=1;
 }
 

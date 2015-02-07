@@ -36,7 +36,7 @@ function label_item($qwd,$lg){
 	return $label;
 }
 function alias_item($qwd,$lg){
-    $sql="SELECT label from label_page WHERE qwd=$qwd AND lg='$lg' AND type=2";
+    $sql="SELECT label from label_page WHERE qwd=$qwd AND lg='$lg' AND type=2 AND prop=1";
 	//echo $sql;
 	$rep_alias=mysql_query($sql);
 	$aliases="";
@@ -76,7 +76,10 @@ function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true)
 				if ($i>0)
 					$txt.=" - ";
 				if ($link){
-					$txt.=" <a href=\"?p$id_prop=".$values[$i];
+					if ($id_prop=="1639") //pendant of
+						$txt.=" <a href=\"?q=".$values[$i];
+					else
+						$txt.=" <a href=\"?p$id_prop=".$values[$i];
 					if ($mode==1)
 						foreach($tab_miss as $key=>$value)
 							if ($value!="")
@@ -84,7 +87,7 @@ function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true)
 					$txt.="\" ";
 					if ($type=="creator")
 						$txt.=" class=\"lien_aut\" ";
-					if ($type=="location")
+					if ($type=="internal")
 						$txt.=" class=\"interne\" ";
 					$txt.=">";
 				}
@@ -180,5 +183,15 @@ function truncate($text, $chars =  56) {
     if ($trunk)
 		$text = $text."...";
     return $text;
+}
+function val_0($id_artw,$id_prop,$lg) {
+	$sql="SELECT p".$id_prop.".qwd as prop_qwd from artw_prop,p".$id_prop." WHERE artw_prop.prop=".$id_prop." AND  artw_prop.id_artw=".$id_artw." AND artw_prop.id_prop=p".$id_prop.".id AND p".$id_prop.".level=0";
+	$rep=mysql_query($sql);
+	if (mysql_num_rows($rep)==0)
+		return "";
+	else{
+		$row = mysql_fetch_assoc($rep);
+		return "<a href=\"?p$id_prop=".$row["prop_qwd"]."\" class=\"interne\">".label_item($row["prop_qwd"],$lg)."</a>";
+	}
 }
 ?>

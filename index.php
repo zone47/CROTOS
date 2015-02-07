@@ -2,6 +2,7 @@
 /* / */
 set_time_limit(120);
 $mode=0;
+  
 if (isset($_COOKIE['mode']))
 	$mode=intval($_COOKIE['mode']);
 if (isset($_GET['mode']))
@@ -46,7 +47,15 @@ define ("t_start", (float)$g_usec + (float)$g_sec);
 
 //Search queries
 include "queries.php";
-
+if ($p!=1) // hack if $p indicated out of range because of $nb parameter
+	if (($p-1)*$nb>$num_rows){
+		$new_url="http://www.zone47.com/crotos/?";
+		foreach($_GET as $key => $value) 
+			if ($key!="p")
+				$new_url.="&".$key."=".$value;
+		header("Location:".$new_url);
+	}
+	
 $nbpg=ceil($num_rows/$nb); // number of pages
 
 //Suggests if home or random choice
@@ -86,7 +95,7 @@ if ($y2!="") $liennav.="&amp;y2=".$y2;
 
 include "text_nav.php";
 ?><!doctype html>
-<html>
+<html lang="<?php echo $l ?>">
 <head>
 	<meta charset="utf-8">
     <meta name="author" content="/* / */" />
@@ -114,7 +123,7 @@ echo " - ".$txt_res;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" media="screen and (max-width: 840px)" href="css/medium.css" type="text/css" />
     <link rel="stylesheet" media="screen and (max-width: 700px)" href="css/small.css" type="text/css" />
-     <link rel="stylesheet" href="css/jquery-ui.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery-ui.min.js"></script>
     <!-- Masonry <script src="js/masonry.pkgd.min.js"></script> -->
@@ -136,7 +145,7 @@ function img_magnify(){
 	});
 }
 function init_display(){ 
-	if ($(window).width()>700){
+	if ($(window).width()>=680){
 		$(".yoxview").yoxview({
 			linkToOriginalContext:true,
 			cacheImagesInBackground:true,
@@ -289,12 +298,12 @@ else
 $(window).bind('resize', function(e)
 {
 	init_display();
-	if ($(window).width()<=700){
+	if ($(window).width()<=680){
 		img_magnify();
 	}
 });
 $(window).load(function() {
-	if ($(window).width()<=700){
+	if ($(window).width()<=680){
 		img_magnify();
 	}
 });
@@ -370,11 +379,15 @@ while($data = mysql_fetch_assoc($rep)) {
 		$pageWP=substr($pageWP,$pos+1,strlen($pageWP));
 	}
 	
-	$location=txt_prop($id_artw,276,$l,"location",0);
-	$collection=txt_prop($id_artw,195,$l,"location",0);
-	$coll_or_loc=$collection;
-	if ($coll_or_loc=="")
-		$coll_or_loc=$location;
+	$coll0=val_0($id_artw,195,$l);
+	$location0=val_0($id_artw,275,$l);
+
+	$coll_or_loc=$coll0;
+	if ($coll0=="")
+		$coll_or_loc=$location0;
+	
+	$location=txt_prop($id_artw,276,$l);
+	$collection=txt_prop($id_artw,195,$l);
 	
 	$loc_link=local_link($id_artw,195,$l);
 	if ($loc_link=="")
@@ -390,6 +403,7 @@ while($data = mysql_fetch_assoc($rep)) {
 	$based=txt_prop($id_artw,144,$l);
 	$subject=txt_prop($id_artw,921,$l);
 	$inspired=txt_prop($id_artw,941,$l);
+	$pendant=txt_prop($id_artw,1639,$l);
 	
 	if (intval($data['width_h'])<201)
 		$width_item=202;
@@ -400,6 +414,7 @@ while($data = mysql_fetch_assoc($rep)) {
 		$content.="	<div style=\"width:".$width_item."px\" class=\"item\" data-width=\"".$width_item."px\" >\n";
 	}
 	else{ 
+		//$content.="	<div class=\"item solo\" style=\"width:".$width_item."px\" data-width=\"".$width_item."px\">\n";
 		if ($data['large']!=""){
 			$width_big_img=0;
 			
@@ -541,16 +556,22 @@ while($data = mysql_fetch_assoc($rep)) {
 	}
 	else
 		$content.="\n<p class=\"start_cartel\">";
-		
+
+	if ($pendant!="")
+		$content.="\n<p>".$pendant."</p>";		
 	$content.=$type."</p>";
 	if ($material!="")
 		$content.="\n<p>".$material."</p>";
 	if ($inv!="")
 		$content.="\n<p><span class=\"libelle\">".translate($l,"217")."</span>&nbsp;: ".$inv."</p>";
+	if ($collection!="")
+		$content.="\n<p>".$collection."</p>";
 	if ($series!="")
 		$content.="\n<p>".$series."</p>";
 	if ($partof!="")
 		$content.="\n<p>".$partof."</p>";
+	if ($location!="")
+		$content.="\n<p>".$location."</p>";
 		
 	if ($mouvement!="")
 		$content.="\n<p>".$mouvement."</p>";
@@ -588,6 +609,17 @@ while($data = mysql_fetch_assoc($rep)) {
 	$content.="\n<p> <a href=\"".$url."\"><img src=\"img/crotos.png\" alt=\"CROTOS\"/></a> <a href=\"".$url."\">crotos/?q=".$qwd_art."</a></p>";
 
 	$content.="\n				</div>";
+	if (($num_rows==1)&&($credits!="")){
+		$content.="\n				<div class=\"img_info\">";
+		$content.="\n					<div class=\"credit_img\">";
+		$content.="\n					<a href=\"".$commons_link."\"><img src=\"img/commons_gray.png\" alt=\"\"></a>";
+		$content.="\n					</div>";
+		$content.="\n					<div class=\"credit_txt\">";
+		$content.=html_entity_decode($credits);
+		$content.="\n					</div>";
+		
+		$content.="\n				</div>";
+	}
 	
 	$content.="\n			</div>";
 

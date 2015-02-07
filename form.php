@@ -12,6 +12,7 @@ for ($i=0;$i<count($lgs);$i++){
     echo "			<option value=\"".translate($lgs[$i],"lang_code")."\"";
 	if ($l==translate($lgs[$i],"lang_code"))
 		 echo " selected=\"selected\"";
+	//echo " >".translate($lgs[$i],"lang_code")." - ".translate($lgs[$i],"lg")."</option>\n";	
 	echo " >".translate($lgs[$i],"lg")."</option>\n";	
 	/* Easter egg */if (($lgs[$i]=="mu")&&($l!="mu")) echo " -->";
 }
@@ -95,7 +96,7 @@ else
 ?>
     		<option value="" id="tout"><?php echo ucfirst(translate($l,"everything")) ?></option>
 <?php 
-$p31_list=array("3305213","860861","93184","11060274","133067","1473346","184296");
+$p31_list=array("3305213","860861","93184","11060274","125191","133067","212431","5647631","184296","1473346");
 if (($tab_idx["p31"]!="")&&(!(in_array($tab_idx["p31"],$p31_list))))
 	echo "    		<option value=\"".$tab_idx["p31"]."\" selected>".ucfirst(label_item($tab_idx["p31"],$l))."</option>\n";
 for ($i=0;$i<count($p31_list);$i++){

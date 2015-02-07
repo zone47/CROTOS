@@ -57,7 +57,7 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 	}
 	// if 276 ou 195 update site
 	if (($prop==276)||($prop==195)){
-		$new_val=parent_cherche($val_item);
+		//$new_val=parent_cherche($val_item);
 		if ($ent_qwd["claims"]["P856"]){
 			$site="";
 			$tab856=$ent_qwd["claims"]["P856"];
@@ -71,7 +71,7 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 		}
 	}
 }
-function parent_cherche($val_qwd){
+/*function parent_cherche($val_qwd){
 	$dfic=file_get_contents("https://www.wikidata.org/w/api.php?action=wbgetentities&ids=q$val_qwd&format=json",true);
 	$data_item=json_decode($dfic,true);
 	$claims_qwd=$data_item["entities"]["Q".$val_qwd]["claims"];
@@ -91,6 +91,123 @@ function parent_cherche($val_qwd){
 	else
 		return $val_qwd;
 		
+}*/
+function parent_cherche($prop,$val_prop,$id_artw,$new_ids){
+	//test if ($prop=="276") echo "\n parent_cherche($prop,$val_prop,$id_artw,$new_ids)";
+	if ($new_ids==""){ // already exists
+		$sql="SELECT id, id_parent FROM p$prop WHERE qwd=$val_prop";
+		$rep=mysql_query($sql);
+		$row = mysql_fetch_assoc($rep);
+		$id_parent=$row['id_parent'];
+		$sql="INSERT INTO artw_prop (prop,id_artw,id_prop) VALUES ($prop,$id_artw,$id_parent)";
+		//test if ($prop=="276") echo "\nINSERT INTO artw_prop (prop,id_artw,id_prop) VALUES ($prop,$id_artw,$id_parent)";
+		$rep=mysql_query($sql);
+		
+		$sql="SELECT qwd,level FROM p$prop WHERE id=$id_parent";
+		$rep=mysql_query($sql);
+		$row = mysql_fetch_assoc($rep);
+		$qwd_parent=$row['qwd'];
+		$level=$row['level'];
+		//test if ($prop=="276") echo "\nlevel $level id_parent $id_parent($prop,$qwd_parent,$id_artw,)";
+		if ($level!=0){
+			parent_cherche($prop,$qwd_parent,$id_artw,"");	
+		}
+	}
+	else{ // new
+		$dfic=file_get_contents("https://www.wikidata.org/w/api.php?action=wbgetentities&ids=q$val_prop&format=json",true);
+		$data_item=json_decode($dfic,true);
+		$claims_qwd=$data_item["entities"]["Q".$val_prop]["claims"];
+		$nouv_qwd="";		
+		if ((($claims_qwd["P361"])&&(!($claims_qwd["P856"])))||(($claims_qwd["P276"])&&(!($claims_qwd["P856"])))){
+			if ($claims_qwd["P361"]){
+				foreach ($claims_qwd["P361"] as $val){
+					if ($nouv_qwd=="")
+					   $nouv_qwd=$val["mainsnak"]["datavalue"]["value"]["numeric-id"];
+					else
+						break;
+				}
+			}
+			if ($claims_qwd["P276"]){
+				foreach ($claims_qwd["P276"] as $val){
+					if ($nouv_qwd=="")
+					   $nouv_qwd=$val["mainsnak"]["datavalue"]["value"]["numeric-id"];
+					else
+						break;
+				}
+			}
+			if ($nouv_qwd!=$val_prop){// security against infinite loop
+				// parent found
+
+				$sql="SELECT id,level FROM p$prop WHERE qwd=$nouv_qwd";
+				$rep=mysql_query($sql);
+				$nids="";
+				$level_found=-1;
+				if (mysql_num_rows($rep)==0){
+					
+					//Value of property inserted
+					$sql="INSERT INTO p$prop (qwd) VALUES ($nouv_qwd)";
+					$rep=mysql_query($sql);
+					
+					$sql="SELECT id FROM p$prop WHERE qwd=$nouv_qwd";
+					$rep=mysql_query($sql);
+					
+					$row = mysql_fetch_assoc($rep);
+					$id_prop=$row['id'];
+					$nids=$new_ids."|".$id_prop;
+					//Labels of property inserted
+					insert_label_page($prop,$nouv_qwd,$id_prop);
+					
+				}
+				else{			
+					$row = mysql_fetch_assoc($rep);
+					$id_prop=$row['id'];	
+					$level_found=$row['level'];
+				}
+				
+				// Update levels of ids already found and update parent of lest id
+				$tab_ids=explode("|",$new_ids);
+				if ($nids!=""){ // new prop value
+					for ($i=0;$i<count($tab_ids);$i++){
+						$sql="SELECT level FROM p$prop WHERE id=".$tab_ids[$i];
+						$rep=mysql_query($sql);
+						$row = mysql_fetch_assoc($rep);
+						
+						$new_level=$row['level']+1;
+						
+						$sql="UPDATE p$prop SET level=$new_level WHERE id=".$tab_ids[$i];
+						$rep=mysql_query($sql);
+						if ($i==(count($tab_ids)-1)){
+							$sql="UPDATE p$prop SET id_parent=$id_prop WHERE id=".$tab_ids[$i];
+							$rep=mysql_query($sql);
+						}
+					}
+					
+				}
+				else{
+					$cpt=1;
+					for ($i=(count($tab_ids)-1);$i>-1;$i--){
+						$sql="UPDATE p$prop SET level=".($level_found+$cpt)." WHERE id=".$tab_ids[$i];
+						$rep=mysql_query($sql);	
+						if ($i==(count($tab_ids)-1)){
+							$sql="UPDATE p$prop SET id_parent=$id_prop WHERE id=".$tab_ids[$i];
+							$rep=mysql_query($sql);
+						}						
+						$cpt++;
+					}
+							
+				}
+				
+				$sql="INSERT INTO artw_prop (prop,id_artw,id_prop) VALUES ($prop,$id_artw,$id_prop)";
+				//test if ($prop=="276") echo "\nINSERT INTO artw_prop (prop,id_artw,id_prop) VALUES ($prop,$id_artw,$id_prop)";
+				$rep=mysql_query($sql);
+				
+				if ($level_found!=0)
+					parent_cherche($prop,$nouv_qwd,$id_artw,$nids);
+			}
+			
+		}
+	}
+	
 }
 function request($url){
    // is curl installed?
