@@ -1,0 +1,46 @@
+/* --- STYLES DE BASE --- */
+/* Page */
+html {
+  font-size: 100%; /* Évite un bug d'IE 6-7.*/
+}
+body {
+  margin: 0;
+  padding: 0 0 1em 1em; /* Remettre à zéro si nécessaire. */
+  font-family: Arial, Helvetica, FreeSans, sans-serif; 
+  font-size: 13px; /* À adapter pour la police choisie.  */
+  line-height: 1.3; /* À adapter au design. */
+  color: black;
+  background:#FFFFFF;
+  color:#000;
+  -webkit-font-smoothing: antialiased; 
+  -moz-font-smoothing: antialiased; 
+  -o-font-smoothing: antialiased;
+}
+a img {
+  border:1px solid #333  ;
+}
+#bl_titre {
+	float:left;
+	width:65px;
+	z-index:10;	
+}
+#bl_titre img{
+	vertical-align:top;
+}
+#bl_titre a,#bl_titre a:link ,#bl_titre a:visited,#bl_titre a:hover,#bl_titre a:focus,#bl_titre a:active{
+	color:#000000;	
+	text-decoration:none;
+}
+h1{
+	font-size:130%;
+	font-weight:bold;	
+}
+h1.entete{
+	font:bold 14px  Verdana, Geneva, sans-serif;
+}
+#clear{
+	clear:both;	
+}
+#stuff li{
+	margin-bottom:5px;	
+}

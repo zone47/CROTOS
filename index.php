@@ -650,7 +650,7 @@ define ("t_end", (float)$g2_usec + (float)$g2_sec);
  print round (t_end-t_start, 1)." secondes"; ?>
 </div>
 <footer <?php if ($num_rows<6) echo "class=\"marge\"" ?>>
-	<span class="bl_foot">by <a href="https://twitter.com/shona_gon">/* / */</a>&nbsp;&nbsp; (<a href="/dozo/crotos-moteur-de-recherche-sur-les-oeuvres-dart-dans-wikidata" class="externe">info [fr]</a> , <a href="https://github.com/zone47/CROTOS" class="externe">source</a>, <a href="bdd/crotos.sql.zip">data</a> )&nbsp;&nbsp; with</span><span class="sep"> </span>
+	<span class="bl_foot">by <a href="https://twitter.com/shona_gon">/* / */</a>&nbsp;&nbsp; (<a href="/dozo/crotos-moteur-de-recherche-sur-les-oeuvres-dart-dans-wikidata" class="externe">info [fr]</a>, <a href="lab/">Lab</a> , <a href="https://github.com/zone47/CROTOS" class="externe">source</a>, <a href="bdd/crotos.sql.zip">data</a> )&nbsp;&nbsp; with</span><span class="sep"> </span>
     <span class="bl_foot"><a href="http://www.wikidata.org" title="<?php echo translate($l,"Wikidata"); ?>"><img src="img/wikidata.png" alt="<?php echo translate($l,"Wikidata"); ?>"/></a>  <a href="http://commons.wikimedia.org" title="<?php echo translate($l,"Commons"); ?>"><img src="img/wikimedia-commons.png" alt="<?php echo translate($l,"Commons"); ?>" /></a>  <a href="http://www.semanticpedia.org/" title="Sémantipédia"><img src="img/semanticpedia.png" alt="Sémanticpédia" /></a>    <img src="img/photographer.png" alt="Photographers" />  al.</span>
     <span class="bl_foot"> and &lt;3</span>
     <div class="update">Last update:
