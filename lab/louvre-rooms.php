@@ -49,7 +49,7 @@ function children_search($id_parent,$l){
 
 		
 		$txt="\n<li>".$data_rooms[$i]["label"]." <b>($nbartworks items)</b> <a href=\"https://www.wikidata.org/wiki/Q".$data_rooms[$i]["qwd"]."\">Q".$data_rooms[$i]["qwd"]."</a>";
-		if ($cat!="")
+		if ($data_rooms[$i]["commonscategory"]!="")
 			$txt.=" - <a href=\"https://commons.wikimedia.org/wiki/Category:".$data_rooms[$i]["commonscategory"]."\">WikiCommons</a>";
 		$txt.=" - <a href=\"http://www.zone47.com/crotos/?p276=".$data_rooms[$i]["qwd"]."\">Crotos</a></li>";
 		// - <a href=\"http://tools.wmflabs.org/autolist/index.php?language=fr&wdq=claim%5B276%3A%28tree%5B$qwd%5D%5B%5D%5B276%5D%29%5D&run=Run\">Autolist</a>";
