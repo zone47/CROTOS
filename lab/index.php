@@ -12,8 +12,8 @@
 <?php include "entete.php" ?>
 <h1>Crotos Lab</h1>
 <ul id="stuff">
-	<li><a href="collections.php">Number of visual artworks items by institution</a></li>
-    <li><a href="collections.php">Number of visual artworks items by creator</a></li>
+	<li><a href="prop_nb.php">Number of visual artworks items by property</a></li>
+    <li><a href="../new.php">New items with image</a></li>
     <li><a href="cpt_lg">Occurences des libellés selon les langues</a></li>
     <li><a href="louvre-rooms.php">Œuvres du Louvre par salles</a></li>
 </ul>
