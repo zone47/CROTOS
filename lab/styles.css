@@ -47,3 +47,13 @@ h1.entete{
 #prop_form{
 	margin:20px;
 }
+#stuff{
+	font-size:110%;	
+}
+#stuff li{
+	margin-bottom:15px;	
+}
+#source{
+	font-size:90%;
+	margin-top:30px;
+}

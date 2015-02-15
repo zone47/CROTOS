@@ -17,5 +17,8 @@
     <li><a href="cpt_lg">Occurences des libellés selon les langues</a></li>
     <li><a href="louvre-rooms.php">Œuvres du Louvre par salles</a></li>
 </ul>
+<p id="source">
+Source: <a href="https://github.com/zone47/CROTOS" class="externe">Github/Crotos</a>
+</p>
 </body>
 </html>
