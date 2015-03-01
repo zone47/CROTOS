@@ -4,9 +4,8 @@ include "../init.php";
 include "../traduction.php";
 include "../functions.php";
 include "../config.php";
-$link = mysql_connect ($host,$user,$pass) or die ('Erreur : '.mysql_error());
-mysql_select_db($db) or die ('Erreur :'.mysql_error());
-mysql_query("SET NAMES 'utf8'");
+$link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
+mysqli_query($link,"SET NAMES 'utf8'");
 
 ?><!doctype html>
 <html lang="en">
@@ -42,8 +41,8 @@ $(document).ready(function()
 foreach($trads as $key=>$value){
 	if ($key!="mu"){
 		$sql="SELECT count(id) as total from label_page  WHERE lg LIKE '$key'";
-		$rep_s=mysql_query($sql);
-		$data=mysql_fetch_assoc($rep_s);
+		$rep_s=mysqli_query($link,$sql);
+		$data=mysqli_fetch_assoc($rep_s);
 		echo "<tr><td>$key</td>";
 		if (($key=="ar")||($key=="fa")||($key=="he"))
 			echo "<td class=\"rtl\">".$value['lg']."</td>";

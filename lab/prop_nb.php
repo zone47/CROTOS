@@ -4,9 +4,8 @@ include "../init.php";
 include "../traduction.php";
 include "../functions.php";
 include "../config.php";
-$link = mysql_connect ($host,$user,$pass) or die ('Erreur : '.mysql_error());
-mysql_select_db($db) or die ('Erreur :'.mysql_error());
-mysql_query("SET NAMES 'utf8'");
+$link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
+mysqli_query($link,"SET NAMES 'utf8'");
 $l="en";
 if (isset($_GET['l']))
 	if ($_GET['l']!="")
@@ -26,6 +25,11 @@ $nb=5;
 if (isset($_GET['nb']))
 	if ($_GET['nb']!="")
 		$nb=$_GET['nb'];
+$thb=0;
+if (isset($_GET['thb']))
+	if ($_GET['thb']!="")
+		$thb=$_GET['thb'];
+$h_thumb=80;
 ?><!doctype html>
 <html lang="en">
 <head>
@@ -48,7 +52,7 @@ $(document).ready(function()
 <?php include "entete.php" ?>
 	<form id="prop_form">
     
-    	<label for="props" id="label_lg">Property<?php //echo translate($l,"language") ?></label>
+    	<label for="props" id="label_lg">Property</label>
     	<select name="prop" id="props">
 <?php
 $tab_props=array(31,135,136,144,170,180,186,195,276,921,941);
@@ -73,7 +77,7 @@ for ($i=0;$i<count($lgs);$i++){
 }
 ?>
 		</select>
-        <label for="nb_min" id="label_lg">Minimum number</label>
+        <label for="nb_min" id="label_lg" >Minimum</label>
     	<select name="nb" id="nb_min">
 <?php
 $tab_nb=array(0,5,10,20,50,100,200,500,1000);
@@ -84,6 +88,8 @@ for ($i=0;$i<count($tab_nb);$i++){
 }
 ?>    
         </select>
+        <label for="thb" >Thumbnails</label>
+        <input type="checkbox" name="thb" <?  if ($thb==1) echo " checked=\"checked\""; ?> value="1"/>
         <input type="submit" value="<?php echo translate($l,"search") ?>" id="ok" />
     </form>
 <table id="occ" class="tablesorter ">
@@ -97,25 +103,40 @@ for ($i=0;$i<count($tab_nb);$i++){
 </tr> 
 </thead> 
 <?php
-$sql="SELECT id, qwd from p$prop";
+$sql="SELECT id, qwd, P18, nb, nbimg from p$prop WHERE nb>".$nb." ORDER BY nbimg DESC";
 if ($prop==0)
-	$sql="SELECT id, qwd from p$prop_query WHERE level=0";
-$rep=mysql_query($sql);
-$data=mysql_fetch_assoc($rep_s);
-while($data = mysql_fetch_assoc($rep)) {
-	$id_coll=$data['id'];
-	$sql="SELECT count(id) as total from artw_prop  WHERE prop=$prop_query and id_prop=".$id_coll;
-	$rep2=mysql_query($sql);
-	$data2=mysql_fetch_assoc($rep2);
-	$nbartworks=$data2['total'];
-	
-	$sql="SELECT count(artworks.id) as total from artworks, artw_prop  WHERE artworks.id=artw_prop.id_artw and  artworks.P18!='' and artw_prop.prop=$prop_query and id_prop=".$id_coll;
-	$rep2=mysql_query($sql);
-	$data2=mysql_fetch_assoc($rep2);
-	$nbimg=$data2['total'];
-	if (($nbartworks>$nb)&&($data['qwd']!=0)){
+	$sql="SELECT id, qwd, P18, nb, nbimg from p$prop WHERE level=0 AND nb>".$nb." ORDER BY nbimg DESC";
+$rep=mysqli_query($link,$sql);
+while($data = mysqli_fetch_assoc($rep)) {
+	$id_prop=$data['id'];
+	$nbartworks=$data['nb'];
+	$nbimg=$data['nbimg'];
+	if ($data['qwd']!=0){
 		echo "<tr>\n";
-		echo "	<td>".label_item($data['qwd'],$l)." <a href=\"https://www.wikidata.org/wiki/Q".$data['qwd']."\"> (Q".$data['qwd'].")</a></td>\n";
+		echo "	<td>";
+		if ($thb==1){
+			echo "	<div class=\"td_thumb\">";
+			if (intval($data['P18'])!=0){
+				$sql="SELECT P18, width, height from commons_img  WHERE id=".$data['P18'];
+				$rep2=mysqli_query($link,$sql);
+				$data2=mysqli_fetch_assoc($rep2);
+				$img=str_replace(" ","_",$data2['P18']);
+				$digest = md5($img);
+				$folder = $digest[0] . '/' . $digest[0] . $digest[1] . '/' . urlencode($img);
+				$w_thumb=floor(intval($data2['width'])/intval($data2['height'])*$h_thumb);
+				$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img);
+				if (substr ($img,-3)=="svg")
+					$thumb.=".png";	
+				echo "	<a href=\"https://commons.wikimedia.org/wiki/File:".urlencode($img)."\"><img src=\"".$thumb."\" /></a>";
+			}
+			echo "	</div>\n";
+			echo "<span>";
+		}
+		
+		echo label_item($data['qwd'],$l)." <a href=\"https://www.wikidata.org/wiki/Q".$data['qwd']."\"> (Q".$data['qwd'].")</a>";
+		if ($thb==1)
+			echo "</span>";
+		echo "</td>\n";
 		echo "	<td class=\"artworks\">$nbartworks</td>\n";
 		echo "	<td class=\"images\">$nbimg</td>\n";
 		echo "	<td><a href=\"/crotos/?p$prop_query=".$data['qwd']."\">view artworks</a></td>\n";

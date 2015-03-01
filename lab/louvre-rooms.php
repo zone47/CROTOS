@@ -4,18 +4,18 @@ include "../init.php";
 include "../traduction.php";
 include "../functions.php";
 include "../config.php";
-$link = mysql_connect ($host,$user,$pass) or die ('Erreur : '.mysql_error());
-mysql_select_db($db) or die ('Erreur :'.mysql_error());
-mysql_query("SET NAMES 'utf8'");
+$link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
+mysqli_query($link,"SET NAMES 'utf8'");
 
 function children_search($id_parent,$l){
+	global $link;
 	$sql="SELECT id, qwd,commonscategory from p276 WHERE id_parent=".$id_parent;
-	$rep=mysql_query($sql);
-	$num_rows= mysql_num_rows($rep);
+	$rep=mysqli_query($link,$sql);
+	$num_rows= mysqli_num_rows($rep);
 	if ($num_rows!=0)
 		echo "\n<ul>";
 	$data_rooms=array();
-	while($data = mysql_fetch_assoc($rep)){
+	while($data = mysqli_fetch_assoc($rep)){
 		$lbl=ucfirst(trim(label_item($data['qwd'],$l)));
 		$sorttxt="";
 		preg_match('#[0-9][0-9]*[a-z]*#i',$lbl,$matches);
@@ -43,8 +43,8 @@ function children_search($id_parent,$l){
 	
 	for($i=0;$i<count($data_rooms);$i++){
 		$sql="SELECT count(id) as total from artw_prop  WHERE prop=276 and id_prop=".$data_rooms[$i]["id_loc"];
-		$rep2=mysql_query($sql);
-		$data2=mysql_fetch_assoc($rep2);
+		$rep2=mysqli_query($link,$sql);
+		$data2=mysqli_fetch_assoc($rep2);
 		$nbartworks=$data2['total'];
 
 		
@@ -78,8 +78,8 @@ function children_search($id_parent,$l){
 <?php
 $l=fr;
 $sql="SELECT id FROM `p276` WHERE `commonscategory` = 'Palais du Louvre'";
-$rep=mysql_query($sql);
-$data=mysql_fetch_assoc($rep);
+$rep=mysqli_query($link,$sql);
+$data=mysqli_fetch_assoc($rep);
 $id_Louvre=$data['id'];
 
 children_search($id_Louvre,$l);
