@@ -11,17 +11,23 @@ if ( !function_exists('json_decode') ){
 		return $json->decode($content);
 	}
 }
-function esc_dblquote($chaine){
-	$chaine=str_replace("\"","\\\"",$chaine);
-	return $chaine;
+function get_WDjson($qitem){
+	global $fold_crotos;
+	$qitem_path=$fold_crotos."harvest/items_props/".$qitem.".json";
+	if (file_exists($qitem_path))
+		return file_get_contents($qitem_path,true);
+	else{
+		copy("https://www.wikidata.org/w/api.php?action=wbgetentities&ids=q".$qitem."&format=json", $qitem_path);
+		return file_get_contents($qitem_path,true);
+	}
 }
+
 function insert_label_page($prop,$val_item,$id_art_or_prop){
-	global $tab_lg; 
-    global $tab_miss; 
+	global $tab_lg,$tab_miss,$link; 
 	if ($prop==1)
 		$dfic=file_get_contents("items/$val_item.json",true);
 	else
-		$dfic=file_get_contents("https://www.wikidata.org/w/api.php?action=wbgetentities&ids=q$val_item&format=json",true);
+		$dfic=get_WDjson($val_item);
 		
 	$data_item=json_decode($dfic,true);
 	$ent_qwd=$data_item["entities"]["Q".$val_item];
@@ -38,10 +44,10 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 			$page=$ent_qwd["sitelinks"][$lg."wiki"]["title"];
 		
 		if (($lab!="")||($page!="")){
-			$lab=esc_dblquote($lab);
-			$page=esc_dblquote($page);
+			$lab=esc_dblq($lab);
+			$page=esc_dblq($page);
 			$sql="INSERT INTO label_page (type,prop,qwd,label,page,lg,id_art_or_prop) VALUES (1,$prop,$val_item,\"$lab\",\"$page\",\"$lg\",$id_art_or_prop)";
-			$rep=mysql_query($sql);
+			$rep=mysqli_query($link,$sql);
 		}
         if (($lab=="")&&($prop==1))
             $tab_miss[$lg]=1;
@@ -49,15 +55,14 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 		// alias
 		if ($ent_qwd["aliases"][$lg]){
 			foreach ($ent_qwd["aliases"][$lg] as $vallab){
-				$alias=esc_dblquote($vallab["value"]);
+				$alias=esc_dblq($vallab["value"]);
 				$sql="INSERT INTO label_page (type,prop,qwd,label,lg,id_art_or_prop) VALUES (2,$prop,$val_item,\"".$alias."\",\"$lg\",$id_art_or_prop)";
-				$rep=mysql_query($sql);
+				$rep=mysqli_query($link,$sql);
 			}
 		}
 	}
 	// if 276 ou 195 update site
 	if (($prop==276)||($prop==195)){
-		//$new_val=parent_cherche($val_item);
 		if ($ent_qwd["claims"]["P856"]){
 			$site="";
 			$tab856=$ent_qwd["claims"]["P856"];
@@ -65,47 +70,39 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 				if ($site==""){
 					$site=$value["mainsnak"]["datavalue"]["value"];
 					$sql="UPDATE p".$prop." SET site=\"".$site."\" WHERE qwd=$val_item";
-					$rep=mysql_query($sql);
+					$rep=mysqli_query($link,$sql);
 				}
 			}
 		}
+		if ($ent_qwd["claims"]["P373"]){
+			$cat="";
+			$tab373=$ent_qwd["claims"]["P373"];
+			foreach ($tab373 as $value){
+				if ($site==""){
+					$site=$value["mainsnak"]["datavalue"]["value"];
+					$sql="UPDATE p".$prop." SET commonscategory=\"".$site."\" WHERE qwd=$val_item";
+					$rep=mysqli_query($link,$sql);
+				}
+			}
+		}
+		
 	}
 }
-/*function parent_cherche($val_qwd){
-	$dfic=file_get_contents("https://www.wikidata.org/w/api.php?action=wbgetentities&ids=q$val_qwd&format=json",true);
-	$data_item=json_decode($dfic,true);
-	$claims_qwd=$data_item["entities"]["Q".$val_qwd]["claims"];
-	$nouv_qw="";
-	if (($claims_qwd["P361"])&&(!($claims_qwd["P856"]))){
-		foreach ($claims_qwd["P361"] as $val)
-			if ($nouv_qw=="")
-			   $nouv_qwd=$val["mainsnak"]["datavalue"]["value"]["numeric-id"];
-			else
-				break;
-		if ($nouv_qw!=$val_qwd)
-			return parent_cherche($nouv_qwd);
-		else
-			return $val_qwd;
-			   
-	}
-	else
-		return $val_qwd;
-		
-}*/
 function parent_cherche($prop,$val_prop,$id_artw,$new_ids){
+	global $link;
 	//test if ($prop=="276") echo "\n parent_cherche($prop,$val_prop,$id_artw,$new_ids)";
 	if ($new_ids==""){ // already exists
 		$sql="SELECT id, id_parent FROM p$prop WHERE qwd=$val_prop";
-		$rep=mysql_query($sql);
-		$row = mysql_fetch_assoc($rep);
+		$rep=mysqli_query($link,$sql);
+		$row = mysqli_fetch_assoc($rep);
 		$id_parent=$row['id_parent'];
 		$sql="INSERT INTO artw_prop (prop,id_artw,id_prop) VALUES ($prop,$id_artw,$id_parent)";
 		//test if ($prop=="276") echo "\nINSERT INTO artw_prop (prop,id_artw,id_prop) VALUES ($prop,$id_artw,$id_parent)";
-		$rep=mysql_query($sql);
+		$rep=mysqli_query($link,$sql);
 		
 		$sql="SELECT qwd,level FROM p$prop WHERE id=$id_parent";
-		$rep=mysql_query($sql);
-		$row = mysql_fetch_assoc($rep);
+		$rep=mysqli_query($link,$sql);
+		$row = mysqli_fetch_assoc($rep);
 		$qwd_parent=$row['qwd'];
 		$level=$row['level'];
 		//test if ($prop=="276") echo "\nlevel $level id_parent $id_parent($prop,$qwd_parent,$id_artw,)";
@@ -114,7 +111,7 @@ function parent_cherche($prop,$val_prop,$id_artw,$new_ids){
 		}
 	}
 	else{ // new
-		$dfic=file_get_contents("https://www.wikidata.org/w/api.php?action=wbgetentities&ids=q$val_prop&format=json",true);
+		$dfic=get_WDjson($val_prop);
 		$data_item=json_decode($dfic,true);
 		$claims_qwd=$data_item["entities"]["Q".$val_prop]["claims"];
 		$nouv_qwd="";		
@@ -139,19 +136,25 @@ function parent_cherche($prop,$val_prop,$id_artw,$new_ids){
 				// parent found
 
 				$sql="SELECT id,level FROM p$prop WHERE qwd=$nouv_qwd";
-				$rep=mysql_query($sql);
+				$rep=mysqli_query($link,$sql);
 				$nids="";
 				$level_found=-1;
-				if (mysql_num_rows($rep)==0){
+				if (mysqli_num_rows($rep)==0){
 					
 					//Value of property inserted
-					$sql="INSERT INTO p$prop (qwd) VALUES ($nouv_qwd)";
-					$rep=mysql_query($sql);
+					$p18_str=img_qwd($nouv_qwd);
+					if ($p18_str!="")
+						$p18=id_commons($p18_str);
+					else
+						$p18=0;
+						
+					$sql="INSERT INTO p$prop (qwd,P18) VALUES ($nouv_qwd,".$p18.")";
+					$rep=mysqli_query($link,$sql);
 					
 					$sql="SELECT id FROM p$prop WHERE qwd=$nouv_qwd";
-					$rep=mysql_query($sql);
+					$rep=mysqli_query($link,$sql);
 					
-					$row = mysql_fetch_assoc($rep);
+					$row = mysqli_fetch_assoc($rep);
 					$id_prop=$row['id'];
 					$nids=$new_ids."|".$id_prop;
 					//Labels of property inserted
@@ -159,7 +162,7 @@ function parent_cherche($prop,$val_prop,$id_artw,$new_ids){
 					
 				}
 				else{			
-					$row = mysql_fetch_assoc($rep);
+					$row = mysqli_fetch_assoc($rep);
 					$id_prop=$row['id'];	
 					$level_found=$row['level'];
 				}
@@ -169,16 +172,16 @@ function parent_cherche($prop,$val_prop,$id_artw,$new_ids){
 				if ($nids!=""){ // new prop value
 					for ($i=0;$i<count($tab_ids);$i++){
 						$sql="SELECT level FROM p$prop WHERE id=".$tab_ids[$i];
-						$rep=mysql_query($sql);
-						$row = mysql_fetch_assoc($rep);
+						$rep=mysqli_query($link,$sql);
+						$row = mysqli_fetch_assoc($rep);
 						
 						$new_level=$row['level']+1;
 						
 						$sql="UPDATE p$prop SET level=$new_level WHERE id=".$tab_ids[$i];
-						$rep=mysql_query($sql);
+						$rep=mysqli_query($link,$sql);
 						if ($i==(count($tab_ids)-1)){
 							$sql="UPDATE p$prop SET id_parent=$id_prop WHERE id=".$tab_ids[$i];
-							$rep=mysql_query($sql);
+							$rep=mysqli_query($link,$sql);
 						}
 					}
 					
@@ -187,10 +190,10 @@ function parent_cherche($prop,$val_prop,$id_artw,$new_ids){
 					$cpt=1;
 					for ($i=(count($tab_ids)-1);$i>-1;$i--){
 						$sql="UPDATE p$prop SET level=".($level_found+$cpt)." WHERE id=".$tab_ids[$i];
-						$rep=mysql_query($sql);	
+						$rep=mysqli_query($link,$sql);	
 						if ($i==(count($tab_ids)-1)){
 							$sql="UPDATE p$prop SET id_parent=$id_prop WHERE id=".$tab_ids[$i];
-							$rep=mysql_query($sql);
+							$rep=mysqli_query($link,$sql);
 						}						
 						$cpt++;
 					}
@@ -199,7 +202,7 @@ function parent_cherche($prop,$val_prop,$id_artw,$new_ids){
 				
 				$sql="INSERT INTO artw_prop (prop,id_artw,id_prop) VALUES ($prop,$id_artw,$id_prop)";
 				//test if ($prop=="276") echo "\nINSERT INTO artw_prop (prop,id_artw,id_prop) VALUES ($prop,$id_artw,$id_prop)";
-				$rep=mysql_query($sql);
+				$rep=mysqli_query($link,$sql);
 				
 				if ($level_found!=0)
 					parent_cherche($prop,$nouv_qwd,$id_artw,$nids);
@@ -271,6 +274,7 @@ function getjpegsize($img_loc) {
 function esc_dblq($text){
 	return str_replace("\"","\\\"",$text);
 }
+
 function simplexml_load_file_from_url($url, $timeout = 30){
   $context = stream_context_create(array('http'=>array('user_agent' => 'PHP script','timeout' => (int)$timeout)));
   $data = file_get_contents($url, false, $context);
@@ -279,5 +283,158 @@ function simplexml_load_file_from_url($url, $timeout = 30){
     return false;
   }
   return simplexml_load_string($data);
+}
+function img_qwd($qwd){
+	$p18="";
+	$dfic=get_WDjson($qwd);
+	$data_item=json_decode($dfic,true);
+	$claims_qwd=$data_item["entities"]["Q".$qwd]["claims"];
+	if ($claims_qwd["P18"])
+		foreach ($claims_qwd["P18"] as $val){
+		   $p18=$val["mainsnak"]["datavalue"]["value"];
+		   break;
+		}
+	return $p18;
+}
+function id_commons($p18_str){
+	global $link;
+	$p18=0;
+	$commons_artist="";
+	$commons_credit="";
+	$commons_license="";
+	$thumb="";
+	$thumb_h="";
+	$large="";
+	$w_thumb_h=0;
+	$sql="SELECT id FROM commons_img WHERE P18=\"".esc_dblq($p18_str)."\"";
+	$rep=mysqli_query($link,$sql);
+	if (mysqli_num_rows($rep)==0){
+		$img=str_replace(" ","_",$p18_str);
+		$urlapi="https://commons.wikimedia.org/w/api.php?action=query&prop=imageinfo&format=xml&iiprop=extmetadata&iilimit=10&titles=File:".urlencode($img);
+		$xml = simplexml_load_file_from_url($urlapi);
+		if ($xml){
+			$commons_artist=$xml->xpath('//Artist/@value')[0];
+			$commons_credit=$xml->xpath('//Credit/@value')[0];
+			$commons_license=$xml->xpath('//License/@value')[0];
+		
+			$digest = md5($img);
+			$folder = $digest[0] . '/' . $digest[0] . $digest[1] . '/' . urlencode($img);
+			$urlimg = 'http://upload.wikimedia.org/wikipedia/commons/' . $folder;
+			
+			if (substr ($img,-3)=="svg"){
+				$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/200px-". urlencode($img).".png";
+				$size=getimagesize($thumb);
+				$width_tmp=$size[0];
+				$height_tmp=$size[1];
+				if ($width_tmp/$height_tmp>200/350)
+					$w_thumb=200;
+				else
+					$w_thumb=floor(350*$width_tmp/$height_tmp);
+				$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img).".png";
+				if ($width_tmp/$height_tmp>1400/900)
+					$width=1400;
+				else
+					$width=floor(900*$width_tmp/$height_tmp);
+				$height=floor($height_tmp*$width/$width_tmp);
+				$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$width."px-". urlencode($img).".png";
+			}
+			else{
+				$urlapimagnus="https://tools.wmflabs.org/magnus-toolserver/commonsapi.php?image=".urlencode($img);
+				$xml = simplexml_load_file_from_url($urlapimagnus);
+				if ($xml){
+					$width=intval($xml->xpath('//file/width/text()')[0]);
+					$height=intval($xml->xpath('//file/height/text()')[0]);
+				}
+				else{
+					$size=getjpegsize($urlimg);
+					if (!(isset($size[1])))
+						$size=getimagesize($urlimg);
+					$width=$size[0];
+					$height=$size[1];
+				}
+			
+				if(!((is_null($width))||($width==0))){
+					// thumb vertical
+					if ($width/$height>200/350){
+						if ($width>200)
+							$w_thumb=200;
+						else
+							$w_thumb=$width;
+					}
+					else{
+						if ($height>350)
+							$w_thumb=floor(350*$width/$height);
+						else
+							$w_thumb=$width;
+					}
+					if ($w_thumb==$width)
+						$thumb=$urlimg;
+					else
+						$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img);
+						
+					// thumb horizontal
+					if ($width/$height>320/240){
+						if ($width>320)
+							$w_thumb_h=320;
+						else
+							$w_thumb_h=$width;
+					}
+					else{
+						if ($height>240)
+							$w_thumb_h=floor(240*$width/$height);
+						else
+							$w_thumb_h=$width;
+					}
+					if ($w_thumb_h==$width)
+						$thumb_h=$urlimg;
+					else
+						$thumb_h="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb_h."px-". urlencode($img);
+				
+					// large
+					if ($width/$height>1400/900){
+						if ($width>1400)
+							$w_large=1400;
+						else
+							$w_large=$width;
+					}
+					else{
+						if ($height>900)
+							$w_large=floor(900*$width/$height);
+						else
+							$w_large=$width;
+					}
+					if ($w_large==$width)
+						$large=$urlimg;
+					else
+						$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_large."px-". urlencode($img);
+				}
+				else 
+					$width=0;
+
+				unset($size);
+			}
+			if ($width!=0){
+				$commons_artist=esc_dblq($commons_artist);
+				$commons_credit=esc_dblq($commons_credit);
+				$commons_license=esc_dblq($commons_license);	
+				$thumb=esc_dblq($thumb);
+				$thumb_h=esc_dblq($thumb_h);
+				$large=esc_dblq($large);
+				$sql="INSERT INTO commons_img (P18,commons_artist,commons_credit,commons_license,thumb,thumb_h,width_h,large,width,height) VALUES (\"".esc_dblq($p18_str)."\",\"".$commons_artist."\",\"".$commons_credit."\",\"".$commons_license."\",\"".$thumb."\",\"".$thumb_h."\",$w_thumb_h,\"".$large."\",$width,$height)";
+
+				$rep=mysqli_query($link,$sql);
+				$sql="SELECT id FROM commons_img WHERE P18=\"".esc_dblq($p18_str)."\"";
+				$rep=mysqli_query($link,$sql);
+				$row = mysqli_fetch_assoc($rep);
+				$p18=$row['id'];
+			}
+		}
+	}
+	else{
+		$row = mysqli_fetch_assoc($rep);
+		$p18=$row['id'];
+	}
+	return $p18;
+	
 }
 ?>

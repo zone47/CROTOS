@@ -1,11 +1,11 @@
 <?php
 /* / */
-
+set_time_limit(600);
 $host = 'db543840727.db.1and1.com'; 
 $user = 'dbo543840727';
 $pass = '47crotos47';
 $db = 'db543840727';
-$fic_sql="crotos_tmp.sql";
+$fic_sql="crotos_tmp_bu.sql";
 
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 
@@ -22,15 +22,14 @@ exec($cmd);
 $cmd="zip -j /kunden/homepages/42/d110278962/htdocs/zone47/crotos/bdd/crotos.sql.zip /kunden/homepages/42/d110278962/htdocs/zone47/crotos/bdd/crotos.sql";
 exec($cmd);
 
-$cmd="cp /kunden/homepages/42/d110278962/htdocs/zone47/crotos/dateupdate.txt /kunden/homepages/42/d110278962/htdocs/zone47/crotos/dateprev.txt"; 
-exec($cmd);
-$ficdate = fopen("../dateupdate.txt", 'w');
+/*$ficdate = fopen("../datemaj.txt", 'w');
 fputs($ficdate,date("j / n / Y"));
 fclose($ficdate);
-
+*/
 $to = "benoit.deshayes@gmail.com"; 
-$subject = "Crotos - Mise à jour"; 
-$body = "Mise à jour effectuée."; 
+$subject = "Crotos - Back up"; 
+$body = "Back up"; 
+$body = "Mise à jour effect effectuée."; 
 mail($to, $subject, $body);
 
 ?>

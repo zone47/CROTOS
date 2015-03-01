@@ -13,8 +13,9 @@ $db = 'crotos_tmp';
 $fold_crotos="***/crotos/";
 
 $file_harvest="harvest.php";
+$file_harvest_props="harvest_props.php";
 $file_compilation="compilation.php";
-$file_subclasses="subclasses.php";
+$file_subclasses="props_sub.php";
 $file_optimization="optimization.php";
 $file_migr="migr.php";
 
@@ -33,6 +34,8 @@ define ("t_start", (float)$g_usec + (float)$g_sec);
 
 include $file_harvest;
 
+include $file_harvest_props;
+
 list($g2_usec, $g2_sec) = explode(" ",microtime());
 define ("t_end", (float)$g2_usec + (float)$g2_sec);
 print "\n".round (t_end-t_start, 1)." secondes";	
@@ -48,18 +51,16 @@ include $file_optimization;
 list($g2_usec4, $g2_sec4) = explode(" ",microtime());
 define ("t_end2", (float)$g2_usec4 + (float)$g2_sec4);
 
-$link = mysql_connect ($host,$user,$pass) or die ('Erreur : '.mysql_error());
-mysql_select_db($db) or die ('Erreur :'.mysql_error());
+$link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 $nbartw =0;
 $sql = "SELECT COUNT(id) as id FROM artworks";
-$req = mysql_query($sql);
-$data = mysql_fetch_assoc($req);
+$req = mysqli_query($link,$sql);
+$data = mysqli_fetch_assoc($req);
 $nbartw = $data['id'];
-mysql_close();
+mysqli_close($link);
 if ($nbartw>10000)
 	include $file_migr;
 
 print "\n".round (t_end2-t_start2, 1)." secondes";	
 print "\nGlobal : ".round (t_end2-t_start, 1)." secondes";
-exec('sudo reboot');
 ?>

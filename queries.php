@@ -22,7 +22,7 @@ if ($s!=""){
 			AND label_page.id_art_or_prop = artw_prop.id_prop
 			AND label_page.prop = artw_prop.prop
 			AND artw_prop.id_artw = artworks.id";
-			if ($mode==0) $sql_s.=" AND artworks.P18<>''";
+			if ($mode==0) $sql_s.=" AND artworks.P18!=0";
 			$sql_s.=")
 			UNION (
 			
@@ -31,12 +31,12 @@ if ($s!=""){
 			WHERE label_page.label LIKE \"%".$tab_keywords[$i]."%\"
 			AND label_page.id_art_or_prop = artworks.id
 			AND label_page.prop =1";
-			if ($mode==0) $sql_s.=" AND artworks.P18<>''";
+			if ($mode==0) $sql_s.=" AND artworks.P18!=0";
 			$sql_s.=")";
 
-			$rep_s=mysql_query($sql_s);
+			$rep_s=mysqli_query($link,$sql_s);
 			$new_s="";
-			while($data_s = mysql_fetch_assoc($rep_s)) {
+			while($data_s = mysqli_fetch_assoc($rep_s)) {
 				if ($prim_query){
 					$res_s[]=$data_s['id'];
 					if ($new_s!="")
@@ -96,21 +96,21 @@ foreach($tab_idx as $key=>$value){
 		}
 		if (!$optimization){
 			$search_query=true;
-			if ($key=="p31"){//case of subclasses of types
-				$where="(p31.qwd=".$value;
-				include "subclasses/$value.php";
-				for ($i=0;$i<count($tab279);$i++)
-					$where.=" OR p31.qwd=".$tab279[$i];
-				$where.=")";
-			}
-			else
-				$where=$key.".qwd=".$value;
+			$where="(".$key.".qwd=".$value;
+
+			$sql_sub="SELECT id_sub FROM prop_sub, ".$key." WHERE prop_sub.prop=".str_replace("p","",$key)." AND prop_sub.id_prop=".$key.".id AND ".$key.".qwd=".$value;
+			$rep_sub=mysqli_query($link,$sql_sub);
+			while($data = mysqli_fetch_assoc($rep_sub))
+				$where.=" OR ".$key.".id=".$data['id_sub'];
+			$where.=")";
+			echo "<!-- ".$sql_sub."\n ".$where." -->";
+			
 			$sql_s="select distinct artworks.id as id 
 			from ".$key.", artw_prop, artworks WHERE ".$where." AND artw_prop.id_prop=".$key.".id AND artw_prop.prop=".str_replace("p","",$key)." AND artworks.id=artw_prop.id_artw";
-			if ($mode==0) $sql_s.=" AND P18<>''";
-			$rep_s=mysql_query($sql_s);
+			if ($mode==0) $sql_s.=" AND artworks.P18!=0";
+			$rep_s=mysqli_query($link,$sql_s);
 			$new_s="";
-			while($data_s = mysql_fetch_assoc($rep_s)) {
+			while($data_s = mysqli_fetch_assoc($rep_s)) {
 				if ($prim_query){
 					$res_s[]=$data_s['id'];
 					if ($new_s!="")
@@ -242,7 +242,7 @@ if (($search_query)||($optimization)||($search_date)||($check_query)){
 			}
 		}
 		$sql.=$sql_c;
-		if ($mode==0) $sql.=" AND P18<>''";
+		if ($mode==0) $sql.=" AND artworks.P18!=0";
 	}
 }
 if ($sql!="")
@@ -251,7 +251,7 @@ else
 	if (isset($_GET['p'])){
 		if ($_GET['p']!=""){
 			$sql="SELECT * from artworks";
-			if ($mode==0) $sql.="  WHERE P18<>'' AND year1 IS NOT NULL";
+			if ($mode==0) $sql.="  WHERE artworks.P18!=0 AND year1 IS NOT NULL";
 			else {
 				if ($check_query){
 					$sql.="  WHERE ";
@@ -275,7 +275,7 @@ if ($q!=""){
 }
 if ($random){
 	$sql="SELECT * from artworks";
-	if ($mode==0) $sql.="  WHERE P18<>''";
+	if ($mode==0) $sql.="  WHERE artworks.P18!=0";
 	else {
 		if ($check_query){
 			$sql.="  WHERE ";
@@ -290,10 +290,10 @@ if ($random){
 	$num_rows =$nb;
 }
 else {
-	$repnb=mysql_query($sql);
-	$num_rows = mysql_num_rows($repnb);
+	$repnb=mysqli_query($link,$sql);
+	$num_rows = mysqli_num_rows($repnb);
 	$sql.=" LIMIT ".$deb.", ".$nb;
 }
-$rep=mysql_query($sql);
-$num_rows_ec = mysql_num_rows($rep);
+$rep=mysqli_query($link,$sql);
+$num_rows_ec = mysqli_num_rows($rep);
 ?>

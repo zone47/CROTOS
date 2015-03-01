@@ -13,21 +13,22 @@ function right($str, $length) {
 	return substr($str, -$length);
 }
 function label_item($qwd,$lg){
+	global $link;
     $sql="SELECT label from label_page WHERE qwd=$qwd AND lg='$lg' AND label!='' LIMIT 0,1";
-	$rep_lab=mysql_query($sql);
-	$num_rows= mysql_num_rows($rep_lab);
+	$rep_lab=mysqli_query($link,$sql);
+	$num_rows= mysqli_num_rows($rep_lab);
 	if ($num_rows==0){
 		$sql="SELECT label from label_page WHERE qwd=$qwd AND lg='en' AND label!='' LIMIT 0,1";
-		$rep_lab=mysql_query($sql);
-		$num_rows = mysql_num_rows($rep_lab);
+		$rep_lab=mysqli_query($link,$sql);
+		$num_rows = mysqli_num_rows($rep_lab);
 		if ($num_rows==0){
 			$sql="SELECT label from label_page WHERE qwd=$qwd AND label!='' LIMIT 0,1";
-			$rep_lab=mysql_query($sql);
-			$num_rows = mysql_num_rows($rep_lab);
+			$rep_lab=mysqli_query($link,$sql);
+			$num_rows = mysqli_num_rows($rep_lab);
 		}
 	}
 	if ($num_rows!=0){
-		$data_lab = mysql_fetch_assoc($rep_lab);
+		$data_lab = mysqli_fetch_assoc($rep_lab);
 		$label=$data_lab['label'];
 	}else
 		$label="";
@@ -36,11 +37,12 @@ function label_item($qwd,$lg){
 	return $label;
 }
 function alias_item($qwd,$lg){
+	global $link;
     $sql="SELECT label from label_page WHERE qwd=$qwd AND lg='$lg' AND type=2 AND prop=1";
 	//echo $sql;
-	$rep_alias=mysql_query($sql);
+	$rep_alias=mysqli_query($link,$sql);
 	$aliases="";
-	while ($data_prop = mysql_fetch_assoc($rep_alias)){
+	while ($data_prop = mysqli_fetch_assoc($rep_alias)){
 		if ($aliases!="")
 			$aliases.="<br />";
 		$aliases.=$data_prop['label'];
@@ -48,11 +50,12 @@ function alias_item($qwd,$lg){
 	return $aliases;
 }
 function val_prop($id_artw,$prop){
+	global $link;
 	$vals=array();
 	$sql="SELECT p".$prop.".qwd as prop_qwd from artw_prop,p".$prop." WHERE artw_prop.prop=".$prop." AND  artw_prop.id_artw=$id_artw AND  artw_prop.id_prop=p".$prop.".id";
-	$rep_prop=mysql_query($sql);
+	$rep_prop=mysqli_query($link,$sql);
 	$i=0;
-	while ($data_prop = mysql_fetch_assoc($rep_prop)){
+	while ($data_prop = mysqli_fetch_assoc($rep_prop)){
 		$vals[$i]=intval($data_prop['prop_qwd']);
 		$i++;
 	}
@@ -100,10 +103,11 @@ function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true)
 	return $txt;
 }
 function loc_val($qwd,$prop){
+	global $link;
 	$sql="SELECT site from p".$prop." WHERE qwd=".$qwd;
-	$rep_prop=mysql_query($sql);
+	$rep_prop=mysqli_query($link,$sql);
 	$site="";
-	while ($data_prop = mysql_fetch_assoc($rep_prop))
+	while ($data_prop = mysqli_fetch_assoc($rep_prop))
 		$site=$data_prop['site'];
 	return $site;
 }
@@ -134,27 +138,28 @@ function local_link($id_art,$id_prop,$lg){
 }
 
 function page_item($qwd,$lg){
+	global $link;
 	$page="";
     $sql="SELECT page from label_page WHERE qwd=$qwd AND lg='$lg' AND page!='' LIMIT 0,1";
-	$rep_lab=mysql_query($sql);
-	$num_rows= mysql_num_rows($rep_lab);
+	$rep_lab=mysqli_query($link,$sql);
+	$num_rows= mysqli_num_rows($rep_lab);
 	if ($num_rows!=0){
-		$data_page = mysql_fetch_assoc($rep_lab);
+		$data_page = mysqli_fetch_assoc($rep_lab);
 		$page=$data_page['page'];
 	}else{
 		$sql="SELECT page from label_page WHERE qwd=$qwd AND lg='en' AND page!='' LIMIT 0,1";
-		$rep_lab=mysql_query($sql);
-		$num_rows= mysql_num_rows($rep_lab);	
+		$rep_lab=mysqli_query($link,$sql);
+		$num_rows= mysqli_num_rows($rep_lab);	
 		if ($num_rows!=0){
-			$data_page = mysql_fetch_assoc($rep_lab);
+			$data_page = mysqli_fetch_assoc($rep_lab);
 			$page="en|".$data_page['page'];
 		}
 		else{
 			$sql="SELECT page,lg from label_page WHERE qwd=$qwd AND page!='' LIMIT 0,1";
-			$rep_lab=mysql_query($sql);
-			$num_rows= mysql_num_rows($rep_lab);	
+			$rep_lab=mysqli_query($link,$sql);
+			$num_rows= mysqli_num_rows($rep_lab);	
 			if ($num_rows!=0){
-				$data_page = mysql_fetch_assoc($rep_lab);
+				$data_page = mysqli_fetch_assoc($rep_lab);
 				$page=$data_page['lg']."|".$data_page['page'];
 			}
 		}
@@ -185,12 +190,13 @@ function truncate($text, $chars =  56) {
     return $text;
 }
 function val_0($id_artw,$id_prop,$lg) {
+	global $link;
 	$sql="SELECT p".$id_prop.".qwd as prop_qwd from artw_prop,p".$id_prop." WHERE artw_prop.prop=".$id_prop." AND  artw_prop.id_artw=".$id_artw." AND artw_prop.id_prop=p".$id_prop.".id AND p".$id_prop.".level=0";
-	$rep=mysql_query($sql);
-	if (mysql_num_rows($rep)==0)
+	$rep=mysqli_query($link,$sql);
+	if (mysqli_num_rows($rep)==0)
 		return "";
 	else{
-		$row = mysql_fetch_assoc($rep);
+		$row = mysqli_fetch_assoc($rep);
 		return "<a href=\"?p$id_prop=".$row["prop_qwd"]."\" class=\"interne\">".label_item($row["prop_qwd"],$lg)."</a>";
 	}
 }

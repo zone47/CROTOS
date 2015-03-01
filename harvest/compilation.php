@@ -1,27 +1,27 @@
 <?php
 //set_time_limit(108000);
 //////////// Compilation ///////////////////// 
-$link = mysql_connect ($host,$user,$pass) or die ('Erreur : '.mysql_error());
-mysql_select_db($db) or die ('Erreur :'.mysql_error());
-mysql_query("SET NAMES 'utf8'");
+$link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
+mysqli_query($link,"SET NAMES 'utf8'");
 
-mysql_query("TRUNCATE `artworks`");
-mysql_query("TRUNCATE `artw_prop`");
-mysql_query("TRUNCATE `label_page`");
-mysql_query("TRUNCATE `p31`");
-mysql_query("TRUNCATE `p135`");
-mysql_query("TRUNCATE `p136`");
-mysql_query("TRUNCATE `p144`");
-mysql_query("TRUNCATE `p170`");
-mysql_query("TRUNCATE `p179`");
-mysql_query("TRUNCATE `p180`");
-mysql_query("TRUNCATE `p186`");
-mysql_query("TRUNCATE `p195`");
-mysql_query("TRUNCATE `p276`");
-mysql_query("TRUNCATE `p361`");
-mysql_query("TRUNCATE `p921`");
-mysql_query("TRUNCATE `p941`");
-mysql_query("TRUNCATE `p1639`");
+mysqli_query($link,"TRUNCATE `artworks`");
+mysqli_query($link,"TRUNCATE `artw_prop`");
+mysqli_query($link,"TRUNCATE `label_page`");
+mysqli_query($link,"TRUNCATE `p31`");
+mysqli_query($link,"TRUNCATE `p135`");
+mysqli_query($link,"TRUNCATE `p136`");
+mysqli_query($link,"TRUNCATE `p144`");
+mysqli_query($link,"TRUNCATE `p170`");
+mysqli_query($link,"TRUNCATE `p179`");
+mysqli_query($link,"TRUNCATE `p180`");
+mysqli_query($link,"TRUNCATE `p186`");
+mysqli_query($link,"TRUNCATE `p195`");
+mysqli_query($link,"TRUNCATE `p276`");
+mysqli_query($link,"TRUNCATE `p361`");
+mysqli_query($link,"TRUNCATE `p921`");
+mysqli_query($link,"TRUNCATE `p941`");
+mysqli_query($link,"TRUNCATE `p1639`");
+mysqli_query($link,"TRUNCATE `prop_sub`");
 
 $tab_lg=array("ar","bn","br","ca","cs","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 
@@ -115,158 +115,21 @@ foreach($tab_prop as $key=>$val){
 				break;
 		}
 		if ($key!="P18")
-			$tab_prop[$key]=esc_dblquote($tab_prop[$key]);
+			$tab_prop[$key]=esc_dblq($tab_prop[$key]);
 	}
 }
-$commons_artist="";
-$commons_credit="";
-$commons_license="";
-$thumb="";
-$thumb_h="";
-$large="";
-$w_thumb_h=0;
+
 $new_img=0;
+$p18=0;
 if ($tab_prop["P18"]!=""){
-	$sql="SELECT commons_artist,commons_credit,commons_license,thumb,thumb_h,width_h,large FROM commons_img WHERE P18=\"".esc_dblquote($tab_prop["P18"])."\"";
-	$rep=mysql_query($sql);
-	if (mysql_num_rows($rep)==0){
-		$img=str_replace(" ","_",$tab_prop["P18"]);
-		$tab_prop["P18"]=esc_dblq($tab_prop["P18"]);
-		
-		$urlapi="https://commons.wikimedia.org/w/api.php?action=query&prop=imageinfo&format=xml&iiprop=extmetadata&iilimit=10&titles=File:".urlencode($img);
-		$xml = simplexml_load_file_from_url($urlapi);
-		if ($xml){
-			$commons_artist=$xml->xpath('//Artist/@value')[0];
-			$commons_credit=$xml->xpath('//Credit/@value')[0];
-			$commons_license=$xml->xpath('//License/@value')[0];
-		
-			$digest = md5($img);
-			$folder = $digest[0] . '/' . $digest[0] . $digest[1] . '/' . urlencode($img);
-			$urlimg = 'http://upload.wikimedia.org/wikipedia/commons/' . $folder;
-			
-			if (substr ($img,-3)=="svg"){
-				$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/200px-". urlencode($img).".png";
-				$size=getimagesize($thumb);
-				$width_tmp=$size[0];
-				$height_tmp=$size[1];
-				if ($width_tmp/$height_tmp>200/350)
-					$w_thumb=200;
-				else
-					$w_thumb=floor(350*$width_tmp/$height_tmp);
-				$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img).".png";
-				if ($width_tmp/$height_tmp>1400/900)
-					$width=1400;
-				else
-					$width=floor(900*$width_tmp/$height_tmp);
-				$height=floor($height_tmp*$width/$width_tmp);
-				$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$width."px-". urlencode($img).".png";
-			}
-			else{
-				$urlapimagnus="https://tools.wmflabs.org/magnus-toolserver/commonsapi.php?image=".urlencode($img);
-				$xml = simplexml_load_file_from_url($urlapimagnus);
-				if ($xml){
-					$width=intval($xml->xpath('//file/width/text()')[0]);
-					$height=intval($xml->xpath('//file/height/text()')[0]);
-				}
-				else{
-					$size=getjpegsize($urlimg);
-					if (!(isset($size[1])))
-						$size=getimagesize($urlimg);
-					$width=$size[0];
-					$height=$size[1];
-				}
-			
-				if(!((is_null($width))||($width==0))){
-					// thumb vertical
-					if ($width/$height>200/350){
-						if ($width>200)
-							$w_thumb=200;
-						else
-							$w_thumb=$width;
-					}
-					else{
-						if ($height>350)
-							$w_thumb=floor(350*$width/$height);
-						else
-							$w_thumb=$width;
-					}
-					if ($w_thumb==$width)
-						$thumb=$urlimg;
-					else
-						$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img);
-						
-					// thumb horizontal
-					if ($width/$height>320/240){
-						if ($width>320)
-							$w_thumb_h=320;
-						else
-							$w_thumb_h=$width;
-					}
-					else{
-						if ($height>240)
-							$w_thumb_h=floor(240*$width/$height);
-						else
-							$w_thumb_h=$width;
-					}
-					if ($w_thumb_h==$width)
-						$thumb_h=$urlimg;
-					else
-						$thumb_h="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb_h."px-". urlencode($img);
-				
-					// large
-					if ($width/$height>1400/900){
-						if ($width>1400)
-							$w_large=1400;
-						else
-							$w_large=$width;
-					}
-					else{
-						if ($height>900)
-							$w_large=floor(900*$width/$height);
-						else
-							$w_large=$width;
-					}
-					if ($w_large==$width)
-						$large=$urlimg;
-					else
-						$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_large."px-". urlencode($img);
-					$new_img=1; // new image
-				}
-				else {
-					$width=0;
-					$height=0;	
-					// no metadata on image -> no image
-					$tab_prop["P18"]="";
-				}
-	
-				unset($size);
-			}
-			$commons_artist=esc_dblq($commons_artist);
-			$commons_credit=esc_dblq($commons_credit);
-			$commons_license=esc_dblq($commons_license);	
-			$thumb=esc_dblq($thumb);
-			$thumb_h=esc_dblq($thumb_h);
-			$large=esc_dblq($large);
-			$sql="INSERT INTO commons_img (P18,commons_artist,commons_credit,commons_license,thumb,thumb_h,width_h,large,width,height) VALUES (\"".$tab_prop["P18"]."\",\"".$commons_artist."\",\"".$commons_credit."\",\"".$commons_license."\",\"".$thumb."\",\"".$thumb_h."\",$w_thumb_h,\"".$large."\",$width,$height)";
-			if ($width!=0)
-				$rep=mysql_query($sql);
-		}
-		else {
-			// no metadata on image -> no image
-			$tab_prop["P18"]="";
-		}
-	}
-	else{
-		$row = mysql_fetch_assoc($rep);
-		$commons_artist=esc_dblq($row['commons_artist']);
-		$commons_credit=esc_dblq($row['commons_credit']);
-		$commons_license=esc_dblq($row['commons_license']);
-		$thumb=esc_dblq($row['thumb']);
-		$thumb_h=esc_dblq($row['thumb_h']);
-		$w_thumb_h=$row['width_h'];
-		$large=esc_dblq($row['large']);
-		$tab_prop["P18"]=esc_dblq($tab_prop["P18"]);
-	}
+	$img_exists=false;
+	$sql="SELECT id FROM commons_img WHERE P18=\"".esc_dblq($tab_prop["P18"])."\"";
+	$rep=mysqli_query($link,$sql);
+	if (mysqli_num_rows($rep)!=0)
+		$img_exists=true;
+	$p18=id_commons($tab_prop["P18"]);
+	if (($p18!=0)and(!($img_exists)))
+		$new_img=1;
 }
 
 //date P571 or P585
@@ -340,42 +203,42 @@ $offic_url=$tab_prop["P856"];
 if ($offic_url=="")
 	$offic_url=$tab_prop["P973"];
 
-$sql="INSERT INTO artworks (qwd,P18,P214,P217,P347,P350,P373,P727,link,P1212,year1,year2,b_date,commons_artist,commons_credit,commons_license,thumb,thumb_h,width_h,large,new_img) VALUES ($item,\"".$tab_prop["P18"]."\",\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$offic_url."\",\"".$tab_prop["P1212"]."\",$year1,$year2,\"".$b_date."\",\"".$commons_artist."\",\"".$commons_credit."\",\"".$commons_license."\",\"".$thumb."\",\"".$thumb_h."\",$w_thumb_h,\"".$large."\",$new_img)";
-$rep=mysql_query($sql);
+$sql="INSERT INTO artworks (qwd,P18,P214,P217,P347,P350,P373,P727,link,P1212,year1,year2,b_date,new_img) VALUES ($item,".$p18.",\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$offic_url."\",\"".$tab_prop["P1212"]."\",$year1,$year2,\"".$b_date."\",$new_img)";
+$rep=mysqli_query($link,$sql);
 
 $sql="SELECT id FROM artworks WHERE qwd=\"$item\"";
-$rep=mysql_query($sql);
-$row = mysql_fetch_assoc($rep);
+$rep=mysqli_query($link,$sql);
+$row = mysqli_fetch_assoc($rep);
 $id_artwork=$row['id'];
 
-//1 for artwork item
+// 1abels for artwork item
 insert_label_page(1,$item,$id_artwork);
 
 // Other properties
-$tab_multi=array(170,31,276,195,136,135,179,180,186,144,361,921,941,1639);	
+$tab_multi=array(31,135,136,144,170,179,180,186,195,276,361,921,941,1639);	
 for ($i=0;$i<count($tab_multi);$i++){
 	if ($claims["P".$tab_multi[$i]])
 		foreach ($claims["P".$tab_multi[$i]] as $value){
 			$val=intval($value["mainsnak"]["datavalue"]["value"]["numeric-id"]);
-			/*if (($tab_multi[$i]==195)||($tab_multi[$i]==276)){
-				$sql="SELECT id FROM p".$tab_multi[$i]." WHERE qwd=$val";
-				$rep=mysql_query($sql);
-				if (mysql_num_rows($rep)==0)
-					$val=parent_cherche($val);// Looking for uper-classes
-			}*/
 			$sql="SELECT id FROM p".$tab_multi[$i]." WHERE qwd=$val";
-			$rep=mysql_query($sql);
+			$rep=mysqli_query($link,$sql);
 			$newid="";
 			$found=false;
-			if (mysql_num_rows($rep)==0){
+			if (mysqli_num_rows($rep)==0){
 				//Value of property inserted
-				$sql="INSERT INTO p".$tab_multi[$i]." (qwd) VALUES ($val)";
-				$rep=mysql_query($sql);
+				$p18_str=img_qwd($val);
+				if ($p18_str!="")
+					$p18=id_commons($p18_str);
+				else
+					$p18=0;
+					
+				$sql="INSERT INTO p".$tab_multi[$i]." (qwd,P18) VALUES ($val,".$p18.")";
+				$rep=mysqli_query($link,$sql);
 				
 				$sql="SELECT id FROM p".$tab_multi[$i]." WHERE qwd=$val";
-				$rep=mysql_query($sql);
+				$rep=mysqli_query($link,$sql);
 				
-				$row = mysql_fetch_assoc($rep);
+				$row = mysqli_fetch_assoc($rep);
 				$id_prop=$row['id'];
 				$newid=$id_prop;
 				//Labels of property inserted
@@ -383,7 +246,7 @@ for ($i=0;$i<count($tab_multi);$i++){
 				
 			}
 			else{			
-				$row = mysql_fetch_assoc($rep);
+				$row = mysqli_fetch_assoc($rep);
 				$id_prop=$row['id'];
 				$found=true;	
 			}
@@ -391,27 +254,25 @@ for ($i=0;$i<count($tab_multi);$i++){
 			if (($tab_multi[$i]==195)||($tab_multi[$i]==276)){
 				// Looking for uper-classes
 				$sql="SELECT id,level FROM p".$tab_multi[$i]." WHERE qwd=$val";
-				$rep=mysql_query($sql);
+				$rep=mysqli_query($link,$sql);
 
 				$level=0;
-				if (mysql_num_rows($rep)>0){
-					$row = mysql_fetch_assoc($rep);
+				if (mysqli_num_rows($rep)>0){
+					$row = mysqli_fetch_assoc($rep);
 					$level=$row['level'];
 				}
 				if ((!$found)||($level!=0))
 					parent_cherche($tab_multi[$i],$val,$id_artwork,$newid);
 					
 				$sql="SELECT id FROM artw_prop WHERE prop=".$tab_multi[$i]." and id_artw=$id_artwork and id_prop=$id_prop";
-				$rep=mysql_query($sql);
-				if (mysql_num_rows($rep)!=0)
+				$rep=mysqli_query($link,$sql);
+				if (mysqli_num_rows($rep)!=0)
 					$insertok=false;
 			}
-					
 			
 			if ($insertok){
 				$sql="INSERT INTO artw_prop (prop,id_artw,id_prop) VALUES (".$tab_multi[$i].",$id_artwork,$id_prop)";
-				//test if ($tab_multi[$i]=="276") echo "\n".$sql;
-				$rep=mysql_query($sql);
+				$rep=mysqli_query($link,$sql);
 			}
 		}
 	else
@@ -430,12 +291,12 @@ foreach($tab_miss as $key=>$value){
 		$sql.="lb".$key."=".$value;
 }
 $sql.=" WHERE id=$id_artwork";
-$rep=mysql_query($sql);
+$rep=mysqli_query($link,$sql);
 unset($tab_miss);
 
-	}//it's a file fichier
+	}//it's a file
 }//reading files in directory
-mysql_close();
+mysqli_close($link);
 closedir($dir);
 echo "\ncompilation done";
 

@@ -2,8 +2,7 @@
 /* / */
 /* Search optimization */
 
-$link = mysql_connect ($host,$user,$pass) or die ('Erreur : '.mysql_error());
-mysql_select_db($db) or die ('Erreur :'.mysql_error());
+$link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 $optimiz = array(
 	"p31|3305213",
 	"p31|860861",
@@ -30,16 +29,17 @@ foreach ($optimiz as $item){
 	
 	$sql="select distinct artworks.id as id 
 	from $prop, artw_prop, artworks WHERE ".$where." AND artw_prop.id_prop=$prop.id AND artw_prop.prop=".str_replace("p","",$prop)." AND artworks.id=artw_prop.id_artw";
-	$rep=mysql_query($sql);
+	$rep=mysqli_query($link,$sql);
 
 	$cpt=0;
-	while ($data = mysql_fetch_assoc($rep)){
+	while ($data = mysqli_fetch_assoc($rep)){
 		$sql="UPDATE artworks SET opt".$prop."_".$value."=1 WHERE id=".$data['id'];
-		$update=mysql_query($sql);
+		$update=mysqli_query($link,$sql);
 		$cpt++;
 	}
 	echo "\n $prop $cpt";
 }
+mysqli_close($link);
 echo "\noptimization done";
 
 ?>

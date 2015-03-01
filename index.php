@@ -31,12 +31,15 @@ $nb=intval($nb);
 
 include "config.php";
 include "init.php";
+if ($new){
+	$_GET['p']="1";
+	$script_name="new.php";
+}
 include "traduction.php";
 include "functions.php";
 
-$link = mysql_connect ($host,$user,$pass) or die ('Erreur : '.mysql_error());
-mysql_select_db($db) or die ('Erreur :'.mysql_error());
-mysql_query("SET NAMES 'utf8'");
+$link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
+mysqli_query($link,"SET NAMES 'utf8'");
 
 $deb=($p-1)*$nb;
 
@@ -46,7 +49,12 @@ list($g_usec, $g_sec) = explode(" ",microtime());
 define ("t_start", (float)$g_usec + (float)$g_sec);
 
 //Search queries
-include "queries.php";
+if ($new)
+	include "queries_new.php";
+else
+	include "queries.php";
+
+
 if ($p!=1) // hack if $p indicated out of range because of $nb parameter
 	if (($p-1)*$nb>$num_rows){
 		$new_url="http://www.zone47.com/crotos/?";
@@ -66,9 +74,9 @@ if (($random)||($num_rows==0)){
 	for ($i=0;$i<2;$i++){
 		$alea_item=$alea_prop[$rand_keys[$i]];
 		$sql_r="SELECT label,qwd FROM label_page WHERE type='1' AND prop=".$alea_item." AND lg='$l' AND label !='' ORDER BY RAND() LIMIT 0,1";
-		$rep_r=mysql_query($sql_r);
-		if (mysql_num_rows($rep_r)!=0){
-			$data_r = mysql_fetch_assoc($rep_r);
+		$rep_r=mysqli_query($link,$sql_r);
+		if (mysqli_num_rows($rep_r)!=0){
+			$data_r = mysqli_fetch_assoc($rep_r);
 			if ($alea_bar!="")
 				$alea_bar.=", ";
 			$alea_bar.="<a href=\"?p".$alea_item."=".$data_r['qwd']."\">".$data_r['label']."</a>";	
@@ -355,8 +363,7 @@ else
 ?>
 <?php
 $cpt=0;
-// Masonry $nitem=1;
-while($data = mysql_fetch_assoc($rep)) {
+while($data = mysqli_fetch_assoc($rep)) {
 	$content="";
 	$cpt++;
 	$id_artw=$data['id'];
@@ -405,30 +412,54 @@ while($data = mysql_fetch_assoc($rep)) {
 	$inspired=txt_prop($id_artw,941,$l);
 	$pendant=txt_prop($id_artw,1639,$l);
 	
-	if (intval($data['width_h'])<201)
+	$p18=$data['P18'];
+	
+	$commons_artist="";
+	$commons_credit="";
+	$license="";
+	$thumb="";
+	$thumb_h="";
+	$width_h=0;
+	$large="";
+	if ($p18!=0){
+		$sql="select * from commons_img where id=".$p18;
+		$rep18=mysqli_query($link,$sql);
+		if (mysqli_num_rows($rep18)!=0){
+			$data_p18 = mysqli_fetch_assoc($rep18);
+			$p18_str=$data_p18['P18'];
+			$commons_artist=$data_p18['commons_artist'];
+			$commons_credit=$data_p18['commons_credit'];
+			$license=$data_p18['commons_license'];
+			$thumb=$data_p18['thumb'];
+			$thumb_h=$data_p18['thumb_h'];
+			$width_h=$data_p18['width_h'];
+			$large=$data_p18['large'];
+		}
+	}
+	
+	if (intval($width_h)<201)
 		$width_item=202;
 	else
-		$width_item=intval($data['width_h'])+2;
-		
+		$width_item=intval($width_h)+2;	
+	
 	if ($num_rows>1){
 		$content.="	<div style=\"width:".$width_item."px\" class=\"item\" data-width=\"".$width_item."px\" >\n";
 	}
 	else{ 
-		//$content.="	<div class=\"item solo\" style=\"width:".$width_item."px\" data-width=\"".$width_item."px\">\n";
-		if ($data['large']!=""){
+		if ($large!=""){
 			$width_big_img=0;
 			
-			if (strpos($data['large'],"commons/thumb")){
-				preg_match('#/[0-9]*px-#',$data['large'],$matches);
+			if (strpos($large,"commons/thumb")){
+				preg_match('#/[0-9]*px-#',$large,$matches);
 				if ($matches)
 					$width_big_img=intval(str_replace("/","",str_replace("px-","",$matches[0])));
 			}
 			else{
-				$sql="select width from commons_img where P18=\"".esc_dblq($data['P18'])."\"";
-				$rep_img=mysql_query($sql);
-				$num_rows = mysql_num_rows($rep_img);
+				$sql="select width from commons_img where id=".$p18;
+				$rep_img=mysqli_query($link,$sql);
+				$num_rows = mysqli_num_rows($rep_img);
 				if ($num_rows!=0){
-					$data_img = mysql_fetch_assoc($rep_img);
+					$data_img = mysqli_fetch_assoc($rep_img);
 					$width_big_img=intval($data_img['width']);
 				}
 				
@@ -448,8 +479,7 @@ while($data = mysql_fetch_assoc($rep)) {
 		$content.="		<div class=\"thumb multiimg\"><div>";
 	else
 		$content.="		<div class=\"thumb soloimg\"><div>";
-	if ($data['thumb_h']!=""){
-		$license=$data['commons_license'];
+	if ($thumb_h!=""){
 		if ($license!=""){
 			if ($license=="pd")
 				$license=ucfirst(translate($l,"pd"));
@@ -481,9 +511,9 @@ while($data = mysql_fetch_assoc($rep)) {
 			}
 			$license=esc_dblq(htmlentities($license));
 		}
-		$commons_artist = esc_dblq(htmlentities(preg_replace("/<\/?div[^>]*\>/i", "", $data['commons_artist'])));
-		$commons_link="http://commons.wikimedia.org/wiki/File:".htmlentities(str_replace("?","%3F",str_replace(" ","_",$data['P18'])));
-		$commons_credit = esc_dblq(htmlentities(preg_replace("/<img[^>]+\>/i", "",preg_replace("/<\/?td[^>]*\>/i", "",preg_replace("/<\/?tr[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "", preg_replace("/<\/?ul[^>]*\>/i", "", preg_replace("/<\/?hr[^>]*\>/i", "", preg_replace("/<\/?p[^>]*\>/i", "", preg_replace("/<\/?div[^>]*\>/i", "", $data['commons_credit'])))))))))));
+		$commons_artist = esc_dblq(htmlentities(preg_replace("/<\/?div[^>]*\>/i", "",$commons_artist)));
+		$commons_link="http://commons.wikimedia.org/wiki/File:".htmlentities(str_replace("?","%3F",str_replace(" ","_",$p18_str)));
+		$commons_credit = esc_dblq(htmlentities(preg_replace("/<img[^>]+\>/i", "",preg_replace("/<\/?td[^>]*\>/i", "",preg_replace("/<\/?tr[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "", preg_replace("/<\/?ul[^>]*\>/i", "", preg_replace("/<\/?hr[^>]*\>/i", "", preg_replace("/<\/?p[^>]*\>/i", "", preg_replace("/<\/?div[^>]*\>/i", "", $commons_credit)))))))))));
 		$credits=$commons_artist;
 		if (($credits!="")&&($license!=""))
 			$credits.=" | ";
@@ -492,9 +522,9 @@ while($data = mysql_fetch_assoc($rep)) {
 			$credits.=" | ";
 		$credits.=$commons_credit;
 		if ($num_rows>1)
-			$content.="<a href=\"".$commons_link."\" data-file=\"".esc_dblq($data['large'])."\" data-commons=\"".$commons_link."\" class=\"yox\" id=\"link$cpt\"><img src=\"".esc_dblq($data['thumb_h'])."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($data['thumb_h'])."\" data-credit=\"&lt;b&gt;".esc_dblq($titre)."&lt;/b&gt;&lt;br /&gt;".$credits."\"/></a>";
+			$content.="<a href=\"".$commons_link."\" data-file=\"".esc_dblq($large)."\" data-commons=\"".$commons_link."\" class=\"yox\" id=\"link$cpt\"><img src=\"".esc_dblq($thumb_h)."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($thumb_h)."\" data-credit=\"&lt;b&gt;".esc_dblq($titre)."&lt;/b&gt;&lt;br /&gt;".$credits."\"/></a>";
 		else
-			$content.="<a href=\"".$commons_link."\" data-file=\"".esc_dblq($data['large'])."\" data-commons=\"".$commons_link."\" class=\"linksolo\" id=\"link$cpt\"><img src=\"".esc_dblq($data['large'])."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($data['thumb_h'])."\" data-credit=\"&lt;b&gt;".esc_dblq($titre)."&lt;/b&gt;&lt;br /&gt;".$credits."\"/></a>";
+			$content.="<a href=\"".$commons_link."\" data-file=\"".esc_dblq($large)."\" data-commons=\"".$commons_link."\" class=\"linksolo\" id=\"link$cpt\"><img src=\"".esc_dblq($large)."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($thumb_h)."\" data-credit=\"&lt;b&gt;".esc_dblq($titre)."&lt;/b&gt;&lt;br /&gt;".$credits."\"/></a>";
 	}
 	else 
 		$content.="<img src=\"img/no_image2.png\" alt=\"\" width=\"200\" height=\"240\">";
@@ -520,7 +550,7 @@ while($data = mysql_fetch_assoc($rep)) {
 	$content.="\n			<div class=\"act_not\">";
 	$uri_link="https://www.wikidata.org/wiki/Q".$qwd_art;
 	$content.="<a href=\"".$uri_link."\" title=\"".translate($l,"Wikidata")."\"><img src=\"img/wd_ico.png\" alt=\"\"/></a>";
-	if ($data['thumb_h']!="")
+	if ($thumb_h!="")
 		$content.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")."\"><img src=\"img/commons_ico.png\" alt=\"\"/></a>";
 	if ($described_link!="")
 		$content.="	<a href=\"".$described_link."\" title=\"".translate($l,"973")."\"><img src=\"img/site_link.png\" alt=\"\"/></a>";
@@ -630,7 +660,7 @@ while($data = mysql_fetch_assoc($rep)) {
 	
 	echo $content;	
 }
-mysql_close();
+mysqli_close($link);
 
 ?>
 </div>
