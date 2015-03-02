@@ -1,36 +1,8 @@
 <?php
 /* / */
-set_time_limit(120);
-$mode=0;
-  
-if (isset($_COOKIE['mode']))
-	$mode=intval($_COOKIE['mode']);
-if (isset($_GET['mode']))
-	if ($_GET['mode']!=""){ 
-		setcookie ("mode",$_GET['mode'], time() + 31536000);
-		$mode=$_GET['mode'];
-	}
-
-$l="en"; 
-if (isset($_COOKIE['l']))
-	$l=$_COOKIE['l'];
-if (isset($_GET['l']))
-	if ($_GET['l']!=""){ 
-		setcookie ("l",$_GET['l'], time() + 31536000);
-		$l=$_GET['l'];
-	}
-$nb=20; 
-if (isset($_COOKIE['nb']))
-	$nb=$_COOKIE['nb'];
-if (isset($_GET['nb']))
-	if ($_GET['nb']!=""){ 
-		setcookie ("nb",$_GET['nb'], time() + 31536000);
-		$nb=$_GET['nb'];
-	}
-$nb=intval($nb);
-
 include "config.php";
 include "init.php";
+
 if ($new){
 	$_GET['p']="1";
 	$script_name="new.php";
@@ -43,7 +15,6 @@ mysqli_query($link,"SET NAMES 'utf8'");
 
 $deb=($p-1)*$nb;
 
-
 // Timer begin
 list($g_usec, $g_sec) = explode(" ",microtime());
 define ("t_start", (float)$g_usec + (float)$g_sec);
@@ -53,7 +24,6 @@ if ($new)
 	include "queries_new.php";
 else
 	include "queries.php";
-
 
 if ($p!=1) // hack if $p indicated out of range because of $nb parameter
 	if (($p-1)*$nb>$num_rows){

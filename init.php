@@ -1,6 +1,35 @@
 <?php 
 /* / */
 $script_name="index.php";
+set_time_limit(120);
+$mode=0;
+  
+if (isset($_COOKIE['mode']))
+	$mode=intval($_COOKIE['mode']);
+if (isset($_GET['mode']))
+	if ($_GET['mode']!=""){ 
+		setcookie ("mode",$_GET['mode'], time() + 31536000);
+		$mode=$_GET['mode'];
+	}
+
+$l="en"; 
+if (isset($_COOKIE['l']))
+	$l=$_COOKIE['l'];
+if (isset($_GET['l']))
+	if ($_GET['l']!=""){ 
+		setcookie ("l",$_GET['l'], time() + 31536000);
+		$l=$_GET['l'];
+	}
+$nb=20; 
+if (isset($_COOKIE['nb']))
+	$nb=$_COOKIE['nb'];
+if (isset($_GET['nb']))
+	if ($_GET['nb']!=""){ 
+		setcookie ("nb",$_GET['nb'], time() + 31536000);
+		$nb=$_GET['nb'];
+	}
+$nb=intval($nb);
+
 $p=1; // numéro de page par défaut
 $lgs=array("ar","bn","br","ca","cs","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 $random=false;
