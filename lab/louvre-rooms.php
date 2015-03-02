@@ -84,8 +84,7 @@ $id_Louvre=$data['id'];
 
 children_search($id_Louvre,$l);
 
-
-
+mysqli_close($link);
 ?>
 
 </body>

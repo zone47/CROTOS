@@ -54,7 +54,7 @@ foreach($trads as $key=>$value){
 		echo "<tr><td>$key</td><td>".$value['lg']."</td><td class=\"nb\">1</td></tr>\n";
 
 }
-
+mysqli_close($link);
 ?>
 </table>
 </body>

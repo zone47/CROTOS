@@ -2,6 +2,9 @@
 /* / */
 /* Harvest WD */
 //$cmd="rm -f ".$fold_crotos."harvest/items/*";
+echo "\nHarvest";
+include $file_timer_begin;
+
 $cmd="del /Q ".str_replace("/","\\",$fold_crotos)."harvest\\items\\*.*";
 exec($cmd);
 /* items with subclasses
@@ -28,6 +31,10 @@ exec($cmd);
 170593   collage
 429785   poster
 46686    altarpiece
+1277842  panathenaic amphora
+15123870 lithograph
+//1640824  inscription
+//178743   stele, subclass of artefact
 
 items without subclasses
 93184    drawing
@@ -37,7 +44,7 @@ items without subclasses
 // Types with subclasses
 $types = array (3305213,860861,1278452,11060274,212431,48498,125191,326478,133067,
 184296,572916,1473346,860372,213156,277583,12043905,132137,17514,5647631,
-220659,170593,429785,46686);
+220659,170593,429785,46686,1277842,15123870);
 $cpt=0;
 for ($i=0;$i<count($types);$i++){
 	$type=$types[$i];
@@ -65,6 +72,6 @@ for ($i=0;$i<count($types2);$i++){
 			echo "\n$cpt";
 	}
 }
-echo "\nharvest done";
-
+echo "\nHarvest done";
+include $file_timer_end;
 ?>

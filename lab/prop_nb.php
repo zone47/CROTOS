@@ -143,6 +143,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 		echo "</tr>\n";
 	}
 }
+mysqli_close($link);
 ?>
 </table>
 </body>

@@ -1,6 +1,9 @@
 <?php
 //set_time_limit(108000);
 //////////// Compilation ///////////////////// 
+echo "\nCompilation";
+include $file_timer_begin;
+
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 mysqli_query($link,"SET NAMES 'utf8'");
 
@@ -298,7 +301,8 @@ unset($tab_miss);
 }//reading files in directory
 mysqli_close($link);
 closedir($dir);
-echo "\ncompilation done";
 
+echo "\nCompilation done";
+include $file_timer_end;
 
 ?>

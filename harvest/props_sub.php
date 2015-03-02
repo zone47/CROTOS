@@ -1,6 +1,8 @@
 <?php
 /* / */
-/* Search optimization */
+/* Search for subs P279 and part of P361 for indexes */
+echo "\nSubs and parts of";
+include $file_timer_begin;
 
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 $tab_props=array(31,135,136,144,170,179,180,186,195,276,921,941);
@@ -61,6 +63,7 @@ for ($i=0;$i<count($tab_props);$i++){
 	}
 }
 mysqli_close($link);
-echo "\n nb props done";
 
+echo "\nSubs and parts of done";
+include $file_timer_end;
 ?>

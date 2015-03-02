@@ -1,6 +1,9 @@
 <?php
 /* / */
 /* Harvest qwd items of qwd values for artworks propeties */
+echo "\nHarvest";
+include $file_timer_begin;
+
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 mysqli_query($link,"SET NAMES 'utf8'");
 //$cmd="rm -f ".$fold_crotos."harvest/items/*";
@@ -18,6 +21,7 @@ for ($i=0;$i<count($props);$i++){
 			echo "\n$cpt";
 	}
 }
-echo "\nharvest props done";
-
+mysqli_close($link);
+echo "\nHarvest props done";
+include $file_timer_end;
 ?>

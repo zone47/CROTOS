@@ -1,6 +1,8 @@
 <?php
 /* / */
 /* Search optimization */
+echo "\nOptimization";
+include $file_timer_begin;
 
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 $optimiz = array(
@@ -40,6 +42,7 @@ foreach ($optimiz as $item){
 	echo "\n $prop $cpt";
 }
 mysqli_close($link);
-echo "\noptimization done";
 
+echo "\nOptimization done";
+include $file_timer_end;
 ?>
