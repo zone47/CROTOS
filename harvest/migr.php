@@ -13,7 +13,6 @@ if ($nbartw>10000){
 	include $file_timer_begin;
 	
 	$source_file=$fold_crotos."bdd/".$fic_sql;
-	$fold_subclasses=$fold_crotos."subclasses/";
 	$cmd=$mysqldump." -uroot crotos_tmp > ".$source_file;
 	//$cmd="mysqldump -h ".$host." -u ".$user." -p".$pass." ".$db." > ".$fold_crotos."bdd/".$fic_sql;
 	exec($cmd);
@@ -31,10 +30,6 @@ if ($nbartw>10000){
 	// Upload
 	
 	$upload = ftp_put($conn_id, $ftp_fold."bdd/".$fic_sql, $source_file, FTP_BINARY);
-	$dir = opendir($fold_subclasses); 
-	while($file = readdir($dir)) 
-		if($file != '.' && $file != '..')
-			$upload = ftp_put($conn_id,$ftp_fold."subclasses/".$file, $fold_subclasses.$file, FTP_BINARY);
 	
 	ftp_quit($conn_id);	
 	
