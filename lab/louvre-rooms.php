@@ -73,14 +73,17 @@ function children_search($id_parent,$l){
 </head>
 <body>
 <?php include "entete.php" ?>
-<h1>Œuvres du Louvre par salles sur Wikidata</h1>
 
-<?php
+<?php 
 $l=fr;
-$sql="SELECT id FROM `p276` WHERE `commonscategory` = 'Palais du Louvre'";
+$sql="SELECT id,nb FROM `p276` WHERE `commonscategory` = 'Palais du Louvre'";
 $rep=mysqli_query($link,$sql);
 $data=mysqli_fetch_assoc($rep);
 $id_Louvre=$data['id'];
+$nb=$data['nb'];
+?>
+<h1><a href="http://www.zone47.com/crotos/?p195=19675">Œuvres du Louvre</a> par salles sur Wikidata (<?php echo $nb; ?> items)</h1>
+<?php
 
 children_search($id_Louvre,$l);
 

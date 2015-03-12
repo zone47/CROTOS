@@ -2,11 +2,6 @@
 /* / */
 include "config.php";
 include "init.php";
-
-if ($new){
-	$_GET['p']="1";
-	$script_name="new.php";
-}
 include "traduction.php";
 include "functions.php";
 
@@ -97,14 +92,19 @@ else {
 echo " - ".$txt_res;
 ?>" />
     <link rel="icon" href="favicon.ico" />
+<?php
+    if ($disp==0)
+		echo "<link rel=\"stylesheet\" href=\"css/night.css\">";
+	else
+		echo "<link rel=\"stylesheet\" href=\"css/day.css\">";
+?>
     <link rel="stylesheet" href="css/styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" media="screen and (max-width: 840px)" href="css/medium.css" type="text/css" />
+    <link rel="stylesheet" media="screen and (max-width: 945px)" href="css/medium.css" type="text/css" />
     <link rel="stylesheet" media="screen and (max-width: 700px)" href="css/small.css" type="text/css" />
     <link rel="stylesheet" href="css/jquery-ui.css">
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery-ui.min.js"></script>
-    <!-- Masonry <script src="js/masonry.pkgd.min.js"></script> -->
     <script src="js/imagesloaded.pkgd.min.js"></script>
     <script src="js/yoxview/yoxview-init.js"></script>
     <script>
@@ -155,23 +155,37 @@ function init_display(){
 $(document).ready(function() {
 <?php if ($num_rows>1){ ?>
 	function preload(arrayOfImages) { $(arrayOfImages).each(function () { $('<img />').attr('src',this).appendTo('body').css('display','none'); }); }
-	preload(['img/arrow_down.png','img/magnifying_on.png']);
+	preload(['img/arrow_down.png','img/arrow_down_day.png','img/magnifying_on.png']);
 <?php }
- else { ?>	
- $("#iconot1").attr("src","img/arrow_up.png");
-<?php } ?>	
-	$('#lg,#nb,#listp31,#miss_props input').change(function() {
+else{  
+	if ($disp==0)
+		echo "$(\"#iconot1\").attr(\"src\",\"img/arrow_up.png\");";
+	else
+		echo "$(\"#iconot1\").attr(\"src\",\"img/arrow_up_day.png\");";
+}
+?>	
+	$('#lg,#nb,#d1,#d2,#listp31,#miss_props input').change(function() {
 		$('#form').submit();
 	});
 	$(".lien_notice").click(function() {
 		var id_not = "#notice"+this.id.replace("iconot","");
 		if($(id_not).css('display') == 'none'){
 			$(id_not).css({ display: "block" });
-			$("#"+this.id).attr("src","img/arrow_up.png");
+<?php
+if ($disp==0)
+	echo "			$(\"#\"+this.id).attr(\"src\",\"img/arrow_up.png\");";
+else
+	echo "			$(\"#\"+this.id).attr(\"src\",\"img/arrow_up_day.png\");";
+?>
 		}
 		else{
 			$(id_not).css({ display: "none" });
-			$("#"+this.id).attr("src","img/arrow_down.png");
+<?php
+if ($disp==0)
+	echo "			$(\"#\"+this.id).attr(\"src\",\"img/arrow_down.png\");";
+else
+	echo "			$(\"#\"+this.id).attr(\"src\",\"img/arrow_down_day.png\");";
+?>
 		}
 	});
 
@@ -309,8 +323,8 @@ $(window).load(function() {
 </nav>
 <div id="entete">
     <div id="bl_titre">
-        <a href="/crotos/" title="CROTOS"><img src="img/crotos.jpg" alt="CROTOS" width="108" height="120" id="img_crotos"/></a>
-        <a href="/crotos/" title="CROTOS"><h1><?php /* Easter egg */if ($l=="mu") echo "HOUBA"; else echo "Crotos"; ?></h1></a>
+        <a href="/crotos/" title="Crotos"><img src="img/crotos.jpg" alt="CROTOS" width="108" height="120" id="img_crotos"/></a>
+        <a href="/crotos/" title="Crotos"><h1><?php /* Easter egg */if ($l=="mu") echo "HOUBA"; else echo "Crotos"; ?></h1></a>
     </div>
 	<?php include "form.php" ?>    
 </div>
@@ -400,10 +414,15 @@ while($data = mysqli_fetch_assoc($rep)) {
 			$commons_artist=$data_p18['commons_artist'];
 			$commons_credit=$data_p18['commons_credit'];
 			$license=$data_p18['commons_license'];
-			$thumb=$data_p18['thumb'];
 			$thumb_h=$data_p18['thumb_h'];
 			$width_h=$data_p18['width_h'];
 			$large=$data_p18['large'];
+			// Hack to move to compilation
+			if ((substr ($thumb_h,-3)=="tif")||(substr ($thumb_h,-3)=="iff")){
+				$width=$data_p18['width'];
+				$thumb_h=str_replace("tif/","tif/lossy-page1-",$thumb_h).".jpg";
+				$large=str_replace($width_h,$width,$thumb_h);
+			}
 		}
 	}
 	
@@ -496,8 +515,12 @@ while($data = mysqli_fetch_assoc($rep)) {
 		else
 			$content.="<a href=\"".$commons_link."\" data-file=\"".esc_dblq($large)."\" data-commons=\"".$commons_link."\" class=\"linksolo\" id=\"link$cpt\"><img src=\"".esc_dblq($large)."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($thumb_h)."\" data-credit=\"&lt;b&gt;".esc_dblq($titre)."&lt;/b&gt;&lt;br /&gt;".$credits."\"/></a>";
 	}
-	else 
-		$content.="<img src=\"img/no_image2.png\" alt=\"\" width=\"200\" height=\"240\">";
+	else{
+		if ($disp==0)
+			$content.="<img src=\"img/no_image2.png\" alt=\"\" width=\"200\" height=\"240\">";
+		else
+			$content.="<img src=\"img/no_image_day.png\" alt=\"\" width=\"200\" height=\"240\">";
+	}
 	$content.="\n		</div></div>";
 		
 	$content.="\n		<div class=\"cartel\">";
@@ -515,13 +538,27 @@ while($data = mysqli_fetch_assoc($rep)) {
 	}
 	$content.="\n			</div>";	
 	
-	$content.="\n			<div class=\"btn_notice\"><img id=\"iconot$cpt\" src=\"img/arrow_down.png\" alt=\"notice\" class=\"lien_notice\">\n			</div>";
+	$content.="\n			<div class=\"btn_notice\">";
+	if ($disp==0)
+		$content.="<img id=\"iconot$cpt\" src=\"img/arrow_down.png\" alt=\"notice\" class=\"lien_notice\">\n";
+	else
+		$content.="<img id=\"iconot$cpt\" src=\"img/arrow_down_day.png\" alt=\"notice\" class=\"lien_notice\">\n";
+	$content.="			</div>";
 
 	$content.="\n			<div class=\"act_not\">";
 	$uri_link="https://www.wikidata.org/wiki/Q".$qwd_art;
-	$content.="<a href=\"".$uri_link."\" title=\"".translate($l,"Wikidata")."\"><img src=\"img/wd_ico.png\" alt=\"\"/></a>";
-	if ($thumb_h!="")
-		$content.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")."\"><img src=\"img/commons_ico.png\" alt=\"\"/></a>";
+	$content.="<a href=\"".$uri_link."\" title=\"".translate($l,"Wikidata")."\">";
+	if ($disp==0)
+		$content.="<img src=\"img/wd_ico.png\" alt=\"\"/>";
+	else
+		$content.="<img src=\"img/wd_ico_day.png\" alt=\"\"/>";
+	$content.="</a>";
+	if ($thumb_h!=""){
+		if ($disp==0)
+			$content.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")."\"><img src=\"img/commons_ico.png\" alt=\"\"/></a>";
+		else
+			$content.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")."\"><img src=\"img/commons_ico_day.png\" alt=\"\"/></a>";
+	}
 	if ($described_link!="")
 		$content.="	<a href=\"".$described_link."\" title=\"".translate($l,"973")."\"><img src=\"img/site_link.png\" alt=\"\"/></a>";
 	if ($pageWP!=""){
@@ -530,7 +567,12 @@ while($data = mysqli_fetch_assoc($rep)) {
 			$content.=$lgWP;
 		else 
 			$content.=$l;
-		$content.=".wikipedia.org/wiki/".str_replace(" ","_",str_replace("\"","",$pageWP))."\"><img src=\"img/wp_ico.png\" alt=\"\" /></a>";
+		$content.=".wikipedia.org/wiki/".str_replace(" ","_",str_replace("\"","",$pageWP))."\">";
+		if ($disp==0)
+			$content.="<img src=\"img/wp_ico.png\" alt=\"\" /></a>";
+		else
+			$content.="<img src=\"img/wp_ico_day.png\" alt=\"\" /></a>";
+		
 		if ($lgWP!="")
 			$content.=" <a href=\"https://".$lgWP.".wikipedia.org/wiki/".str_replace(" ","_",str_replace("\"","",$pageWP))."\" class=\"lgWP\" title=\"".translate($l,"Wikipedia")."\">".$lgWP."</a>";
 	}
@@ -643,7 +685,7 @@ if ($num_rows>5){
 }
 ?>
 </div>
-<div style="float:left;color:#1e1e1e"><?php
+<div id="timer"><?php
 // Timer end and print
 list($g2_usec, $g2_sec) = explode(" ",microtime());
 define ("t_end", (float)$g2_usec + (float)$g2_sec);

@@ -4,7 +4,7 @@
 <form action="index.php" method="get" id="form"  name="form"  accept-charset="UTF-8">
 	<div id="params">
     	<div>
-		<label for="lg" id="label_lg"><?php echo translate($l,"language") ?></label>
+		<label for="lg" id="label_lg" class="paralab"><?php echo translate($l,"language") ?></label>
 		<select name="l" id="lg">
 <?php
 for ($i=0;$i<count($lgs);$i++){
@@ -25,7 +25,7 @@ foreach($tab_idx as $key=>$value)
 		echo "		<input type=\"hidden\" value=\"$value\" name=\"$key\" id=\"$key\" />";
 ?>
 
-		<label for="nb"><?php echo translate($l,"img_page") ?></label>
+		<label for="nb" class="paralab"><?php echo translate($l,"img_page") ?></label>
 		<select name="nb" id="nb">
         	<option value="10" <?php if ($nb==10) echo "selected=\"selected\""; ?>>10</option>
 			<option value="20" <?php if ($nb==20) echo "selected=\"selected\""; ?>>20</option>
@@ -57,6 +57,11 @@ foreach($tab_idx as $key=>$value)
 			echo "<a href=\"?".$liennav.$comp."&amp;mode=0\">".translate($l,"read")."</a>";
 		?>
    		</div>
+        <div id="disp">
+			<label for="d1"><img src="img/<?php if ($disp==0) echo "moon_night.png"; else echo "moon.png"; ?>" alt="moon"/></label><input type="radio" name="disp" value="0" id="d1" <?php if ($disp==0) echo "checked" ?>><input type="radio" name="disp" value="1"  id="d2" <?php if ($disp==1) echo "checked" ?>><label for="d2"><img src="img/<?php if ($disp==0) echo "sun_night.png"; else echo "sun.png"; ?>" alt="sun" /></label>
+            
+        </div>
+
 	</div>
 
 	<div id="recherche">
@@ -125,7 +130,10 @@ foreach($tab_idx as $key=>$value)
 					$txt_crit.="&amp;".$key2."=".$value2;
 		if ($s!="") $txt_crit.="&amp;s=".$s;
 		$txt_crit.="\">";
-		$txt_crit.="<img src=\"img/delete.png\" alt=\"\" width=\"16\" height=\"17\"/>";
+		if ($disp==0)
+			$txt_crit.="<img src=\"img/delete.png\" alt=\"\" width=\"16\" height=\"17\"/>";
+		else
+			$txt_crit.="<img src=\"img/delete_day.png\" alt=\"\" width=\"16\" height=\"17\"/>";
 		$txt_crit.="</a>";
 	}
 if ($q!="")

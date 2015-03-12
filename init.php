@@ -3,13 +3,20 @@
 $script_name="index.php";
 set_time_limit(120);
 $mode=0;
-  
 if (isset($_COOKIE['mode']))
 	$mode=intval($_COOKIE['mode']);
 if (isset($_GET['mode']))
 	if ($_GET['mode']!=""){ 
 		setcookie ("mode",$_GET['mode'], time() + 31536000);
 		$mode=$_GET['mode'];
+	}
+$disp=1;
+if (isset($_COOKIE['disp']))
+	$disp=intval($_COOKIE['disp']);
+if (isset($_GET['disp']))
+	if ($_GET['disp']!=""){ 
+		setcookie ("disp",$_GET['disp'], time() + 31536000);
+		$disp=$_GET['disp'];
 	}
 
 $l="en"; 
@@ -123,6 +130,10 @@ if (isset($_GET['q']))
 if (isset($_GET['p']))
 	if ($_GET['p']!="") 
 		$p=intval($_GET['p']);
+if ($new){
+	$_GET['p']="1";
+	$script_name="new.php";
+}
 if (isset($_GET['s'])){
 	$s=$_GET['s'];
 	$s= preg_replace('/\p{C}+/u', "", $s);

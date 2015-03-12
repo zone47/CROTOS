@@ -103,7 +103,6 @@ foreach($tab_idx as $key=>$value){
 			while($data = mysqli_fetch_assoc($rep_sub))
 				$where.=" OR ".$key.".id=".$data['id_sub'];
 			$where.=")";
-			echo "<!-- ".$sql_sub."\n ".$where." -->";
 			
 			$sql_s="select distinct artworks.id as id 
 			from ".$key.", artw_prop, artworks WHERE ".$where." AND artw_prop.id_prop=".$key.".id AND artw_prop.prop=".str_replace("p","",$key)." AND artworks.id=artw_prop.id_artw";

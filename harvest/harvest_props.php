@@ -1,7 +1,7 @@
 <?php
 /* / */
 /* Harvest qwd items of qwd values for artworks propeties */
-echo "\nHarvest";
+echo "\nHarvest props";
 include $file_timer_begin;
 
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());

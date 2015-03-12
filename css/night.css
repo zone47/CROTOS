@@ -1,0 +1,140 @@
+body{
+  background:#1e1e1e;
+  color:#FFF;	
+}
+a:link,a:visited {
+  color:#fff;
+}
+a:hover, a:focus, a:active {
+  color: #e7e7e7;
+}
+a img, footer img {
+  border-color:#333  ;
+}
+a.externe:after {
+	content: url("../img/externe.png");
+}
+a.wikidata:after {
+	content: url("../img/wikidata_link.png");
+}
+#yoxview{
+	border: solid 1px #333;
+}
+#access{
+	color:#1e1e1e;
+}
+#access a,#access a:link,#access a:link {
+	color:#1e1e1e;
+}
+#access a:hover,#access a:focus,#access a:active {
+ 	color: #e7e7e7;
+}
+#bl_titre a,#bl_titre a:link ,#bl_titre a:visited,#bl_titre a:hover,#bl_titre a:focus,#bl_titre a:active{
+	color:#fff;	
+}
+#recherche  #ok,  #ok2{
+	border: 1px solid #000;
+	background: #d3d3d3;
+	background: -webkit-gradient(linear, left top, left bottom, from(#d3d3d3), to(#d3d3d3));
+	background: -webkit-linear-gradient(top, #d3d3d3, #d3d3d3);
+	background: -moz-linear-gradient(top, #d3d3d3, #d3d3d3);
+	background: -ms-linear-gradient(top, #d3d3d3, #d3d3d3);
+	background: -o-linear-gradient(top, #d3d3d3, #d3d3d3);
+	background-image: -ms-linear-gradient(top, #dedede 0%, #dedede 100%);
+	color: #2f2f2f;
+}
+#ok2{
+	background:#d3d3d3 url("../img/magnifying.png") center center no-repeat;
+}
+#recherche #ok:hover,#recherche #ok:active,#ok2:hover,#ok2:active {
+	border: 1px solid #f3f3f3;
+	text-shadow: #31540c 0 0 0;
+	background: #444;
+	background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#444));
+	background: -webkit-linear-gradient(top, #444, #444);
+	background: -moz-linear-gradient(top, #444, #666);
+	background: -ms-linear-gradient(top, #444, #444);
+	background: -o-linear-gradient(top, #444, #444);
+	background-image: -ms-linear-gradient(top, #444 0%, #444 100%);
+	color: #f3f3f3;
+}
+#recherche #ok:hover,#recherche #ok:active{
+	background-image: -ms-linear-gradient(top, #444 0%, #444 100%);
+}
+#ok2:hover,#ok2:active {
+	background:#444 url("../img/magnifying_on.png") center center no-repeat;
+}
+.ui-helper-hidden-accessible{
+	color:#666;	
+}
+.criteres{
+	color:#fff;
+}
+.libelle_criteres{
+	color:#efefef;
+}
+#tout{
+	color:#4F4F4F;	
+}
+#res_nav span{
+	color:#999;
+}
+#contrib span{
+	color:#999;
+}
+.page{
+	color:#999;	
+}
+.nav_list a,.page_ec{
+	background-color: #fff;
+	color: #333;
+}
+.nav_list a:hover,.nav_list a:active{
+	background-color: #dedede;
+	color: #1a1a1a;
+}
+.nav_list .page_ec{
+	background-color: #333;
+	color:#fff;
+	border:1px solid #FFF;
+}
+.alea{
+	color:#999;
+}
+.libelle{
+	color:#fff;	
+}
+.cartel{
+	color:#fff;
+}
+a.lien_aut,a.lien_aut:link,a.lien_aut:link {
+	color:#bbb;
+}
+a.lien_aut:hover,a.lien_aut:focus,a.lien_aut:active {
+	color: #bbb;
+}
+a.interne,a.interne:link,a.interne:link {
+	color:#9F9F9F;
+}
+a.interne:hover,a.interne:focus,a.interne:active {
+	color: #9F9F9F;
+}
+.notice{
+	background-color:#1E1E1E;
+	color:#fafafa;
+	border-bottom:1px solid #444;
+	border-right:1px solid #444;
+	border-left:1px solid #444;
+}
+#timer{
+  color:#1e1e1e;	
+}
+footer{
+	color:#999;
+}
+#lg_rtl a.wikidata:after {
+	content: url("../img/wikidata_link_rtl.png");
+}
+#lg_rtl a.externe:after {
+	content: url("../img/externe_rtl.png");
+}

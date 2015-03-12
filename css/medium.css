@@ -1,7 +1,7 @@
 /* / */
 /* Display max 800px" */
 #bl_titre{
-	width:220px;	
+	width:180px;	
 }
 h1{
 	display:block;
@@ -11,8 +11,25 @@ h1{
 	margin:3px 0 5px 0;
 	
 } 
-#recherche{
+#params{
+	margin-bottom:3px;
+}
+#contrib,#disp{
+	float:none;	
+	display:inline;
+}
+#contrib{
+	line-height:20px;
+	margin-right:10px;
+}
+#recherche,#res_nav{
 	margin-left:140px;
+}
+#recherche{
+	padding-left:0;
+}
+#res_na{
+	padding-left:1px;
 }
 #recherche input{
 	font-size:1.5em;	

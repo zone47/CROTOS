@@ -1,0 +1,145 @@
+body {
+	background:#FFF;
+	color:#0F0F0F;	
+}
+a:link {
+	color:#000055;
+}
+a:visited {
+	color:#551A8B;
+}
+a:hover, a:focus, a:active {
+	color: #320f53;
+}
+a img, footer img {
+	border-color:#AFAFAF  ;
+}
+a.externe:after {
+	content: url("../img/externe_day.png");
+}
+a.wikidata:after {
+	content: url("../img/wikidata_link.png");
+}
+#yoxview{
+	border: solid 1px #333;
+}
+#yoxview a:link,#yoxview a:visited {
+  color:#fff;
+}
+#yoxview a:hover,#yoxview a:focus, #yoxview a:active {
+  color: #e7e7e7;
+}
+#yoxview a.externe:after {
+	content: url("../img/externe.png");
+}
+.thumb img:hover,.thumb img:active{
+	-moz-box-shadow: 0 0 10px #494949;
+	-webkit-box-shadow: 0 0 10px #494949;
+	box-shadow: 0 0 10px #494949;
+}
+.act_not img:hover,.act_not img:active,.btn_notice img:hover,.btn_notice img:active{
+	-moz-box-shadow: 0 0 2px #545454;
+	-webkit-box-shadow: 0 0 2px #545454;
+	box-shadow: 0 0 2px #545454;
+}
+input,select{
+	border:1px solid #BCBCBC;	
+}
+#access{
+	color:#FFF;
+}
+#access a,#access a:link,#access a:link {
+	color:#FFF;
+}
+#access a:hover,#access a:focus,#access a:active {
+ 	color: #0F0F0F;
+}
+#bl_titre a,#bl_titre a:link ,#bl_titre a:visited,#bl_titre a:hover,#bl_titre a:focus,#bl_titre a:active{
+	color:#0F0F0F;	
+}
+#recherche  #ok,  #ok2{
+	border: 1px solid #CDCDCD;
+	background: #4c4c4c;
+	background: -webkit-gradient(linear, left top, left bottom, from(#4c4c4c), to(#4c4c4c));
+	background: -webkit-linear-gradient(top, #4c4c4c, #4c4c4c);
+	background: -moz-linear-gradient(top, #4c4c4c, #4c4c4c);
+	background: -ms-linear-gradient(top, #4c4c4c, #4c4c4c);
+	background: -o-linear-gradient(top, #4c4c4c, #4c4c4c);
+	background-image: -ms-linear-gradient(top, #212121 0%, #212121 100%);
+	color: #F1F1F1;
+}
+#ok2{
+	background:#4c4c4c url("../img/magnifying_on.png") center center no-repeat;
+}
+#recherche #ok:hover,#recherche #ok:active,#ok2:hover,#ok2:active {
+	border: 1px solid #3A3A3A;
+	background: #DADADA;
+	background: -webkit-gradient(linear, left top, left bottom, from(#DADADA), to(#DADADA));
+	background: -webkit-linear-gradient(top, #DADADA, #DADADA);
+	background: -moz-linear-gradient(top, #DADADA, #DADADA);
+	background: -ms-linear-gradient(top, #DADADA, #DADADA);
+	background: -o-linear-gradient(top, #DADADA, #DADADA);
+	background-image: -ms-linear-gradient(top, #DADADA 0%, #DADADA 100%);
+	color: #343434;
+}
+#recherche #ok:hover,#recherche #ok:active{
+	background-image: -ms-linear-gradient(top, #DADADA 0%, #DADADA 100%);
+}
+#ok2:hover,#ok2:active {
+	background:#DADADA url("../img/magnifying.png") center center no-repeat;
+}
+.ui-helper-hidden-accessible{
+	color:#666;	
+}
+.libelle_criteres,.libelle{
+	color:#2B2B2B;
+}
+.criteres{
+	color:#0f0f0f;
+}
+#tout{
+	color:#4F4F4F;	
+}
+.nav_list a,.page_ec{
+	background-color: #F5F5F5;
+	color: #333;
+	border:1px solid #DDDDDD;
+}
+.nav_list a:hover,.nav_list a:active{
+	background-color: #DADADA;
+	color: #1a1a1a;
+	border:1px solid #0d0d0d;
+}
+.nav_list .page_ec{
+	background-color: #4c4c4c;
+	color:#fff;
+	border: 1px solid #CDCDCD;;
+}
+#res_nav span, #contrib span,.page,.alea{
+	color:#606060;
+}
+a.lien_aut,a.lien_aut:link,a.lien_aut:link,a.interne,a.interne:link,a.interne:link {
+	color:#3b2888;
+}
+a.lien_aut:hover,a.lien_aut:focus,a.lien_aut:active,a.interne:hover,a.interne:focus,a.interne:active {
+	color: #5d3382;
+}
+.notice{
+	background-color:#fff;
+	color:#0F0F0F;
+	border-bottom:1px solid #cecece;
+	border-right:1px solid #cecece;
+	border-left:1px solid #cecece;
+}
+footer{
+	color:#333;
+}
+#lg_rtl a.wikidata:after {
+	content: url("../img/wikidata_link_rtl.png");
+}
+#lg_rtl a.externe:after {
+	content: url("../img/externe_rtl.png");
+}
+#timer{
+  color:#FFF;	
+}

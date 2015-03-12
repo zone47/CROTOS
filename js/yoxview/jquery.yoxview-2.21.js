@@ -46,7 +46,7 @@
             autoHideInfo: true, // If false, the info bar (with image count and title) is always displayed.
             autoPlay: false, // If true, slideshow mode starts when the popup opens
             backgroundColor: "#000000",
-            backgroundOpacity: 0.9,
+            backgroundOpacity: 0.94,
             buttonsFadeTime: 300, // The time, in milliseconds, it takes the buttons to fade in/out when hovered on. Set to 0 to force the Prev/Next buttons to remain visible.
             cacheBuffer: 20, // The number of images to cache after the current image (directional, depends on the current viewing direction)
             cacheImagesInBackground: true, // If true, full-size images are cached even while the gallery hasn't been opened yet.

@@ -105,7 +105,7 @@ for ($i=0;$i<count($tab_nb);$i++){
 <?php
 $sql="SELECT id, qwd, P18, nb, nbimg from p$prop WHERE nb>".$nb." ORDER BY nbimg DESC";
 if ($prop==0)
-	$sql="SELECT id, qwd, P18, nb, nbimg from p$prop WHERE level=0 AND nb>".$nb." ORDER BY nbimg DESC";
+	$sql="SELECT id, qwd, P18, nb, nbimg from p195 WHERE level=0 AND nb>".$nb." ORDER BY nbimg DESC";
 $rep=mysqli_query($link,$sql);
 while($data = mysqli_fetch_assoc($rep)) {
 	$id_prop=$data['id'];

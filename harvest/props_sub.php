@@ -5,10 +5,12 @@ echo "\nSubs and parts of";
 include $file_timer_begin;
 
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
+mysqli_query($link,"TRUNCATE `prop_sub`");
 $tab_props=array(31,135,136,144,170,179,180,186,195,276,921,941);
 for ($i=0;$i<count($tab_props);$i++){
-//for ($i=0;$i<1;$i++){
 	$prop=$tab_props[$i];
+	echo "\ntable p".$prop;
+//for ($i=0;$i<1;$i++){
 	$sql="SELECT id, qwd, P18 from p$prop";
 	$rep=mysqli_query($link,$sql);
 	$sub_search=true;

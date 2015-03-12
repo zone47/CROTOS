@@ -1,6 +1,6 @@
 /* / */
 /* Display max 600px" */
-.nav a.nav_sec,.nav_sec,.mode_plus, #facets .mode_plus{
+#contrib,.nav a.nav_sec,.nav_sec,.mode_plus, #facets .mode_plus{
 	display:none;	
 }
 nav{
@@ -10,6 +10,7 @@ nav{
 #bl_titre{
 	padding-left:2%;
 	width:auto;
+	padding-top:13px;
 }
 #img_crotos{
 	height:100%;
@@ -24,10 +25,11 @@ a img{
 	border:0;
 }
 #params{
+	padding-top:2px;
 	padding-right:5%;
 	margin-bottom:10px;	
 }
-#params label{
+.paralab{
 	display:none;
 }
 #params select{
@@ -39,6 +41,10 @@ a img{
 	margin-top:2px;
 	margin-right:0;
 	margin-bottom:8px;	
+}
+#disp{
+	float:none;	
+	display:block;
 }
 body{
 	padding:0;

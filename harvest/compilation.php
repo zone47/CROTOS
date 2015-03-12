@@ -24,7 +24,6 @@ mysqli_query($link,"TRUNCATE `p361`");
 mysqli_query($link,"TRUNCATE `p921`");
 mysqli_query($link,"TRUNCATE `p941`");
 mysqli_query($link,"TRUNCATE `p1639`");
-mysqli_query($link,"TRUNCATE `prop_sub`");
 
 $tab_lg=array("ar","bn","br","ca","cs","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 
