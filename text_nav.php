@@ -6,7 +6,7 @@ $limit=$nb;
 $lien_param=$liennav;
 if ($recordcount>$limit){
 	$txtnav="";
-	if ($p!=1){
+	if (($p!=1)&&($p!=0)){
 		$txtnav.="<a href=\"";
 		$txtnav.=$script_name."?p=".($p-1);
 		if ($lien_param!="") $txtnav.=$lien_param;
@@ -80,19 +80,31 @@ if ($recordcount>$limit){
 		if ($lien_param!="") $txtnav.=$lien_param;
 		$txtnav.="\">$nbpages</a></span>\n";		
 	}
-	if ($p!=$nbpg){
+	if (($p!=$nbpg)&&($p!=0)){
 		$txtnav.="&nbsp;&nbsp;&nbsp;<a href=\"";
 		$txtnav.=$script_name."?p=".($p+1);
 		if ($lien_param!="") $txtnav.=$lien_param;
 		$txtnav.="\" class=\"precsuiv\">".translate($l,"next")."</a>\n";
 	}
+	
+	if (!$new){
+		$txtnav.= "&nbsp;&nbsp;<a href=\"".$script_name."?".$liennav."&r=1\"";
+		if ($p==0)
+			$txtnav.= " class=\"page_ec\"";
+		else
+			$txtnav.= " class=\"random\"";
+		$txtnav.= ">".mb_ucfirst(translate($l,"random"))."</a> \n";
+	}
+
 }
 else
 	$txtnav="<span class=\"page\">".translate($l,"page")."&nbsp;:&nbsp;&nbsp;</span><span class=\"page_ec\">1</span>";
 
 $txtnav=str_replace("\'","'",$txtnav);
 if ($random){
-	$txtnav= "<a href=\"".$script_name."?".$liennav."\" class=\"random\">".mb_ucfirst(translate($l,"random"))."</a> \n";
+	$txtnav= "<a href=\"cosmos/\" class=\"nav_sec\">Cosmos</a> \n";
+	$txtnav.= "<a href=\"".$script_name."?".$liennav."\" class=\"page_ec\">".mb_ucfirst(translate($l,"random"))."</a> \n";
 	$txtnav.= "<a href=\"".$script_name."?".$liennav."&amp;p=1\" class=\"nav_sec\">".translate($l,"chronology")."</a>\n";
+	
 }
 ?>

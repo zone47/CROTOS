@@ -150,7 +150,7 @@ foreach($tab_check as $key=>$value){
 	}
 }
 $search_date=false;
-if (!(($y1==-40000)&&($y2==2014)))
+if (!(($y1==-40000)&&($y2==2015)))
 	$search_date=true;
 if (($search_query)||($optimization)||($search_date)||($check_query)){
 	if (($search_query)&&(!(count($res_s)>0)))
@@ -184,6 +184,10 @@ if (($search_query)||($optimization)||($search_date)||($check_query)){
 						case "c1":
 							if ($sql_c!="") $sql_c.=" AND";
 							$sql_c.=" lb$l=0";
+							break;
+						case "c2":
+							if ($sql_c!="") $sql_c.=" AND";
+							$sql_c.=" hd=1";
 							break;
 						case "c571":
 							if ($sql_c!="") $sql_c.=" AND";
@@ -244,8 +248,14 @@ if (($search_query)||($optimization)||($search_date)||($check_query)){
 		if ($mode==0) $sql.=" AND artworks.P18!=0";
 	}
 }
-if ($sql!="")
-	$sql.=" ORDER BY ISNULL(year1), year1";
+if ($sql!=""){
+	$repnb=mysqli_query($link,$sql);
+	$num_rows = mysqli_num_rows($repnb);
+	if ($rand_sel)
+		$sql.=" ORDER BY RAND() LIMIT 0,$nb  ";
+	else
+		$sql.=" ORDER BY ISNULL(year1), year1";
+}
 else
 	if (isset($_GET['p'])){
 		if ($_GET['p']!=""){
@@ -262,6 +272,8 @@ else
 				}
 			}
 			$sql.=" ORDER BY ISNULL(year1), year1";
+			$repnb=mysqli_query($link,$sql);
+			$num_rows = mysqli_num_rows($repnb);
 		}
 		else
 			$random=true;
@@ -289,9 +301,8 @@ if ($random){
 	$num_rows =$nb;
 }
 else {
-	$repnb=mysqli_query($link,$sql);
-	$num_rows = mysqli_num_rows($repnb);
-	$sql.=" LIMIT ".$deb.", ".$nb;
+	if (!$rand_sel)
+		$sql.=" LIMIT ".$deb.", ".$nb;
 }
 $rep=mysqli_query($link,$sql);
 $num_rows_ec = mysqli_num_rows($rep);

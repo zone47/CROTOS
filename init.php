@@ -7,7 +7,7 @@ if (isset($_COOKIE['mode']))
 	$mode=intval($_COOKIE['mode']);
 if (isset($_GET['mode']))
 	if ($_GET['mode']!=""){ 
-		setcookie ("mode",$_GET['mode'], time() + 31536000);
+		setcookie ("mode",$_GET['mode'], time() + 31536000, "/");
 		$mode=$_GET['mode'];
 	}
 $disp=1;
@@ -15,16 +15,16 @@ if (isset($_COOKIE['disp']))
 	$disp=intval($_COOKIE['disp']);
 if (isset($_GET['disp']))
 	if ($_GET['disp']!=""){ 
-		setcookie ("disp",$_GET['disp'], time() + 31536000);
+		setcookie ("disp",$_GET['disp'], time() + 31536000, "/");
 		$disp=$_GET['disp'];
 	}
 
-$l="en"; 
+$l="fr"; 
 if (isset($_COOKIE['l']))
 	$l=$_COOKIE['l'];
 if (isset($_GET['l']))
 	if ($_GET['l']!=""){ 
-		setcookie ("l",$_GET['l'], time() + 31536000);
+		setcookie ("l",$_GET['l'], time() + 31536000, "/");
 		$l=$_GET['l'];
 	}
 $nb=20; 
@@ -32,18 +32,33 @@ if (isset($_COOKIE['nb']))
 	$nb=$_COOKIE['nb'];
 if (isset($_GET['nb']))
 	if ($_GET['nb']!=""){ 
-		setcookie ("nb",$_GET['nb'], time() + 31536000);
+		if (intval($_GET['nb']<201))
+			setcookie ("nb",$_GET['nb'], time() + 31536000, "/");
+		else 
+			setcookie ("nb",200, time() + 31536000, "/");
 		$nb=$_GET['nb'];
 	}
 $nb=intval($nb);
 
-$p=1; // numéro de page par défaut
+$p=0; // numéro de page par défaut
 $lgs=array("ar","bn","br","ca","cs","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 $random=false;
+$rand_sel=false;
+if (isset($_GET['r']))
+	if ($_GET['r']=="1") 
+		$rand_sel=true;
+if (isset($_GET['p'])){
+	if ($_GET['p']!="") 
+		$p=intval($_GET['p']);
+	else
+		$rand_sel=true;
+}
+else
+	$rand_sel=true;
 $s=""; // Search
 $q="";
 $y1=-40000;
-$y2=2014;
+$y2=2015;
 $tab_idx = array(
 	"p31" => "",// qwd type
 	"p135"=> "",// qwd mouvement
@@ -88,6 +103,7 @@ $tab_miss = array(
 $tab_check = array(
 	"c1" => "",// label
 	"c18"=> "",// image
+	"c2" => "",// HD
 	"c135"=> "",// movement
 	"c136"=> "",// genre
 	"c144"=> "",// based on
@@ -127,12 +143,28 @@ if ($mode==1){
 if (isset($_GET['q']))
 	if ($_GET['q']!="") 
 		$q=str_ireplace("q","",$_GET['q']);
-if (isset($_GET['p']))
-	if ($_GET['p']!="") 
-		$p=intval($_GET['p']);
 if ($new){
-	$_GET['p']="1";
+	//if (!($_GET['r']=="1")){ 
+	if ((!(isset($_GET['p'])))||($_GET['p']=="")){
+		$_GET['p']="1";
+		$p=1;
+	}
+	//}
+	$rand_sel=false;
 	$script_name="new.php";
+}
+if ($cosmos){
+	if ((!(isset($_GET['p'])))||($_GET['p']=="")){
+		$_GET['p']="1";
+		$p=1;
+	}
+	$rand_sel=false;
+	if (isset($_GET['r']))
+		if ($_GET['r']=="1"){ 
+			$rand_sel=true;
+			$_GET['p']="";
+			$p=0;
+		}
 }
 if (isset($_GET['s'])){
 	$s=$_GET['s'];
@@ -140,10 +172,29 @@ if (isset($_GET['s'])){
 	$s=trim(str_replace("\"","",urldecode($s)));
 	/* Easter egg */ if (str_replace("!","",str_replace(" ","",strtolower($s)))=="houba"){ $s="";$l="mu";setcookie ("l","mu", time() + 31536000);}
 }
+if ((isset($_GET['s']))&&($cosmos)){
+	$s=$_GET['s'];
+	if ($s!=""){ 
+		$s= preg_replace('/\p{C}+/u', "", $s);
+		$s=trim(str_replace("\"","",urldecode($s)));
+		if ($cosmos)
+			header('Location:../index.php?s='.$s);
+		/* Easter egg */ if (str_replace("!","",str_replace(" ","",strtolower($s)))=="houba"){ $s="";$l="mu";setcookie ("l","mu", time() + 31536000);}
+	}
+}
 if (isset($_GET['y1']))
 	if (is_int(intval($_GET['y1']))) 
 		$y1=intval($_GET['y1']);
 if (isset($_GET['y2']))
 	if (is_int(intval($_GET['y2']))) 
 		$y2=intval($_GET['y2']);
+//$n minimum number of results
+$n=3; 
+if (isset($_COOKIE['n']))
+	$n=intval($_COOKIE['n']);
+if (isset($_GET['n']))
+	if ($_GET['n']!=""){ 
+		setcookie ("n",intval($_GET['n']), time() + 31536000, "/");
+		$n=intval($_GET['n']);
+	}
 ?>
