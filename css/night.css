@@ -32,6 +32,15 @@ a.wikidata:after {
 #bl_titre a,#bl_titre a:link ,#bl_titre a:visited,#bl_titre a:hover,#bl_titre a:focus,#bl_titre a:active{
 	color:#fff;	
 }
+#lab a,#lab a:link ,#lab a:visited,#lab a:hover,#lab a:focus,#lab a:active{
+	color:#C6C6C6;	
+}
+#bl_titre .sh1 a,#bl_titre .sh1 a:link ,#bl_titre .sh1 a:visited,#bl_titre .sh1 a:hover,#bl_titre .sh1 a:focus,#bl_titre .sh1 a:active{
+	color:#C6C6C6;	
+}
+#cosmos::after { 
+	color:#C6C6C6;
+}
 #recherche  #ok,  #ok2{
 	border: 1px solid #000;
 	background: #d3d3d3;
@@ -137,4 +146,23 @@ footer{
 }
 #lg_rtl a.externe:after {
 	content: url("../img/externe_rtl.png");
+}
+/* Cosmos */
+#bl_titre #cosmos.cosmos_title a,#bl_titre #cosmos.cosmos_title a:link ,#bl_titre #cosmos.cosmos_title a:visited,#bl_titre #cosmos.cosmos_title a:hover,#bl_titre #cosmos.cosmos_title a:focus,#bl_titre #cosmos.cosmos_title a:active{
+	color:#FFF;
+}
+.fac_list a,.fac_ec{
+	background-color: #d3d3d3;
+	color: #1a1a1a;
+	border:1px solid #DDDDDD;
+}
+.fac_list a:hover,.fac_list a:active{
+	background-color: #CBCBCB;
+	color: #1a1a1a;
+	border:1px solid #0d0d0d;
+}
+.fac_list .fac_ec{
+	background-color: #333;
+	color:#fff;
+	border: 1px solid #fff;;
 }

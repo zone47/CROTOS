@@ -24,6 +24,7 @@ mysqli_query($link,"TRUNCATE `p361`");
 mysqli_query($link,"TRUNCATE `p921`");
 mysqli_query($link,"TRUNCATE `p941`");
 mysqli_query($link,"TRUNCATE `p1639`");
+mysqli_query($link,"ALTER TABLE `commons_img` ADD INDEX(`P18`)");
 
 $tab_lg=array("ar","bn","br","ca","cs","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 
@@ -85,7 +86,7 @@ while($file = readdir($dir)) {
 			"vi"=> 0,
 			"zh"=> 0
 		);
-		if (($cpt % 500)==0)
+		if (($cpt % 1000)==0)
 		echo "\n$cpt";
 
 $datafic=file_get_contents("items/$item.json",true);
@@ -123,13 +124,26 @@ foreach($tab_prop as $key=>$val){
 
 $new_img=0;
 $p18=0;
+$hd=0;
 if ($tab_prop["P18"]!=""){
 	$img_exists=false;
 	$sql="SELECT id FROM commons_img WHERE P18=\"".esc_dblq($tab_prop["P18"])."\"";
 	$rep=mysqli_query($link,$sql);
 	if (mysqli_num_rows($rep)!=0)
-		$img_exists=true;
+		$img_exists=true;		
 	$p18=id_commons($tab_prop["P18"]);
+	
+	if ($p18!=0){
+		$sql="SELECT width,height FROM commons_img WHERE id=".$p18;
+		$rep=mysqli_query($link,$sql);
+		if (mysqli_num_rows($rep)!=0){
+			$row = mysqli_fetch_assoc($rep);
+			if (($row['width']>=2000)||($row['height']>=2000))
+				$hd=1;
+		}
+	}
+	$id_artwork=$row['id'];
+	
 	if (($p18!=0)and(!($img_exists)))
 		$new_img=1;
 }
@@ -205,7 +219,7 @@ $offic_url=$tab_prop["P856"];
 if ($offic_url=="")
 	$offic_url=$tab_prop["P973"];
 
-$sql="INSERT INTO artworks (qwd,P18,P214,P217,P347,P350,P373,P727,link,P1212,year1,year2,b_date,new_img) VALUES ($item,".$p18.",\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$offic_url."\",\"".$tab_prop["P1212"]."\",$year1,$year2,\"".$b_date."\",$new_img)";
+$sql="INSERT INTO artworks (qwd,P18,hd,P214,P217,P347,P350,P373,P727,link,P1212,year1,year2,b_date,new_img) VALUES ($item,".$p18.",$hd,\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$offic_url."\",\"".$tab_prop["P1212"]."\",$year1,$year2,\"".$b_date."\",$new_img)";
 $rep=mysqli_query($link,$sql);
 
 $sql="SELECT id FROM artworks WHERE qwd=\"$item\"";
@@ -298,10 +312,10 @@ unset($tab_miss);
 
 	}//it's a file
 }//reading files in directory
+mysqli_query($link,"ALTER TABLE commons_img DROP INDEX P18");
 mysqli_close($link);
 closedir($dir);
 
 echo "\nCompilation done";
 include $file_timer_end;
-
 ?>

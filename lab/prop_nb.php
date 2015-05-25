@@ -6,10 +6,14 @@ include "../functions.php";
 include "../config.php";
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 mysqli_query($link,"SET NAMES 'utf8'");
-$l="en";
+$l="fr";
+if (isset($_COOKIE['l']))
+	$l=$_COOKIE['l'];
 if (isset($_GET['l']))
-	if ($_GET['l']!="")
+	if ($_GET['l']!=""){
+		setcookie ("l",$_GET['l'], time() + 31536000);
 		$l=$_GET['l'];
+	}
 $prop=31;
 if (isset($_GET['prop']))
 	if ($_GET['prop']!="")
@@ -22,9 +26,9 @@ $prop_query=$prop;
 if ($prop==0)
 	$prop_query=195;
 $nb=5;
-if (isset($_GET['nb']))
-	if ($_GET['nb']!="")
-		$nb=$_GET['nb'];
+if (isset($_GET['nbres']))
+	if ($_GET['nbres']!="")
+		$nb=$_GET['nbres'];
 $thb=0;
 if (isset($_GET['thb']))
 	if ($_GET['thb']!="")
@@ -52,7 +56,7 @@ $(document).ready(function()
 <?php include "entete.php" ?>
 	<form id="prop_form">
     
-    	<label for="props" id="label_lg">Property</label>
+    	<label for="props" id="label_lg"><?php if ($l=="fr") echo "Propriété"; else echo "Property"; ?></label>
     	<select name="prop" id="props">
 <?php
 $tab_props=array(31,135,136,144,170,180,186,195,276,921,941);
@@ -78,7 +82,7 @@ for ($i=0;$i<count($lgs);$i++){
 ?>
 		</select>
         <label for="nb_min" id="label_lg" >Minimum</label>
-    	<select name="nb" id="nb_min">
+    	<select name="nbres" id="nb_min">
 <?php
 $tab_nb=array(0,5,10,20,50,100,200,500,1000);
 for ($i=0;$i<count($tab_nb);$i++){
@@ -88,17 +92,26 @@ for ($i=0;$i<count($tab_nb);$i++){
 }
 ?>    
         </select>
-        <label for="thb" >Thumbnails</label>
+        <label for="thb" ><?php if ($l=="fr") echo "Vignettes"; else echo "Thumbnails"; ?></label>
         <input type="checkbox" name="thb" <?  if ($thb==1) echo " checked=\"checked\""; ?> value="1"/>
         <input type="submit" value="<?php echo translate($l,"search") ?>" id="ok" />
     </form>
 <table id="occ" class="tablesorter ">
+<?php 
+if ($l=="fr"){ ?>
+<caption>Nombre d'items <b>œuvres d'art</b> sur <a href="https://www.wikidata.org/"><b>Wikidata</b></a> par <b><?php echo $lb_prop ?></b><?php if ($prop!=0) echo "/<a href=\"https://www.wikidata.org/wiki/Property:P$prop\">p$prop</a>" ?> (><?php echo $nb ?>), via <a href="/crotos/">Crotos</a></caption>
+
+<?php
+}
+else { ?>
 <caption>Number of <b>visual artworks</b> items on <a href="https://www.wikidata.org/"><b>Wikidata</b></a> by <b><?php echo $lb_prop ?></b><?php if ($prop!=0) echo "/<a href=\"https://www.wikidata.org/wiki/Property:P$prop\">p$prop</a>" ?> (><?php echo $nb ?>), via <a href="/crotos/">Crotos</a></caption>
+<?php } ?>
 <thead> 
 <tr> 
     <th><?php echo ucfirst($lb_prop) ?></th> 
-    <th id="artworks">Artworks</th> 
-    <th id="images">with images</th>
+    <th id="artworks"><?php if ($l=="fr") echo "Œuvres"; else echo "Artworks"; ?></th> 
+    <th id="images"><?php if ($l=="fr") echo "avec images"; else echo "with images"; ?></th>
+    <th></th>  
     <th></th>  
 </tr> 
 </thead> 
@@ -139,7 +152,12 @@ while($data = mysqli_fetch_assoc($rep)) {
 		echo "</td>\n";
 		echo "	<td class=\"artworks\">$nbartworks</td>\n";
 		echo "	<td class=\"images\">$nbimg</td>\n";
-		echo "	<td><a href=\"/crotos/?p$prop_query=".$data['qwd']."\">view artworks</a></td>\n";
+		echo "	<td><a href=\"/crotos/?p$prop_query=".$data['qwd']."\">";
+		if ($l=="fr") echo "voir les œuvres"; else echo "view artworks";
+		echo "</a></td>\n";
+		echo "	<td><a href=\"/crotos/lab/artworks/?p=$prop_query&q=Q".$data['qwd']."\">";
+		if ($l=="fr") echo "liste"; else echo "list";
+		echo "</a></td>\n";
 		echo "</tr>\n";
 	}
 }

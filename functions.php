@@ -44,7 +44,7 @@ function alias_item($qwd,$lg){
 	$aliases="";
 	while ($data_prop = mysqli_fetch_assoc($rep_alias)){
 		if ($aliases!="")
-			$aliases.="<br />";
+			$aliases.=" ; ";
 		$aliases.=$data_prop['label'];
 	}
 	return $aliases;
@@ -63,7 +63,7 @@ function val_prop($id_artw,$prop){
 }
 
 function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true){
-	global $mode,$l,$tab_miss;
+	global $mode,$l;//,$tab_miss;
 	$txt="";
 	if ($id_art!=0){
 		$values=val_prop($id_art,$id_prop);
@@ -78,25 +78,30 @@ function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true)
 			if (isset($values[$i])){
 				if ($i>0)
 					$txt.=" - ";
-				if ($link){
-					if ($id_prop=="1639") //pendant of
-						$txt.=" <a href=\"?q=".$values[$i];
-					else
-						$txt.=" <a href=\"?p$id_prop=".$values[$i];
-					if ($mode==1)
-						foreach($tab_miss as $key=>$value)
-							if ($value!="")
-								$txt.="&amp;$key=".$value;
-					$txt.="\" ";
-					if ($type=="creator")
-						$txt.=" class=\"lien_aut\" ";
-					if ($type=="internal")
-						$txt.=" class=\"interne\" ";
-					$txt.=">";
+				if ($type!="listlink"){
+					if ($link){
+						if ($id_prop=="1639") //pendant of
+							$txt.=" <a href=\"?q=".$values[$i];
+						else
+							$txt.=" <a href=\"?p$id_prop=".$values[$i];
+						/*For adding filters to links
+						if ($mode==1)
+							foreach($tab_miss as $key=>$value)
+								if ($value!="")
+									$txt.="&amp;$key=".$value;*/
+						$txt.="\" ";
+						if ($type=="creator")
+							$txt.=" class=\"lien_aut\" ";
+						if ($type=="internal")
+							$txt.=" class=\"interne\" ";
+						$txt.=">";
+					}
+					$txt.=label_item($values[$i],$lg);
+					if ($link)
+						$txt.="</a>";
 				}
-				$txt.=label_item($values[$i],$lg);
-				if ($link)
-					$txt.="</a>";
+				else
+					$txt.="<a href=\"?q=".$values[$i]."&p".$id_prop."\">".label_item($values[$i],$lg)."</a>";
 			}
 		}
 	}

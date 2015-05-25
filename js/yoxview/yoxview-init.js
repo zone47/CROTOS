@@ -15,7 +15,6 @@ var jQueryIsLoaded = typeof jQuery != "undefined";
 if (!jQueryIsLoaded)
     LoadScript("http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js");
     
-//LoadScript(yoxviewPath + "jquery.yoxview-2.21.min.js");
 LoadScript(yoxviewPath + "yox.js");
 LoadScript(yoxviewPath + "jquery.yoxview-2.21.js");
 

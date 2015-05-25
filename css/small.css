@@ -9,7 +9,7 @@ nav{
 }
 #bl_titre{
 	padding-left:2%;
-	width:auto;
+	width:145px;
 	padding-top:13px;
 }
 #img_crotos{
@@ -17,16 +17,31 @@ nav{
 	width:50px;	
 	margin-bottom:10px;
 }
-h1{
-	display:inline;
-	line-height:normal;
+#bl_titre h1{
+	margin-left:55px;
+	font-weight:bold;
+	font-size:22px ;
 } 
+#lab,#cosmos{
+	display:inline;
+	/*margin-left:102px;
+	font-size:90%;*/
+}
+#cosmos{
+	margin-left:6px
+}
+#cosmos::after { 
+	content: " - ";
+}
+#lab{
+	margin-left:0px
+}
 a img{
 	border:0;
 }
 #params{
 	padding-top:2px;
-	padding-right:5%;
+	padding-right:2%;
 	margin-bottom:10px;	
 }
 .paralab{
@@ -60,8 +75,9 @@ body{
 #recherche{
 	clear:both;
 	display:inline-block;
-	width:95%;
+	width:85%;
 	margin-left:2%;
+	margin-right:0;
 }
 #topic_title{
 	width:65%;
@@ -142,5 +158,12 @@ body{
 	height:5px;	
 }
 .img_info{
-	display:none
-;
+	display:none;
+}
+#global #contenu .facet{
+	width:100%;	
+}
+/* Cosmos */
+#facets{
+	margin-left:2%;
+}

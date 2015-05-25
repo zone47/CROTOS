@@ -98,19 +98,17 @@ foreach($tab_idx as $key=>$value){
 		}
 		if (!$optimization){
 			$search_query=true;
-			if ($key=="p31"){//case of subclasses of types
-				$where="(p31.qwd=".$value;
-				include "subclasses/$value.php";
-				for ($i=0;$i<count($tab279);$i++)
-					$where.=" OR p31.qwd=".$tab279[$i];
-				$where.=")";
-			}
-			else
-				$where=$key.".qwd=".$value;
+			$where="(".$key.".qwd=".$value;
+
+			$sql_sub="SELECT id_sub FROM prop_sub, ".$key." WHERE prop_sub.prop=".str_replace("p","",$key)." AND prop_sub.id_prop=".$key.".id AND ".$key.".qwd=".$value;
+			$rep_sub=mysqli_query($link,$sql_sub);
+			while($data = mysqli_fetch_assoc($rep_sub))
+				$where.=" OR ".$key.".id=".$data['id_sub'];
+			$where.=")";
+			
 			$sql_s="select distinct artworks.id as id 
 			from ".$key.", artw_prop, artworks WHERE ".$where." AND artw_prop.id_prop=".$key.".id AND artw_prop.prop=".str_replace("p","",$key)." AND artworks.id=artw_prop.id_artw";
 			if ($mode==0) $sql_s.=" AND artworks.P18!=0";
-			$sql_s.=" AND artworks.new_img=1";
 			$rep_s=mysqli_query($link,$sql_s);
 			$new_s="";
 			while($data_s = mysqli_fetch_assoc($rep_s)) {
@@ -154,7 +152,7 @@ foreach($tab_check as $key=>$value){
 	}
 }
 $search_date=false;
-if (!(($y1==-40000)&&($y2==2014)))
+if (!(($y1==-40000)&&($y2==2015)))
 	$search_date=true;
 if (($search_query)||($optimization)||($search_date)||($check_query)){
 	if (($search_query)&&(!(count($res_s)>0)))
@@ -188,6 +186,10 @@ if (($search_query)||($optimization)||($search_date)||($check_query)){
 						case "c1":
 							if ($sql_c!="") $sql_c.=" AND";
 							$sql_c.=" lb$l=0";
+							break;
+						case "c2":
+							if ($sql_c!="") $sql_c.=" AND";
+							$sql_c.=" hd=1";
 							break;
 						case "c571":
 							if ($sql_c!="") $sql_c.=" AND";
@@ -249,9 +251,15 @@ if (($search_query)||($optimization)||($search_date)||($check_query)){
 		$sql.=" AND artworks.new_img=1";
 	}
 }
-if ($sql!="")
-	$sql.=" ORDER BY ISNULL(year1), year1";
-else
+if ($sql!=""){
+	$repnb=mysqli_query($link,$sql);
+	$num_rows = mysqli_num_rows($repnb);
+	if ($rand_sel)
+		$sql.=" ORDER BY RAND() LIMIT 0,$nb  ";
+	else
+		$sql.=" ORDER BY ISNULL(year1), year1";
+}
+else{
 	if (isset($_GET['p'])){
 		if ($_GET['p']!=""){
 			$sql="SELECT * from artworks";
@@ -269,12 +277,16 @@ else
 				}
 			}
 			$sql.=" ORDER BY ISNULL(year1), year1";
+			$repnb=mysqli_query($link,$sql);
+			$num_rows = mysqli_num_rows($repnb);
 		}
 		else
 			$random=true;
 	}
 	else
 		$random=true;
+}
+
 if ($q!=""){
 	$random=false;
 	$sql="SELECT * from artworks WHERE qwd=$q";
@@ -294,14 +306,13 @@ if ($random){
 			}
 		}
 	}
-	
-	$sql.=" ORDER BY RAND() LIMIT 0,$nb  ";
+	$sql.=" ORDER BY RAND() LIMIT 0, $nb";
 	$num_rows =$nb;
 }
 else {
-	$repnb=mysqli_query($link,$sql);
-	$num_rows = mysqli_num_rows($repnb);
-	$sql.=" LIMIT ".$deb.", ".$nb;
+	//if (!$rand_sel)
+		$sql.=" LIMIT ".$deb.", ".$nb;
+	echo "<!-- $sql -->";
 }
 $rep=mysqli_query($link,$sql);
 $num_rows_ec = mysqli_num_rows($rep);

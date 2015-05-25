@@ -4,6 +4,14 @@ include "../init.php";
 include "../traduction.php";
 include "../functions.php";
 include "../config.php";
+$l="fr";
+if (isset($_COOKIE['l']))
+	$l=$_COOKIE['l'];
+if (isset($_GET['l']))
+	if ($_GET['l']!=""){ 
+		setcookie ("l",$_GET['l'], time() + 31536000);
+		$l=$_GET['l'];
+	}
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 mysqli_query($link,"SET NAMES 'utf8'");
 
@@ -12,28 +20,64 @@ mysqli_query($link,"SET NAMES 'utf8'");
 <head>
 	<meta charset="utf-8">
     <meta name="author" content="/* / */" />
-    <title>Crotos - Occurences des labels selon les langues</title>
+    <title>Crotos - <?php
+if ($l=="fr")
+	echo "Occurences des langues selon les libellés";
+else
+	echo "Languages occurences from labels";
+?></title>
 	<script src="../js/jquery.js"></script>
    	<script src="../js/jquery.tablesorter.min.js"></script>
     <script>
-$(document).ready(function() 
-    { 
-        $("#occ").tablesorter( {sortList: [[2,1]]} ); 
-    } 
-); 
+$(document).ready(function(){ 
+	$("#occ").tablesorter( {sortList: [[2,1]]} ); 
+	$('#lg').change(function() {
+		$('#lgform').submit();
+	});
+}); 
     </script>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="../js/blue/style.css" />
 </head>
 <body>
 <?php include "entete.php" ?>
+<form id="lgform">
+<h1>
+
+<select name="l" id="lg">
+<?php 
+$lgs=array("en","fr");
+
+for ($i=0;$i<count($lgs);$i++){
+    echo "				<option value=\"".translate($lgs[$i],"lang_code")."\"";
+	if ($l==$lgs[$i])
+		 echo " selected=\"selected\"";
+	echo " >".translate($lgs[$i],"lg")."</option>\n";	
+}
+?></select>
+<?php
+if ($l=="fr")
+	echo "<b>Crotos</b> - Occurences des langues selon les libellés";
+else
+	echo "<b>Crotos</b> - Languages occurences from labels";
+?></h1>
+</form>
 <table id="occ" class="tablesorter ">
-<caption><b>Crotos</b> - Occurences des libellés selon les langues</caption>
 <thead> 
 <tr> 
     <th>Code</th> 
-    <th>Langue</th> 
-    <th>Labels</th> 
+    <th><?php
+if ($l=="fr")
+	echo "Langue";
+else
+	echo "Language";
+?></th> 
+    <th><?php
+if ($l=="fr")
+	echo "Libellés";
+else
+	echo "Labels";
+?></th> 
 </tr> 
 </thead> 
 <?php
