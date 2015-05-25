@@ -1,10 +1,10 @@
 <?php
 /* / */
 /* Harvest WD */
-
+//$cmd="rm -f ".$fold_crotos."harvest/items/*";
 echo "\nHarvest";
 include $file_timer_begin;
-//$cmd="rm -f ".$fold_crotos."harvest/items/*";
+
 $cmd="del /Q ".str_replace("/","\\",$fold_crotos)."harvest\\items\\*.*";
 exec($cmd);
 /* items with subclasses
@@ -31,7 +31,7 @@ exec($cmd);
 170593   collage
 429785   poster
 46686    altarpiece
-738680  pottery of ancient Greece
+1277842  panathenaic amphora
 15123870 lithograph
 //1640824  inscription
 //178743   stele, subclass of artefact
@@ -42,7 +42,9 @@ items without subclasses
 17584242 creative drawing
 */
 // Types with subclasses
-$types = array (3305213,860861,1278452,11060274,212431,48498,125191,326478,133067,184296,572916,1473346,860372,213156,277583,12043905,132137,17514,5647631,220659,170593,429785,46686,738680,15123870);
+$types = array (3305213,860861,1278452,11060274,212431,48498,125191,326478,133067,
+184296,572916,1473346,860372,213156,277583,12043905,132137,17514,5647631,
+220659,170593,429785,46686,1277842,15123870);
 $cpt=0;
 for ($i=0;$i<count($types);$i++){
 	$type=$types[$i];
@@ -52,7 +54,7 @@ for ($i=0;$i<count($types);$i++){
 	foreach ($responseArray["items"] as $key => $value){
 		copy("https://www.wikidata.org/w/api.php?action=wbgetentities&ids=q$value&format=json", $fold_crotos."harvest/items/$value.json");
 		$cpt++;
-		if (($cpt % 1000)==0)
+		if (($cpt % 500)==0)
 			echo "\n$cpt";
 	}
 }

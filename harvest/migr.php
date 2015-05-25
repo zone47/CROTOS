@@ -8,20 +8,19 @@ $req = mysqli_query($link,$sql);
 $data = mysqli_fetch_assoc($req);
 $nbartw = $data['id'];
 mysqli_close($link);
-if ($nbartw>45000){
+if ($nbartw>40000){
 	echo "\nMigration and update";
 	include $file_timer_begin;
 	
 	$source_file=$fold_crotos."bdd/".$fic_sql;
-	$cmd=$mysqldump." -uroot ".$db." > ".$source_file;
-	exec($cmd);
-	$zip_file=$fold_crotos."bdd/".$fic_sql_zip;
-	$cmd=$zip_exe." a -tzip ".$zip_file." ".$source_file;
+	$cmd=$mysqldump." -uroot crotos_tmp > ".$source_file;
+	//$cmd="mysqldump -h ".$host." -u ".$user." -p".$pass." ".$db." > ".$fold_crotos."bdd/".$fic_sql;
 	exec($cmd);
 	
 	$conn_id = ftp_connect($ftp_adresse) or die("Couldn't connect to ftp_server");
 	$login_result = ftp_login($conn_id, $ftp_log, $ftp_pass);
 	
+	$msgftp="";
 	// Connexion
 	if ((!$conn_id) || (!$login_result)) 
 			echo  "FTP connexion fail";
@@ -29,11 +28,11 @@ if ($nbartw>45000){
 			echo " FTP connexion ok ";
 	
 	// Upload
-	$upload = ftp_put($conn_id, $ftp_fold."bdd/".$fic_sql_zip, $zip_file, FTP_BINARY);
+	
+	$upload = ftp_put($conn_id, $ftp_fold."bdd/".$fic_sql, $source_file, FTP_BINARY);
 	
 	ftp_quit($conn_id);	
-	$cmd="del /Q ".str_replace("/","\\",$fold_crotos)."bdd\\".$fic_sql_zip;
-	exec($cmd);
+	
 	include($file_update);
 	
 	echo "\nMigration done";

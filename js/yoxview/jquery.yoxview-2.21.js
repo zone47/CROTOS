@@ -760,7 +760,7 @@
                 
             if (callback)
                 onOpenCallback = callback;
-			
+
             return isJquery ? this : false;
         }
 
@@ -794,7 +794,7 @@
                 stopPlay();
 
             setImage(currentItemIndex);
-
+            
             if (resumePlay)
                 startPlay();
         };
@@ -875,7 +875,8 @@
 					$("#slideshow li.first").removeClass("none");
 					$("#slideshow li.previous").removeClass("none");
 				};
-			
+				/* / */ // Un seul copyr pour albums du Japon
+				//cartelcopyr();;
 /* / */		   
 			   
 			   if (itemIndex < 0)
@@ -902,7 +903,7 @@
                 $.yoxview.currentImage = images[itemIndex];
                 currentItemIndex = itemIndex;
                 setImage(currentItemIndex);
-               
+                
                 // Set the cache buffer, if required:
                 calculateCacheBuffer();
             
@@ -910,6 +911,7 @@
                 if (options.onSelect){
                     options.onSelect(itemIndex, images[itemIndex]);
 				}
+				
             }
         }
         this.prev = function(continuePlaying)
@@ -1176,7 +1178,7 @@
 
         function createPopup()
         {
-			calculateMargins();
+            calculateMargins();
             windowDimensions = getWindowDimensions();
             
             sprites = new Yox.Sprites({
@@ -1556,7 +1558,7 @@
     	
         $(cacheImg).load(function()
         {
-			$.extend(images[cacheVars.currentCacheImg].media, {
+            $.extend(images[cacheVars.currentCacheImg].media, {
                 width: this.width,
                 height: this.height,
                 loaded: true
@@ -1625,7 +1627,7 @@
     	
         function showLoaderIcon()
         {
-			loading = true;
+            loading = true;
             clearTimeout(loaderTimeout);
             ajaxLoader.stop();
             loaderTimeout = setTimeout(function(){
@@ -1646,12 +1648,13 @@
         {
             if (!isPlaying)
                 showLoaderIcon();
+
             loadAndDisplayMedia($.yoxview.currentImage.media);
         }
         
         function resizePopup(popupPosition, callback)
         {
-		    popup.stop().animate(popupPosition, options.popupResizeTime, callback);
+            popup.stop().animate(popupPosition, options.popupResizeTime, callback);
             //popup.stop().animate(popupPosition, 5000, callback);
         }
         function startPlay()
@@ -1854,19 +1857,20 @@
         }
 	    function changeMedia(media)
 	    {
-			var mediaIsImage = media.contentType === "image" || !media.contentType;
-			if (mediaIsImage && disableInfo && infoPanelWrap)
+	        var mediaIsImage = media.contentType === "image" || !media.contentType;
+    	    
+	        if (mediaIsImage && disableInfo && infoPanelWrap)
 	            infoPanelWrap.css("display", "block");
     	        
 	        clearTimeout(hideInfoTimeout);
-            
+    	    
 	        swipePanels();
 	        var panelData = newPanel.data("yoxviewPanel");
     	    
 	        currentMaxSize.width = media.width;
 	        currentMaxSize.height = media.height;
 	        currentMaxSize.padding = media.padding;
-			
+
 	        if (infoPanel)
             {
                 var infoTextValue = media.title || "";
@@ -1898,7 +1902,7 @@
                 }
 				/* / */
             }
-
+            
             var newImagePosition = getImagePosition(media);
 	        if (mediaIsImage)
 	        {
@@ -1987,7 +1991,7 @@
                     panelData.isImage = false;
                 }
             }
-
+            
             var newImageDimensions = { width: newImagePosition.width, height: newImagePosition.height };
             newPanel.css(firstImage ? { width: "100%", height: "100%" } : newImageDimensions);
             
@@ -2087,16 +2091,15 @@
             else{
                 newPanel.css({ display: "block", width: "100%", height: "100%" });
             }
-   
+            
 	    }
         $(tempImg).load(function()
         {
-			if (this.width == 0)
+		    if (this.width == 0)
 		    {
 		        displayError("Image error");
                 return;
             }
-			
             changeMedia($.extend({}, $.yoxview.currentImage.media, {
                 width: this.width,
                 height: this.height
@@ -2152,8 +2155,7 @@
 
         function loadAndDisplayMedia(media)
         {
-			
-			try
+            try
             {
                 if (!media)
                     throw("Error: Media is unavailable.");
@@ -2163,12 +2165,11 @@
                     // Resets the src attribute for the image - avoids a rendering problem in Chrome.
                     // $.opacity is tested so this isn't applied in IE (up to IE8), 
                     // since it creates a problem with the image's fading:
-					
 					if (window.chrome)
                     if ($.support.opacity)
                         tempImg.src = "";
+
                     tempImg.src = media.src;
-					
                 }
                 else
                 {
@@ -2196,7 +2197,7 @@
         }
         function loadMedia(media, onLoad, onError)
         {
-			if (media.contentType == "ooembed")
+            if (media.contentType == "ooembed")
             {
 	            loadMediaFromProvider(
 	                media.provider,
@@ -2213,7 +2214,7 @@
         }
         function displayError(errorMsg)
         {
-			changeMedia({
+            changeMedia({
                 html: "<span class='yoxview_error'>" + errorMsg + "</span>",
                 width: 500,
                 height: 300,

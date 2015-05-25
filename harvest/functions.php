@@ -21,30 +21,6 @@ function get_WDjson($qitem){
 		return file_get_contents($qitem_path,true);
 	}
 }
-function get_query($prop,$qwd){
-	global $fold_crotos;
-	if (($prop==31)||($prop==136)||($prop==186))
-		$req="http://wdq.wmflabs.org/api?q=claim[279:%28tree[".$qwd."][][279]%29]";
-	elseif (($prop==195))
-		$req="http://wdq.wmflabs.org/api?q=claim[361:%28tree[".$qwd."][][361]%29]";
-	elseif ($prop==276)
-		$req="http://wdq.wmflabs.org/api?q=claim[276:%28tree[".$qwd."][][276]%29,361:%28tree[".$qwd."][][361]%29]";
-	elseif (($prop==135)||($prop==144)||($prop==180)||($prop==921)||($prop==941))
-		$req="http://wdq.wmflabs.org/api?q=claim[279:%28tree[".$qwd."][][279]%29,361:%28tree[".$qwd."][][361]%29]";
-	else 
-		$req="";
-	if ($req!=""){
-		$query_path=$fold_crotos."harvest/queries/".$prop."_".$qwd.".json";
-		if (file_exists($query_path))
-			return file_get_contents($query_path,true);
-		else{
-			copy($req."&download=1", $query_path);
-			return file_get_contents($query_path,true);
-		}
-	}
-	else 
-		return "";
-}
 
 function insert_label_page($prop,$val_item,$id_art_or_prop){
 	global $tab_lg,$tab_miss,$link; 
@@ -110,49 +86,6 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 			}
 		}
 		
-	}
-	// if 170 life dates
-	if ($prop==170){
-		$dates="";
-		$year1="";
-		$year2="";
-		$tab_date=array("P569","P570");
-		for ($j=0;$j<count($tab_date);$j++){
-			$b_date=0;
-			$Pdate=$ent_qwd["claims"][$tab_date[$j]];
-			if ($Pdate){
-				foreach ($Pdate as $value){
-					$time=$value["mainsnak"]["datavalue"]["value"]["time"];
-					$precision=$value["mainsnak"]["datavalue"]["value"]["precision"];
-					if ($time){
-						$year=intval(substr($time,1,strpos($time,"-")-1));
-						if (intval($precision)<9)
-							$year="~".$year;
-					}
-					else
-						$year="";
-					if ($tab_date[$j]=="P569")
-						$year1=$year;
-					else 
-						$year2=$year;		
-				}
-			}
-		}
-		if (($year1!="")||($year2!="")){
-			$dates=" (";
-			if 	($year1!="")
-				$dates.=$year1;
-			else
-				$dates.="?";
-			$dates.="–";
-			if 	($year2!="")
-				$dates.=$year2;
-			$dates.=")";
-		}
-		if ($dates!=""){
-			$sql="UPDATE p170 SET dates=\"".$dates."\" WHERE qwd=$val_item";
-			$rep=mysqli_query($link,$sql);
-		}
 	}
 }
 function parent_cherche($prop,$val_prop,$id_artw,$new_ids){

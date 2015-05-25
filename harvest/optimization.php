@@ -21,11 +21,9 @@ foreach ($optimiz as $item){
 	
 	if ($prop=="p31"){
 		$where="($prop.qwd=$value";
-			
-		$sql_sub="SELECT id_sub FROM prop_sub, p31 WHERE prop_sub.prop=31 AND prop_sub.id_prop=p31.id AND p31.qwd=".$value;
-		$rep_sub=mysqli_query($link,$sql_sub);
-		while($data = mysqli_fetch_assoc($rep_sub))
-			$where.=" OR p31.id=".$data['id_sub'];
+		include $fold_crotos."subclasses/".$value.".php";
+		for ($i=0;$i<count($tab279);$i++)
+			$where.=" OR $prop.qwd=".$tab279[$i];
 		$where.=")";
 	}
 	else

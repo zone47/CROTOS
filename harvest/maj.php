@@ -17,8 +17,6 @@ include $file_compilation;
 
 include $file_subclasses;
 
-include $file_nb_labels;
-
 include $file_optimization;
 
 include $file_migr;

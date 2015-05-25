@@ -5,37 +5,16 @@ html {
 }
 body {
   margin: 0;
-  padding: 0 1em 1em 1em; /* Remettre à zéro si nécessaire. */
+  padding: 0 0 1em 1em; /* Remettre à zéro si nécessaire. */
   font-family: Arial, Helvetica, FreeSans, sans-serif; 
   font-size: 13px; /* À adapter pour la police choisie.  */
   line-height: 1.3; /* À adapter au design. */
   color: black;
   background:#FFFFFF;
-  color:#0F0F0F;
+  color:#000;
   -webkit-font-smoothing: antialiased; 
   -moz-font-smoothing: antialiased; 
   -o-font-smoothing: antialiased;
-}
-* {
- box-sizing: inherit;
-}
-*::before, *::after {
- box-sizing: inherit;
-}
-a:link {
-	color:#0000A3;
-}
-a:visited {
-	color:#551A8B;
-}
-a:hover, a:focus, a:active {
-	color: #320f53;
-}
-a.externe:after {
-	content: url("/crotos/img/externe_day.png");
-}
-a img, footer img {
-	border-color:#AFAFAF  ;
 }
 a img {
   border:1px solid #333  ;
@@ -55,24 +34,18 @@ a img {
 h1{
 	font-size:130%;
 	font-weight:bold;	
-	margin-top:10px;
-	margin-bottom:10px;
-	/*margin-left:20px;*/
 }
 h1.entete{
 	font:bold 14px  Verdana, Geneva, sans-serif;
-}
-table.tablesorter{
-	width:100%;
-}
-table.tablesorter thead tr  th{
-	padding-right:15px;	
 }
 #clear{
 	clear:both;	
 }
 #stuff li{
 	margin-bottom:5px;	
+}
+#prop_form{
+	margin:20px;
 }
 #stuff{
 	font-size:110%;	
@@ -83,7 +56,4 @@ table.tablesorter thead tr  th{
 #source{
 	font-size:90%;
 	margin-top:30px;
-}
-#page{
-/*	margin-left:20px;	*/
 }

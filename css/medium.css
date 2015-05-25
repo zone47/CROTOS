@@ -3,6 +3,14 @@
 #bl_titre{
 	width:180px;	
 }
+h1{
+	display:block;
+	line-height:normal;
+	width:108px;
+	text-align:center;
+	margin:3px 0 5px 0;
+	
+} 
 #params{
 	margin-bottom:3px;
 }
@@ -15,7 +23,7 @@
 	margin-right:10px;
 }
 #recherche,#res_nav{
-	margin-left:207px;
+	margin-left:140px;
 }
 #recherche{
 	padding-left:0;
