@@ -13,7 +13,7 @@ include "text_nav.php";
 <head>
 <?php
 include "title_desc_index.php";
-include "header2.php";
+include "header.php";
 ?>      
 <script>
 function disp_notice(e) {
@@ -38,6 +38,7 @@ else
 ?>
 	}
 };
+wait = function() { return false; }
 function loadSprite(id_link,src, callback) { 
 	var sprite = new Image();
 	sprite.onload = callback;

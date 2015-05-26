@@ -134,7 +134,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 	$date="";
 	if ((!(is_null($data['year2'])))||($data['year1']!=$data['year2'])){
 		if ($data['b_date']==1)
-			$date.="~&nbsp;&nbsp;";
+			$date.="~";
 		if (!(is_null($data['year1'])))
 			$date.=$data['year1'];
 		if ((!(is_null($data['year2'])))&&($data['year1']!=$data['year2']))
@@ -374,9 +374,9 @@ while($data = mysqli_fetch_assoc($rep)) {
 			$credits.="&nbsp;&nbsp;|&nbsp;&nbsp;";
 		$credits.=$commons_credit;
 		if ($num_rows>1)
-			$content.="<a href=\"".$commons_link."\" data-file=\"".esc_dblq($large)."\" data-commons=\"".$commons_link."\" class=\"yox\" id=\"link$cpt\"><img src=\"".esc_dblq($thumb_h)."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($thumb_h)."\" data-credit=\"".$credits."\" data-notice=\"".esc_dblq(htmlentities($yox_cartel))."\"/></a>";
+			$content.="<a href=\"".$commons_link."\" data-file=\"".esc_dblq($large)."\" data-commons=\"".$commons_link."\" class=\"yox\" id=\"link$cpt\" onclick=\"return wait();\"><img src=\"".esc_dblq($thumb_h)."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($thumb_h)."\" data-credit=\"".$credits."\" data-notice=\"".esc_dblq(htmlentities($yox_cartel))."\"/></a>";
 		else
-			$content.="<a href=\"".$commons_link."\" data-commons=\"".$commons_link."\" class=\"linksolo\" id=\"link$cpt\"><img src=\"".esc_dblq($large)."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($thumb_h)."\" data-credit=\"".$credits."\" data-notice=\"".esc_dblq(htmlentities($yox_cartel))."\"/></a>";
+			$content.="<a href=\"".$commons_link."\" data-commons=\"".$commons_link."\" class=\"linksolo\" id=\"link$cpt\" onclick=\"return wait();\"><img src=\"".esc_dblq($large)."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($thumb_h)."\" data-credit=\"".$credits."\" data-notice=\"".esc_dblq(htmlentities($yox_cartel))."\"/></a>";
 	}
 	else{
 		if ($disp==0)
