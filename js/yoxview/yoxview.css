@@ -120,7 +120,7 @@
 	bottom: 0;
 	width: 100%;
 	height: 0;
-	color: White;
+	color: #D3D3D3;
 	z-index: 2;
 	overflow: hidden;
 }
@@ -156,6 +156,9 @@
 	margin: 8px 10px 0 10px;
 	font-size: 0.9em;
 }
+#yoxview_infoPanel .yox_inv{
+	color: #AAAAAA;
+}
 #yoxview_infoPanel #yoxview_infoText
 {
 	margin: 0 15px 0 50px;
@@ -163,7 +166,10 @@
 	padding: 3px 0;
 	min-height:33px;
 }
-#yoxview_infoNotice,#yoxview_infoNotice a.lien_aut,#yoxview_infoNotice a.lien_aut:link,#yoxview_infoNotice a.lien_aut:visited,#yoxview_infoNotice a.lien_aut:focus,#yoxview_infoNotice a.lien_aut:hover,#yoxview_infoNotice a.lien_aut:active,#yox_cartel a:link,#yox_cartel a:visited,#yox_cartel a:focus,#yox_cartel a:hover,#yox_cartel a:active{
+#yoxview_infoNotice{
+	color:#bbb;	
+}
+#yoxview_infoPanel a, #yoxview_infoPanel a:link, #yoxview_infoPanel a:visited, #yoxview_infoPanel a:focus, #yoxview_infoPanel a:hover, #yoxview_infoPanel a:active{
 	color:#D3D3D3;
 }
 #yoxview_infoNotice #yox_cartel{
@@ -178,7 +184,7 @@
 }
 #yoxview_infoNotice a.interne, #yoxview_infoNotice a.interne:link, #yoxview_infoNotice a.interne:link{
 	font-size:1em;
-	color:#bbb;
+	color:#d3d3d3;
 }
 #yoxview_infoNotice .libelle{
 	color:#EDEDED;

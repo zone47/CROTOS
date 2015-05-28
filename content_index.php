@@ -149,8 +149,11 @@ while($data = mysqli_fetch_assoc($rep)) {
 		else
 			$cartel.="<br />";
 		$yox_cartel.=" - ".$coll_or_loc;	
+		if ($inv!="")
+			$yox_cartel.=" <span class=\"yox_inv\"> (".$inv.")</span>";
 		$cartel.=$coll_or_loc;
 	}
+
 	$cartel.="\n			</div>";	
 	
 	$cartel.="\n			<div class=\"btn_notice\">";
@@ -364,7 +367,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 			}
 			$license=esc_dblq(htmlentities($license));
 		}
-		$commons_artist = esc_dblq(htmlentities(preg_replace("/<\/?ul[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?div[^>]*\>/i", "",$commons_artist))))));
+		$commons_artist = esc_dblq(htmlentities(preg_replace("/<\/?img[^>]*\>/i", "",preg_replace("/<\/?ul[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?div[^>]*\>/i", "",$commons_artist)))))));
 		$commons_credit = esc_dblq(htmlentities(preg_replace("/<ul[^>]+\>/i", "",preg_replace("/<li[^>]+\>/i", "",preg_replace("/<p[^>]+\>/i", "",preg_replace("/<dd[^>]+\>/i", "",preg_replace("/<dl[^>]+\>/i", "",preg_replace("/<img[^>]+\>/i", "",preg_replace("/<\/?td[^>]*\>/i", "",preg_replace("/<\/?tr[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "", preg_replace("/<\/?ul[^>]*\>/i", "", preg_replace("/<\/?hr[^>]*\>/i", "", preg_replace("/<\/?p[^>]*\>/i", "", preg_replace("/<\/?div[^>]*\>/i", "", $commons_credit))))))))))))))));
 		$credits=$commons_artist;
 		if (($credits!="")&&($license!=""))

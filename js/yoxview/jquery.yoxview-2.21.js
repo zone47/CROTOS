@@ -60,7 +60,7 @@
             flashVideoPlayer: "jwplayer", // The default player for Flash video files
             imagesFolder: yoxviewPath + "images/",
             infoBackColor: "#000000",
-            infoBackOpacity: 0.7,
+            infoBackOpacity: 0.9,
             isRTL : false, // Switch direction. For RTL languages such as Hebrew or Arabic, for example.
             lang: "en", // The language for texts. The relevant language file should exist in the lang folder.
             langFolder: yoxviewPath + "lang/",
