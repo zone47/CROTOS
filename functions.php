@@ -63,7 +63,7 @@ function val_prop($id_artw,$prop){
 }
 
 function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true){
-	global $mode,$l;//,$tab_miss;
+	global $mode,$l,$d;//,$tab_miss;
 	$txt="";
 	if ($id_art!=0){
 		$values=val_prop($id_art,$id_prop);
@@ -75,7 +75,7 @@ function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true)
 		if ($entitled)
 			$txt.="<span class=\"libelle\">".translate($lg,$id_prop)."</span>&nbsp;:";
 		for ($i=0;$i<count($values);$i++){
-			if (isset($values[$i])){
+			if (isset($values[$i])&&($values[$i]!=0)){
 				if ($i>0)
 					$txt.=" - ";
 				if ($type!="listlink"){
@@ -84,11 +84,16 @@ function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true)
 							$txt.=" <a href=\"?q=".$values[$i];
 						else
 							$txt.=" <a href=\"?p$id_prop=".$values[$i];
+						// For publication date, date added
+						if ($d!=0)
+							$txt.="&amp;d=".$d;
+
 						/*For adding filters to links
 						if ($mode==1)
 							foreach($tab_miss as $key=>$value)
 								if ($value!="")
 									$txt.="&amp;$key=".$value;*/
+							
 						$txt.="\" ";
 						if ($type=="creator")
 							$txt.=" class=\"lien_aut\" ";
@@ -195,14 +200,17 @@ function truncate($text, $chars =  56) {
     return $text;
 }
 function val_0($id_artw,$id_prop,$lg) {
-	global $link;
+	global $link,$d;
 	$sql="SELECT p".$id_prop.".qwd as prop_qwd from artw_prop,p".$id_prop." WHERE artw_prop.prop=".$id_prop." AND  artw_prop.id_artw=".$id_artw." AND artw_prop.id_prop=p".$id_prop.".id AND p".$id_prop.".level=0";
 	$rep=mysqli_query($link,$sql);
 	if (mysqli_num_rows($rep)==0)
 		return "";
 	else{
 		$row = mysqli_fetch_assoc($rep);
-		return "<a href=\"?p$id_prop=".$row["prop_qwd"]."\" class=\"interne\">".label_item($row["prop_qwd"],$lg)."</a>";
+		if ($d!=0)
+			return "<a href=\"?p$id_prop=".$row["prop_qwd"]."&amp;d=$d\" class=\"interne\">".label_item($row["prop_qwd"],$lg)."</a>";
+		else
+			return "<a href=\"?p$id_prop=".$row["prop_qwd"]."\" class=\"interne\">".label_item($row["prop_qwd"],$lg)."</a>";
 	}
 }
 ?>

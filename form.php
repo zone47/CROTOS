@@ -1,7 +1,6 @@
 <?php // utf-8 ç 
 /* / */
 ?>
-<form action="<?php echo $script_name; ?>" method="get" id="form"  name="form"  accept-charset="UTF-8">
 	<div id="params">
     	<div>
 		<label for="lg" id="label_lg" class="paralab"><?php echo translate($l,"language") ?></label>
@@ -83,4 +82,3 @@ if ($random)
 <?php
 	include "facets.php";
 ?>
-</form>

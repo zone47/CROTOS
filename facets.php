@@ -22,7 +22,7 @@ else
 ?>
     		<option value="" id="tout"><?php echo ucfirst(translate($l,"everything")) ?></option>
 <?php 
-$p31_list=array("3305213","860861","93184","11060274","125191","133067","212431","5647631","184296","1473346");
+$p31_list=array("3305213","860861","93184","11060274","125191","133067","20437094","5647631","184296","1473346");
 if (($tab_idx["p31"]!="")&&(!(in_array($tab_idx["p31"],$p31_list))))
 	echo "    		<option value=\"".$tab_idx["p31"]."\" selected>".ucfirst(label_item($tab_idx["p31"],$l))."</option>\n";
 for ($i=0;$i<count($p31_list);$i++){
@@ -70,6 +70,17 @@ if ($mode==1){
 		else
 			echo "&nbsp;</span> ";
 	}
+   	echo "<span><label>".translate($l,"Wikipedia")."</label> ";
+	echo "<input name=\"cw\" id=\"cw\" type=\"checkbox\" value=\"1\"";
+	if ($tab_check["cw"]==1)
+		echo " checked=\"checked\"";
+	echo " onChange=\"document.getElementById('form').submit()\"/>✓";
+	echo "<input name=\"mw\" id=\"mw\" type=\"checkbox\" value=\"1\"";
+	if ($tab_miss["mw"]==1)
+		echo " checked=\"checked\"";
+	echo " onChange=\"document.getElementById('form').submit()\"/>✗";
+	echo "&nbsp;&nbsp;&nbsp;&nbsp;</span> ";
+	
 	echo "</div>";
 }
 ?>   

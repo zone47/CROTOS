@@ -1,5 +1,9 @@
 <?php
 if ($num_rows>1)
+	$multi_res=true;
+else
+	$multi_res=false;
+if ($multi_res)
 	echo "<div id=\"contenu\" class=\"yoxview\" >";
 else
 	echo "<div id=\"contenu\" class=\"yoxview contentsolo\" >";	
@@ -30,7 +34,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 	}
 	
 	$coll0=val_0($id_artw,195,$l);
-	$location0=val_0($id_artw,275,$l);
+	$location0=val_0($id_artw,276,$l);
 
 	$coll_or_loc=$coll0;
 	if ($coll0=="")
@@ -90,7 +94,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 	else
 		$width_item=intval($width_h)+2;	
 	
-	if ($num_rows>1){
+	if ($multi_res){
 		$content.="	<div style=\"width:".$width_item."px\" class=\"item\" data-width=\"".$width_item."px\" >\n";
 	}
 	else{ 
@@ -122,6 +126,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 			$content.="	<div class=\"item solo\" style=\"width:".$width_item."px\" data-width=\"".$width_item."px\">\n";
 		}
 	}
+		
 	// Cartel
 	$cartel="\n		<div class=\"cartel\">";
 	
@@ -175,7 +180,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 	
 	$commons_link="";
 	if ($thumb_h!=""){
-		$commons_link="http://commons.wikimedia.org/wiki/File:".htmlentities(str_replace("?","%3F",str_replace(" ","_",$p18_str)));
+		$commons_link="http://commons.wikimedia.org/wiki/File:".htmlentities(str_replace("?","%3F",str_replace(" ","_",$p18_str)), ENT_QUOTES, "UTF-8");
 		if ($disp==0)
 			$cartel.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")."\"><img src=\"img/commons_ico.png\" alt=\"\"/></a>";
 		else
@@ -207,6 +212,9 @@ while($data = mysqli_fetch_assoc($rep)) {
 		$cartel.=$pageWP_link;
 
 	}
+	$url="/crotos/?q=".$qwd_art;	
+	$cartel.="\n <a href=\"".$url."\"><img src=\"img/crotos_ico.png\" alt=\"CROTOS\"/></a>";
+	
 	$cartel_links="\n				<div class=\"liens\">";
 	if ($loc_link!="")
 		$cartel_links.="\n<p>".$loc_link."</p>";
@@ -238,8 +246,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 	$url="http://tools.wmflabs.org/reasonator/?lang=".$l."&amp;q=".$qwd_art;	
 	$cartel_links.="\n<p> <a href=\"".$url."\"><img src=\"img/reasonator.png\" alt=\"Reasonator\"/></a> <a href=\"".$url."\" class=\"externe\">".translate($l,"reasonator")."</a></p>";
 	
-	
-	$url="http://zone47.com/crotos/?q=".$qwd_art;	
+	$url="/crotos/?q=".$qwd_art; 
 	$cartel_links.="\n<p> <a href=\"".$url."\"><img src=\"img/crotos.png\" alt=\"CROTOS\"/></a> <a href=\"".$url."\">crotos/?q=".$qwd_art."</a></p>";
 	$yox_links.=" <a href=\"".$url."\" title=\"Crotos URL\"><img src=\"img/crotos_ico.png\" alt=\"Crotos\"/></a>";
 	
@@ -313,25 +320,10 @@ while($data = mysqli_fetch_assoc($rep)) {
 		$yox_cartel.="&nbsp;&nbsp;|&nbsp;&nbsp;".$depicts;
 	}
 	$yox_cartel.="</span></div>";
+	
 	$cartel.=$cartel_links;
 	
-	if (($num_rows==1)&&($credits!="")){
-		$cartel.="\n				<div class=\"img_info\">";
-		$cartel.="\n					<div class=\"credit_img\">";
-		$cartel.="\n					<a href=\"".$commons_link."\"><img src=\"img/commons_gray.png\" alt=\"\"></a>";
-		$cartel.="\n					</div>";
-		$cartel.="\n					<div class=\"credit_txt\">";
-		$cartel.=html_entity_decode($credits);
-		$cartel.="\n					</div>";
-		
-		$cartel.="\n				</div>";
-	}
-	
-	$cartel.="\n			</div>";
-	$cartel.="\n		</div>";
-	// Cartel - end
-		
-	if ($num_rows>1)
+	if ($multi_res)
 		$content.="		<div class=\"thumb multiimg\"><div>";
 	else
 		$content.="		<div class=\"thumb soloimg\"><div>";
@@ -365,10 +357,10 @@ while($data = mysqli_fetch_assoc($rep)) {
 						}
 				}
 			}
-			$license=esc_dblq(htmlentities($license));
+			$license=esc_dblq(htmlentities($license), ENT_QUOTES, "UTF-8");
 		}
-		$commons_artist = esc_dblq(htmlentities(preg_replace("/<\/?img[^>]*\>/i", "",preg_replace("/<\/?ul[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?div[^>]*\>/i", "",$commons_artist)))))));
-		$commons_credit = esc_dblq(htmlentities(preg_replace("/<ul[^>]+\>/i", "",preg_replace("/<li[^>]+\>/i", "",preg_replace("/<p[^>]+\>/i", "",preg_replace("/<dd[^>]+\>/i", "",preg_replace("/<dl[^>]+\>/i", "",preg_replace("/<img[^>]+\>/i", "",preg_replace("/<\/?td[^>]*\>/i", "",preg_replace("/<\/?tr[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "", preg_replace("/<\/?ul[^>]*\>/i", "", preg_replace("/<\/?hr[^>]*\>/i", "", preg_replace("/<\/?p[^>]*\>/i", "", preg_replace("/<\/?div[^>]*\>/i", "", $commons_credit))))))))))))))));
+		$commons_artist = esc_dblq(htmlentities(preg_replace("/<\/?img[^>]*\>/i", "",preg_replace("/<\/?ul[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?div[^>]*\>/i", "",$commons_artist))))), ENT_QUOTES, "UTF-8"));
+		$commons_credit = esc_dblq(htmlentities(preg_replace("/<ul[^>]+\>/i", "",preg_replace("/<li[^>]+\>/i", "",preg_replace("/<p[^>]+\>/i", "",preg_replace("/<dd[^>]+\>/i", "",preg_replace("/<dl[^>]+\>/i", "",preg_replace("/<img[^>]+\>/i", "",preg_replace("/<\/?td[^>]*\>/i", "",preg_replace("/<\/?tr[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "", preg_replace("/<\/?ul[^>]*\>/i", "", preg_replace("/<\/?hr[^>]*\>/i", "", preg_replace("/<\/?p[^>]*\>/i", "", preg_replace("/<\/?div[^>]*\>/i", "", $commons_credit)))))))))))))), ENT_QUOTES, "UTF-8"));
 		$credits=$commons_artist;
 		if (($credits!="")&&($license!=""))
 			$credits.="&nbsp;&nbsp;|&nbsp;&nbsp;";
@@ -376,10 +368,10 @@ while($data = mysqli_fetch_assoc($rep)) {
 		if (($credits!="")&&($commons_credit!=""))
 			$credits.="&nbsp;&nbsp;|&nbsp;&nbsp;";
 		$credits.=$commons_credit;
-		if ($num_rows>1)
-			$content.="<a href=\"".$commons_link."\" data-file=\"".esc_dblq($large)."\" data-commons=\"".$commons_link."\" class=\"yox\" id=\"link$cpt\" onclick=\"return wait();\"><img src=\"".esc_dblq($thumb_h)."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($thumb_h)."\" data-credit=\"".$credits."\" data-notice=\"".esc_dblq(htmlentities($yox_cartel))."\"/></a>";
+		if ($multi_res)
+			$content.="<a href=\"".$commons_link."\" data-file=\"".esc_dblq($large)."\" data-commons=\"".$commons_link."\" class=\"yox\" id=\"link$cpt\" onclick=\"return wait();\"><img src=\"".esc_dblq($thumb_h)."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($thumb_h)."\" data-credit=\"".$credits."\" data-notice=\"".esc_dblq(htmlentities($yox_cartel, ENT_QUOTES, "UTF-8"))."\"/></a>";
 		else
-			$content.="<a href=\"".$commons_link."\" data-commons=\"".$commons_link."\" class=\"linksolo\" id=\"link$cpt\" onclick=\"return wait();\"><img src=\"".esc_dblq($large)."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($thumb_h)."\" data-credit=\"".$credits."\" data-notice=\"".esc_dblq(htmlentities($yox_cartel))."\"/></a>";
+			$content.="<a href=\"".$commons_link."\" data-commons=\"".$commons_link."\" class=\"linksolo\" id=\"link$cpt\" onclick=\"return wait();\"><img src=\"".esc_dblq($large)."\" alt=\"".esc_dblq($titre)."\" data-img=\"".esc_dblq($thumb_h)."\" data-credit=\"".$credits."\" data-notice=\"".esc_dblq(htmlentities($yox_cartel, ENT_QUOTES, "UTF-8"))."\"/></a>";
 	}
 	else{
 		if ($disp==0)
@@ -388,10 +380,29 @@ while($data = mysqli_fetch_assoc($rep)) {
 			$content.="<img src=\"img/no_image_day.png\" alt=\"\" width=\"200\" height=\"240\" class=\"no_img\">";
 	}
 	$content.="\n		</div></div>";
+	
+	//echo "++++$num_rows++++++$credits+++";
+	//if ((!$multi_res)&&($credits!="")){
+		
+		$cartel.="\n				<div class=\"img_info\">";
+		$cartel.="\n					<div class=\"credit_img\">";
+		$cartel.="\n					<a href=\"".$commons_link."\"><img src=\"img/commons_gray.png\" alt=\"\"></a>";
+		$cartel.="\n					</div>";
+		$cartel.="\n					<div class=\"credit_txt\">";
+		$cartel.=html_entity_decode($credits);
+		$cartel.="\n					</div>";
+		
+		$cartel.="\n				</div>";
+	//}
+	
+	$cartel.="\n			</div>";
+	$cartel.="\n		</div>";
+	// Cartel - end
+		
 	$content.=$cartel;
 	
 	$content.="\n	</div>";
-	if ($num_rows>1)
+	if ($multi_res)
 		$content.="\n	<script>document.getElementById('notice$cpt').style.display = 'none';</script>\n";
 	
 	echo $content;	

@@ -64,8 +64,10 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 			$lab=$ent_qwd["labels"][$lg]["value"];
 		//page
 		$page="";
-		if ($ent_qwd["sitelinks"][$lg."wiki"]["title"])
+		if ($ent_qwd["sitelinks"][$lg."wiki"]["title"]){
 			$page=$ent_qwd["sitelinks"][$lg."wiki"]["title"];
+			$tab_miss["mw"]=0;
+		}
 		
 		if (($lab!="")||($page!="")){
 			$lab=esc_dblq($lab);
@@ -377,6 +379,9 @@ function id_commons($p18_str){
 	$rep=mysqli_query($link,$sql);
 	if (mysqli_num_rows($rep)==0){
 		$img=str_replace(" ","_",$p18_str);
+		$longfilename=false;
+		if (strlen($img)>160)
+			$longfilename=true;
 		$urlapi="https://commons.wikimedia.org/w/api.php?action=query&prop=imageinfo&format=xml&iiprop=extmetadata&iilimit=10&titles=File:".urlencode($img);
 		$xml = simplexml_load_file_from_url($urlapi);
 		if ($xml){
@@ -389,7 +394,10 @@ function id_commons($p18_str){
 			$urlimg = 'http://upload.wikimedia.org/wikipedia/commons/' . $folder;
 			
 			if (substr ($img,-3)=="svg"){
-				$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/200px-". urlencode($img).".png";
+				if ($longfilename)
+					$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/200px-thumbnail.png";
+				else
+					$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/200px-". urlencode($img).".png";
 				$size=getimagesize($thumb);
 				$width_tmp=$size[0];
 				$height_tmp=$size[1];
@@ -397,15 +405,31 @@ function id_commons($p18_str){
 					$w_thumb=200;
 				else
 					$w_thumb=floor(350*$width_tmp/$height_tmp);
-				$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img).".png";
+				if ($longfilename)
+					$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-thumbnail.png";
+				else
+					$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img).".png";
 				if ($width_tmp/$height_tmp>1400/900)
 					$width=1400;
 				else
 					$width=floor(900*$width_tmp/$height_tmp);
 				$height=floor($height_tmp*$width/$width_tmp);
-				$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$width."px-". urlencode($img).".png";
+				if ($longfilename)
+					$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$width."px-thumbnail.png";
+				else
+					$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$width."px-". urlencode($img).".png";
 			}
 			else{
+				$ext = pathinfo($img, PATHINFO_EXTENSION);
+				$filename = pathinfo($img, PATHINFO_FILENAME);
+				$lossy="";
+				$tif=false;
+				if (($ext=="tif")||($ext=="tif")){
+					$tif=true;
+					$lossy="lossy-page1-";
+					$ext.=".jpg";
+				}
+
 				$urlapimagnus="https://tools.wmflabs.org/magnus-toolserver/commonsapi.php?image=".urlencode($img);
 				$xml = simplexml_load_file_from_url($urlapimagnus);
 				if ($xml){
@@ -436,8 +460,16 @@ function id_commons($p18_str){
 					}
 					if ($w_thumb==$width)
 						$thumb=$urlimg;
-					else
-						$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img);
+					else{
+						if ($longfilename)
+							$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb."px-thumbnail.".$ext;
+						else{
+							if (!$tif)
+								$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-".urlencode($img);
+							else
+								$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb."px-".urlencode($filename).".".$ext;
+						}
+					}
 						
 					// thumb horizontal
 					if ($width/$height>320/240){
@@ -454,8 +486,17 @@ function id_commons($p18_str){
 					}
 					if ($w_thumb_h==$width)
 						$thumb_h=$urlimg;
-					else
-						$thumb_h="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb_h."px-". urlencode($img);
+					else{
+						if ($longfilename)
+							$thumb_h="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb_h."px-thumbnail.".$ext;
+						else{
+							if (!$tif)
+								$thumb_h="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb_h."px-". urlencode($img);
+							else
+								$thumb_h="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb_h."px-".urlencode($filename).".".$ext;
+						}
+					}
+						
 				
 					// large
 					if ($width/$height>1400/900){
@@ -472,8 +513,16 @@ function id_commons($p18_str){
 					}
 					if ($w_large==$width)
 						$large=$urlimg;
-					else
-						$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_large."px-". urlencode($img);
+					else{
+						if ($longfilename)
+							$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_large."px-thumbnail.".$ext;
+						else{
+							if (!$tif)
+								$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_large."px-". urlencode($img);
+							else
+								$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_large."px-".urlencode($filename).".".$ext;
+						}
+					}
 				}
 				else 
 					$width=0;

@@ -152,7 +152,10 @@ foreach($tab_check as $key=>$value){
 $search_date=false;
 if (!(($y1==-40000)&&($y2==2015)))
 	$search_date=true;
-if (($search_query)||($optimization)||($search_date)||($check_query)){
+$search_publi=false;
+if ($d!=0)
+	$search_publi=true;
+if (($search_query)||($optimization)||($search_date)||($search_publi)||($check_query)){
 	if (($search_query)&&(!(count($res_s)>0)))
 		$sql="SELECT * from artworks WHERE id=0";
 	else{
@@ -176,6 +179,11 @@ if (($search_query)||($optimization)||($search_date)||($check_query)){
 			if ($sql_c!="")
 				$sql_c.=" AND ";
 			$sql_c.=" year1>=$y1 AND year2<=$y2 ";
+		}
+		if ($search_publi){
+			if ($sql_c!="")
+				$sql_c.=" AND ";
+			$sql_c.="(crea=$d OR img=$d) ";
 		}
 		if ($check_query){
 			foreach($tab_check as $key=>$value){
@@ -248,6 +256,7 @@ if (($search_query)||($optimization)||($search_date)||($check_query)){
 		if ($mode==0) $sql.=" AND artworks.P18!=0";
 	}
 }
+//echo "<!-- $sql -->";
 if ($sql!=""){
 	$repnb=mysqli_query($link,$sql);
 	$num_rows = mysqli_num_rows($repnb);

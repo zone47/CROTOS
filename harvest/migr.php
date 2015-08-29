@@ -8,7 +8,7 @@ $req = mysqli_query($link,$sql);
 $data = mysqli_fetch_assoc($req);
 $nbartw = $data['id'];
 mysqli_close($link);
-if ($nbartw>55000){
+if ($nbartw>42000){
 	echo "\nMigration and update";
 	include $file_timer_begin;
 	

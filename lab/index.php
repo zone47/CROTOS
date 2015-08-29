@@ -55,24 +55,22 @@ if ($lg=="fr")
 else
 	echo "Number of visual artworks items by property";
 ?></a></li>
-    <li><a href="../new.php"><?php
+    <li><a href="updates.php"><?php
 if ($lg=="fr")
-	echo "Nouvelles œuvres d'art avec images sur Crotos";
+	echo "Mises à jour du contenu de Crotos";
 else
-	echo "New items with images on Crotos";
-echo "</a> <small>(";
-$fp = fopen ("../dateupdate.txt", "r");
-echo fgets ($fp, 255);
-fclose ($fp);
+	echo "Content updates on Crotos";
+echo "</a>";
 
-?>)</small></li>
+?></li>
     <li><a href="cpt_lg"><?php
 if ($lg=="fr")
 	echo "Occurences des langues selon les libellés";
 else
 	echo "Languages occurences from labels";
 ?></a></li>
-    <li><a href="louvre-rooms.php"><?php
+	<li><a href="collections">Statistiques par collections</li>
+    <li><a href="louvre-rooms"><?php
 if ($lg=="fr")
 	echo "Œuvres du musée du Louvre par salles";
 else

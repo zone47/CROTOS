@@ -138,7 +138,6 @@ ul#access {
 	line-height:1em;
 }
 #lab{
-	/*margin-left:164px;*/
 	margin-left:137px;
 	font-size:90%;
 }
@@ -146,6 +145,11 @@ ul#access {
 	margin-left:137px;
 	margin-top:8px;
 	font-size:90%;
+}
+#new{
+	margin-top:27px;
+	margin-left:117px;
+	font-size:90%;	
 }
 #params{
 	text-align:right;
@@ -233,6 +237,7 @@ ul#access {
 }
 .libelle_criteres{
 	font-weight:normal;
+	margin-left:10px;
 }
 .criteres img{
 	vertical-align:middle;
@@ -253,7 +258,6 @@ ul#access {
 }
 #listp31{
 	display:inline-block;
-	margin-right:10px;
 }
 #facets input{
 	text-align:right;	
@@ -359,6 +363,8 @@ ul#access {
 	position:relative;
 	top: 50%;
 	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
 }
 .soloimg img{
 	width:100%;
@@ -442,6 +448,12 @@ a.interne:hover,a.interne:focus,a.interne:active {
 	padding-top:5px;	
 	min-height:30px;
 }
+.contentsolo .img_info{
+	display:block;
+}
+.img_info{
+	display:none;
+}
 /* autocomplete */
 .ui-autocomplete-loading {
     background: white url('../img/ui-anim_basic_16x16.gif') right center no-repeat;
@@ -476,7 +488,7 @@ footer.marge{
 	margin-left:0;
 	margin-right:117px;
 }
-#lg_rtl #cosmos,#lg_rtl #lab{
+#lg_rtl #cosmos,#lg_rtl #lab,#lg_rtl #new{
 	margin-right:127px;
 }
 #lg_rtl #params{

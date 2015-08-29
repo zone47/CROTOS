@@ -7,15 +7,17 @@ if ($new)
 else
 	include "queries.php";
 
-if ($p!=0) // hack if $p indicated out of range because of $nb parameter
-	if (($p-1)*$nb>$num_rows){
-		$new_url="http://www.zone47.com/crotos/?";
+if (($p!=0)or($new)){ // hack if $p indicated out of range because of $nb parameter
+	if ((($p-1)*$nb>$num_rows)or($new)){
+		$new_url="?";
 		foreach($_GET as $key => $value) 
 			if ($key!="p")
 				$new_url.="&".$key."=".$value;
-		header("Location:".$new_url);
+		
 	}
-	
+	if (($p-1)*$nb>$num_rows)
+		header("Location:http://www.zone47.com/crotos/".$new_url);
+}
 $nbpg=ceil($num_rows/$nb); // number of pages
 
 //Suggests if home or random choice
@@ -50,6 +52,9 @@ foreach($tab_check as $key=>$value)
 	if ($value!="")
 		$liennav.="&amp;$key=".$value;
 if ($s!="") $liennav.="&amp;s=".$s;
-if ($y1!="") $liennav.="&amp;y1=".$y1;
-if ($y2!="") $liennav.="&amp;y2=".$y2;
+if(!(($y1=-40000)&&(($y2=2015)))){
+	if ($y1!="") $liennav.="&amp;y1=".$y1;
+	if ($y2!="") $liennav.="&amp;y2=".$y2;
+}
+if ($d!="") $liennav.="&amp;d=".$d;
 ?>

@@ -86,7 +86,7 @@ if ($q!=""){
 	$wdq_link="https://tools.wmflabs.org/autolist/index.php?wd".$query;
 
 	if (!(file_exists($cqitem_path))){
-		$url_api="http://wdq.wmflabs.org/api?".$query."&download=1";			
+		$url_api="http://wdq.wmflabs.org/api?".$query."&download=1";	
 		$res =file_get_contents($url_api,true);
 		$responseArray = json_decode($res,true);
 		$nbartworks=count($responseArray["items"]);
@@ -300,6 +300,7 @@ if (!$csv)
 		}
 	
 		$sql_artw="SELECT * from artworks WHERE ".$sql_artw. " ORDER by qwd";
+		//echo $sql_artw;
 		$rep=mysqli_query($link,$sql_artw);
 		$miss_list="";
 		$qog_idx=0;
@@ -316,6 +317,9 @@ if (!$csv)
 			$qwd_data[]=data_qwd($row['qwd'],$row);
 			$qog_idx=$qwd_idx;
 		}
+		for ($i=($qog_idx+1);$i<count($responseArray["items"]);$i++)
+			$miss_w[]=$responseArray["items"][$i];
+		
 		for ($i=0;$i<count($miss_w);$i++)
 			$qwd_data[]=data_qwd($miss_w[$i],0);
 		

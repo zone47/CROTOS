@@ -66,6 +66,7 @@ $s=""; // Search
 $q="";
 $y1=-40000;
 $y2=2015;
+$d=0;// publication date
 $tab_idx = array(
 	"p31" => "",// qwd type
 	"p135"=> "",// qwd mouvement
@@ -105,7 +106,8 @@ $tab_miss = array(
 	"m921"=> "",// subject heading
 	"m941"=> "",// inspired by
 	"m973"=> "",// described at URL
-	"m1212"=> ""// Atlas ID
+	"m1212"=> "",// Atlas ID
+	"mw"=> ""// Wikipedia page
 );
 $tab_check = array(
 	"c1" => "",// label
@@ -131,7 +133,8 @@ $tab_check = array(
 	"c921"=> "",// subject heading
 	"c941"=> "",// inspired by
 	"c973"=> "",// described at URL
-	"c1212"=> ""// Atlas ID
+	"c1212"=> "",// Atlas ID
+	"cw"=> ""// Wikipedia page
 );
 
 foreach($tab_idx as $key=>$value)
@@ -150,16 +153,7 @@ if ($mode==1){
 if (isset($_GET['q']))
 	if ($_GET['q']!="") 
 		$q=str_ireplace("q","",$_GET['q']);
-if ($new){
-	//if (!($_GET['r']=="1")){ 
-	if ((!(isset($_GET['p'])))||($_GET['p']=="")){
-		$_GET['p']="1";
-		$p=1;
-	}
-	//}
-	$rand_sel=false;
-	$script_name="new.php";
-}
+
 if ($cosmos){
 	if ((!(isset($_GET['p'])))||($_GET['p']=="")){
 		$_GET['p']="1";
@@ -195,6 +189,16 @@ if (isset($_GET['y1']))
 if (isset($_GET['y2']))
 	if (is_int(intval($_GET['y2']))) 
 		$y2=intval($_GET['y2']);
+if (isset($_GET['d'])){
+	if ($_GET['d']!=""){
+		$d=$_GET['d'];
+		if ((!($_GET['r']=="1"))&&($p==0)){
+			$_GET['p']="1";
+			$rand_sel=false;
+			$p=1;
+		}
+	}
+}
 //$n minimum number of results
 $n=3; 
 if (isset($_COOKIE['n']))

@@ -51,6 +51,7 @@ while($file = readdir($dir)) {
 			"m361"=> 0,// part of
 			"m921"=> 0,// subject heading
 			"m941"=> 0,// inspired by
+			"mw"=> 1,// wikipedia article
 			"ar"=> 0,
 			"bn"=> 0,
 			"br"=> 0,
@@ -219,8 +220,31 @@ $offic_url=$tab_prop["P856"];
 if ($offic_url=="")
 	$offic_url=$tab_prop["P973"];
 
-$sql="INSERT INTO artworks (qwd,P18,hd,P214,P217,P347,P350,P373,P727,link,P1212,year1,year2,b_date,new_img) VALUES ($item,".$p18.",$hd,\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$offic_url."\",\"".$tab_prop["P1212"]."\",$year1,$year2,\"".$b_date."\",$new_img)";
+$publi_crea=0;
+$publi_img=0;
+
+$sql="SELECT id,crea,img FROM publi WHERE qwd=$item";
 $rep=mysqli_query($link,$sql);
+if (mysqli_num_rows($rep)!=0){
+	$row = mysqli_fetch_assoc($rep);
+	$publi_crea=$row['crea'];
+	$publi_img=$row['img'];
+	if (($row['img']==0)&&($new_img==1)){
+		mysqli_query($link,"UPDATE publi SET img=1 WHERE id=".$row['id']);
+		$publi_img=1;
+	}
+}
+else{
+	mysqli_query($link,"INSERT INTO publi (qwd,crea,img) VALUES ($item,1,$new_img)");
+	$publi_crea=1;
+	$publi_img=$new_img;
+}
+
+$sql="INSERT INTO artworks (qwd,P18,hd,P214,P217,P347,P350,P373,P727,link,P1212,year1,year2,b_date,crea,img) VALUES ($item,".$p18.",$hd,\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$offic_url."\",\"".$tab_prop["P1212"]."\",$year1,$year2,\"".$b_date."\",".$publi_crea.",".$publi_img.")";
+$rep=mysqli_query($link,$sql);
+
+
+mysqli_query($link,"UPDATE publi SET del=1 WHERE qwd=$item");
 
 $sql="SELECT id FROM artworks WHERE qwd=\"$item\"";
 $rep=mysqli_query($link,$sql);
@@ -312,9 +336,20 @@ unset($tab_miss);
 
 	}//it's a file
 }//reading files in directory
-mysqli_query($link,"ALTER TABLE commons_img DROP INDEX P18");
-mysqli_close($link);
 closedir($dir);
+
+mysqli_query($link,"ALTER TABLE commons_img DROP INDEX P18");
+
+// maj date publi
+$newdate=date("Ymd");
+mysqli_query($link,"UPDATE artworks SET crea=$newdate WHERE crea=1");
+mysqli_query($link,"UPDATE artworks SET img=$newdate WHERE img=1");
+mysqli_query($link,"UPDATE publi SET crea=$newdate WHERE crea=1");
+mysqli_query($link,"UPDATE publi SET img=$newdate WHERE img=1");
+mysqli_query($link,"UPDATE publi SET del=$newdate WHERE del=0");
+mysqli_query($link,"UPDATE publi SET del=0 WHERE del=1");
+
+mysqli_close($link);
 
 echo "\nCompilation done";
 include $file_timer_end;

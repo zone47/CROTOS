@@ -1,43 +1,43 @@
 /* / */
-/* Display max 800px" */
-#bl_titre{
-	width:180px;	
+/* Display max 985px" */
+#entete #bl_titre{
+	width:205px;	
 }
-#params{
+#entete #params{
 	margin-bottom:3px;
 }
-#contrib,#disp{
+#entete #contrib,#entete #disp{
 	float:none;	
 	display:inline;
 }
-#contrib{
+#entete #contrib{
 	line-height:20px;
 	margin-right:10px;
 }
-#recherche,#res_nav{
+#entete #recherche,#entete #res_nav{
 	margin-left:207px;
 }
-#recherche{
+#entete #recherche{
 	padding-left:0;
 }
-#res_na{
+#entete #res_nav{
 	padding-left:1px;
 }
-#recherche input{
-	font-size:1.5em;	
+#entete #recherche input{
+	font-size:1.1em;	
 	
 }
-#topic_title{
+#entete #topic_title{
 	margin-right:0em;
 	width:300px;
 }
-#form_facets{
+#entete #form_facets{
 	display:block;
 }
-#slider-range{
+#entete #slider-range{
 	display:none;
 }
-.navhaut{
+#entete .navhaut{
 	margin-right:0;
 }
 
