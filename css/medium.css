@@ -3,6 +3,9 @@
 #entete #bl_titre{
 	width:205px;	
 }
+.nav_update{
+	display:none;
+}
 #entete #params{
 	margin-bottom:3px;
 }

@@ -1,5 +1,15 @@
 <?php
-
+function cpt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true){
+	global $mode,$l;//,$tab_miss;
+	$txt="";
+	if ($id_art!=0){
+		$values=val_prop($id_art,$id_prop);
+		$values=array_unique($values);	
+	}
+	else
+		$values=array($id_prop);
+	return count($values);
+}
 function label($wdq,$l){
 	global $fold_crotos;
 	$qitem_path=$fold_crotos."lab/artworks/items/Q".$wdq.".json";
@@ -113,7 +123,8 @@ function data_qwd($qwd,$row){
 			"lb214"=> "",
 			"lb350"=> "",
 			"url_img"=>"",
-			"wp_links"=>""
+			"wp_links"=>"",
+			"lb180"=> ""
 	);
 	if ($row==0){
 		$tab_lb["lb1"]=label($qwd,$lg);
@@ -173,12 +184,38 @@ function data_qwd($qwd,$row){
 					$rep2=mysqli_query($link,$sql);
 					$data2=mysqli_fetch_assoc($rep2);
 					$img=str_replace(" ","_",$data2['P18']);
+					
+					$ext = pathinfo($img, PATHINFO_EXTENSION);
+					$filename = pathinfo($img, PATHINFO_FILENAME);	
+					$lossy="";
+					$tif=false;
+					if (($ext=="tif")||($ext=="tif")){
+						$tif=true;
+						$lossy="lossy-page1-";
+						$ext.=".jpg";
+					}
+					
+					$longfilename=false;
+					if (strlen($img)>160)
+						$longfilename=true;
+
+					
 					$digest = md5($img);
 					$folder = $digest[0] . '/' . $digest[0] . $digest[1] . '/' . urlencode($img);
 					$w_thumb=floor(intval($data2['width'])/intval($data2['height'])*$h_thumb);
-					$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img);
+					
+					if ($longfilename)
+						$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb."px-thumbnail.".$ext;
+					else{
+						if (!$tif)
+							$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img);
+						else
+							$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb."px-".urlencode($filename).".".$ext;
+					}
+					
 					if (substr ($img,-3)=="svg")
 						$thumb.=".png";	
+						
 					$tab_lb["url_img"]="https://commons.wikimedia.org/wiki/File:".urlencode($img);	
 					$tab_lb["lb18"]= "	<a href=\"".$tab_lb["url_img"]."\" title=\"https://commons.wikimedia.org/wiki/File:".urlencode($img)."\"><img src=\"".$thumb."\"  alt=\"".str_replace("\"","\\\"",$tab_lb["lb1"])."\" /></a>";
 			}
@@ -207,6 +244,8 @@ function data_qwd($qwd,$row){
 				}
 			}
 		}
+		if ($tab_check["c180"]=="1")
+			$tab_lb["lb180"]= cpt_prop($id,180,$lg,"normal",false,false);	
 	}
 
 	return $tab_lb;

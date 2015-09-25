@@ -4,7 +4,7 @@ include "../init.php";
 include "../traduction.php";
 include "../functions.php";
 include "../config.php";
-//error_reporting(E_ALL);
+error_reporting(0);
 
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 mysqli_query($link,"SET NAMES 'utf8'");
@@ -33,6 +33,8 @@ function children_search($id_parent,$l){
 			$sorttxt2=$lbl;
 		$data_rooms[]=array("id_loc"=>$data['id'],"qwd"=>$data['qwd'],"commonscategory"=>$data['commonscategory'],"label"=>$lbl,"for_sort"=>$sorttxt,"for_sort2"=>$sorttxt2);
 	}
+	$for_sort=array();
+	$for_sort2=array();
 	foreach ($data_rooms as $key => $row) {
 		 $id_loc[$key] = $row['id_loc'];
 		 $qwd[$key] = $row['qwd'];
