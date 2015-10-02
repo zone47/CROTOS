@@ -6,11 +6,20 @@
 $sql="SELECT count(id) as nbartworks FROM artworks";
 $rep=mysqli_query($link,$sql);
 $data = mysqli_fetch_assoc($rep);
-echo $data['nbartworks']." artworks - ";
+echo number_format(intval($data['nbartworks']),0,'',' ');
+if ($l=="fr")
+	echo " œuvres d'art – ";
+else
+	echo " artworks – ";
 $sql="SELECT count(id) as nbimg FROM artworks WHERE P18!=0";
 $rep=mysqli_query($link,$sql);
 $data = mysqli_fetch_assoc($rep);
-echo $data['nbimg']." images - ";
+echo number_format(intval($data['nbimg']),0,'',' ');
+if ($l=="fr")
+	echo " avec ";
+else
+	echo " with – ";
+echo " image – ";
 
 $fp = fopen ($fold_crotos."dateupdate.txt", "r");
 $update=fgets ($fp, 255);

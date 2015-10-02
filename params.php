@@ -2,10 +2,7 @@
 $deb=($p-1)*$nb;
 
 //Search queries
-if ($new)
-	include "queries_new.php";
-else
-	include "queries.php";
+include "queries.php";
 
 if (($p!=0)or($new)){ // hack if $p indicated out of range because of $nb parameter
 	if ((($p-1)*$nb>$num_rows)or($new)){
@@ -52,7 +49,7 @@ foreach($tab_check as $key=>$value)
 	if ($value!="")
 		$liennav.="&amp;$key=".$value;
 if ($s!="") $liennav.="&amp;s=".$s;
-if(!(($y1=-40000)&&(($y2=2015)))){
+if(!(($y1==-40000)&&(($y2==2015)))){
 	if ($y1!="") $liennav.="&amp;y1=".$y1;
 	if ($y2!="") $liennav.="&amp;y2=".$y2;
 }

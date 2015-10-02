@@ -26,7 +26,7 @@ mysqli_query($link,"TRUNCATE `p941`");
 mysqli_query($link,"TRUNCATE `p1639`");
 mysqli_query($link,"ALTER TABLE `commons_img` ADD INDEX(`P18`)");
 
-$tab_lg=array("ar","bn","br","ca","cs","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
+$tab_lg=array("ar","bn","br","ca","cs","da","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 
 $dirname = $fold_crotos.'harvest/items/';
 $dir = opendir($dirname); 
@@ -57,6 +57,7 @@ while($file = readdir($dir)) {
 			"br"=> 0,
 			"ca"=> 0,
 			"cs"=> 0,
+			"da"=> 0,
 			"de"=> 0,
 			"el"=> 0,
 			"en"=> 0,
@@ -107,7 +108,8 @@ $tab_prop = array(
 	"P727"=> "", // Europeana ID
 	"P856"=> "", // Official website
 	"P973"=> "", // described at URL
-	"P1212"=> "" // Atlas ID
+	"P1212"=> "", // Atlas ID
+	"P2108"=> "" // Kunstindex Danmark kunstværk-ID
 );
 
 foreach($tab_prop as $key=>$val){
@@ -240,7 +242,7 @@ else{
 	$publi_img=$new_img;
 }
 
-$sql="INSERT INTO artworks (qwd,P18,hd,P214,P217,P347,P350,P373,P727,link,P1212,year1,year2,b_date,crea,img) VALUES ($item,".$p18.",$hd,\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$offic_url."\",\"".$tab_prop["P1212"]."\",$year1,$year2,\"".$b_date."\",".$publi_crea.",".$publi_img.")";
+$sql="INSERT INTO artworks (qwd,P18,hd,P214,P217,P347,P350,P373,P727,link,P1212,P2108,year1,year2,b_date,crea,img) VALUES ($item,".$p18.",$hd,\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$offic_url."\",\"".$tab_prop["P1212"]."\",\"".$tab_prop["P2108"]."\",$year1,$year2,\"".$b_date."\",".$publi_crea.",".$publi_img.")";
 $rep=mysqli_query($link,$sql);
 
 

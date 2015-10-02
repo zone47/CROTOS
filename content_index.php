@@ -186,6 +186,17 @@ while($data = mysqli_fetch_assoc($rep)) {
 		else
 			$cartel.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")."\"><img src=\"img/commons_ico_day.png\" alt=\"\"/></a>";
 	}
+	else{
+		$dp=test_dp($id_artw);
+		if (!$dp){
+			$cartel.="	<img src=\"img/no_commons_ico.png\" ";
+			if ($l=="fr")
+				$cartel.="alt=\"A priori, pas dans le domaine public\" title=\"A priori, pas dans le domaine public\"";
+			else
+				$cartel.="alt=\"A priori, not in Public Domain\" title=\"A priori, not in Public Domain\"";
+			$cartel.="/>";
+		}
+	}
 	if ($described_link!=""){
 		$cartel.=" <a href=\"".$described_link."\" title=\"".translate($l,"973")."\"><img src=\"img/site_link.png\" alt=\"\"/></a>";
 		$yox_links.=" <a href=\"".$described_link."\" title=\"".translate($l,"973")."\"><img src=\"img/site_link.png\" alt=\"\"/></a>";
@@ -213,7 +224,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 
 	}
 	$url="/crotos/?q=".$qwd_art;	
-	$cartel.="\n <a href=\"".$url."\"><img src=\"img/crotos_ico.png\" alt=\"CROTOS\"/></a>";
+	$cartel.="\n <a href=\"".$url."\" title=\"Crotos\"><img src=\"img/crotos_ico.png\" alt=\"Crotos\" title=\"Crotos\"/></a>";
 	
 	$cartel_links="\n				<div class=\"liens\">";
 	if ($loc_link!="")
@@ -237,6 +248,10 @@ while($data = mysqli_fetch_assoc($rep)) {
 	if ($data['P1212']!=""){
 		$cartel_links.="<p><a href=\"http://cartelfr.louvre.fr/cartelfr/visite?srv=car_not_frame&idNotice=".$data['P1212']."\"><img src=\"img/atlas.png\" alt=\"ATLAS\"/></a> <a href=\"http://cartelfr.louvre.fr/cartelfr/visite?srv=car_not_frame&idNotice=".$data['P1212']."\" class=\"externe\">".translate($l,"Atlas")."</a></p>";
 		$yox_links.=" <a href=\"http://cartelfr.louvre.fr/cartelfr/visite?srv=car_not_frame&idNotice=".$data['P1212']."\" title=\"".translate($l,"Atlas")."\"><img src=\"img/atlas_ico.png\" alt=\"ATLAS\"/></a>";
+	}
+	if ($data['P2108']!=""){
+		$cartel_links.="<p><a href=\"https://www.kulturarv.dk/kid/VisVaerk.do?vaerkId=".$data['P2108']."\"><img src=\"img/kid_ico.png\" alt=\"KID\"/></a> <a href=\"https://www.kulturarv.dk/kid/VisVaerk.do?vaerkId=".$data['P2108']."\" class=\"externe\">".translate($l,"KID")."</a></p>";
+		$yox_links.=" <a href=\"https://www.kulturarv.dk/kid/VisVaerk.do?vaerkId=".$data['P2108']."\" title=\"".translate($l,"KID")."\"><img src=\"img/kid_ico.png\" alt=\"KID\"/></a>";
 	}
 	if ($data['P373']!=""){
 		$cartel_links.="<p><a href=\"https://commons.wikimedia.org/wiki/Category:".str_replace(" ","_",$data['P373'])."\"><img src=\"img/commons.png\" alt=\"Commons\"/></a> <a href=\"https://commons.wikimedia.org/wiki/Category:".str_replace(" ","_",$data['P373'])."\" class=\"externe\">".translate($l,"CommonsCat")."</a></p>";
@@ -382,18 +397,18 @@ while($data = mysqli_fetch_assoc($rep)) {
 	$content.="\n		</div></div>";
 	
 	//echo "++++$num_rows++++++$credits+++";
-	//if ((!$multi_res)&&($credits!="")){
+	if ((!$multi_res)&&($credits!="")){
 		
 		$cartel.="\n				<div class=\"img_info\">";
 		$cartel.="\n					<div class=\"credit_img\">";
 		$cartel.="\n					<a href=\"".$commons_link."\"><img src=\"img/commons_gray.png\" alt=\"\"></a>";
 		$cartel.="\n					</div>";
 		$cartel.="\n					<div class=\"credit_txt\">";
-		$cartel.=html_entity_decode($credits);
+		$cartel.=html_entity_decode(str_replace("&nbsp;"," ",$credits));
 		$cartel.="\n					</div>";
 		
 		$cartel.="\n				</div>";
-	//}
+	}
 	
 	$cartel.="\n			</div>";
 	$cartel.="\n		</div>";

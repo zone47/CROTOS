@@ -48,7 +48,7 @@ if (isset($_GET['nb']))
 $nb=intval($nb);
 
 $p=0; // numéro de page par défaut
-$lgs=array("ar","bn","br","ca","cs","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
+$lgs=array("ar","bn","br","ca","cs","da","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 $random=false;
 $rand_sel=false;
 if (isset($_GET['r']))
@@ -199,6 +199,7 @@ if (isset($_GET['d'])){
 		}
 	}
 }
+echo "<!-- $y1 -->";
 //$n minimum number of results
 $n=3; 
 if (isset($_COOKIE['n']))
