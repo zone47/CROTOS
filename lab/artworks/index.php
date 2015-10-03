@@ -10,7 +10,7 @@ list($g_usec, $g_sec) = explode(" ",microtime());
 $t_start=(float)$g_usec + (float)$g_sec;
 
 
-$lgs=array("ar","bn","br","ca","cs","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
+$lgs=array("ar","bn","br","ca","cs","da","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 $lg="fr";
 if (isset($_COOKIE['l']))
 	$lg=$_COOKIE['l'];
@@ -46,6 +46,7 @@ $tab_check = array(
 	"c727"=> "",
 	"c347"=> "",
 	"c1212"=> "",
+	"c2108"=> "",
 	"c214"=> "",
 	"c350"=> "",
 	"c4"=> ""
@@ -223,7 +224,7 @@ if ($q!=""){?>
 <?php 
 
 $crit_str="";
-$crits=array(0,1,2,170,571,31,186,195,217,276,179,3,973,727,347,1212,214,350,18,4,373);
+$crits=array(0,1,2,170,571,31,186,195,217,276,179,3,973,727,347,1212,2108,214,350,18,4,373);
 	for ($i=0;$i<count($crits);$i++){
 		echo "<label>".lab_prop($lg,$crits[$i])."</label>";
 		echo "<input name=\"c".$crits[$i]."\" id=\"c".$crits[$i]."\" type=\"checkbox\" value=\"1\"";
@@ -424,6 +425,16 @@ if (!$csv)
 							if (!$csv) $csvtmp[]="";
 						echo "	</td>";
 						break;
+					case "c2108":
+						echo "	<td>";
+						if ($qwd_data[$i]["lb2108"]!=""){
+							echo "<a href=\"https://www.kulturarv.dk/kid/VisVaerk.do?vaerkId=".$qwd_data[$i]["lb2108"]."\" title=\"".translate($lg,"KID")."\">".$qwd_data[$i]["lb2108"]."</a>";
+							if (!$csv) $csvtmp[]="https://www.kulturarv.dk/kid/VisVaerk.do?vaerkId=".$qwd_data[$i]["lb2108"];
+						}
+						else
+							if (!$csv) $csvtmp[]="";
+						echo "	</td>";
+						break;
 					case "c214":
 						echo "	<td>";
 						if ($qwd_data[$i]["lb214"]!=""){
@@ -466,6 +477,7 @@ if (!$csv)
 <a href="https://br.wikipedia.org/">br</a>, 
 <a href="https://ca.wikipedia.org/">ca</a>, 
 <a href="https://cs.wikipedia.org/">cs</a>, 
+<a href="https://da.wikipedia.org/">da</a>, 
 <a href="https://de.wikipedia.org/">de</a>, 
 <a href="https://el.wikipedia.org/">el</a>, 
 <a href="https://en.wikipedia.org/">en</a>, 

@@ -120,6 +120,7 @@ function data_qwd($qwd,$row){
 			"lb727"=> "",
 			"lb347"=> "",
 			"lb1212"=> "",
+			"lb2108"=> "",
 			"lb214"=> "",
 			"lb350"=> "",
 			"url_img"=>"",
@@ -172,6 +173,8 @@ function data_qwd($qwd,$row){
 			$tab_lb["lb347"]=$row['P347'];		
 		if ($tab_check["c1212"]=="1")
 			$tab_lb["lb1212"]=$row['P1212'];		
+		if ($tab_check["c2108"]=="1")
+			$tab_lb["lb2108"]=$row['P2108'];	
 		if ($tab_check["c214"]=="1")
 			$tab_lb["lb214"]=$row['P214'];	
 		if ($tab_check["c350"]=="1")
@@ -318,6 +321,16 @@ function line_disp($data,$lg,$csv,$cpt){
 					if ($data["lb1212"]!=""){
 						echo "<a href=\"http://cartelfr.louvre.fr/cartelfr/visite?srv=car_not_frame&idNotice=".$data["lb1212"]."\" title=\"".translate($lg,"Atlas")."\">".$data["lb1212"]."</a>";
 						if (!$csv) $csvtmp[]="http://cartelfr.louvre.fr/cartelfr/visite?srv=car_not_frame&idNotice=".$data["lb1212"];
+					}
+					else
+						if (!$csv) $csvtmp[]="";
+					echo "	</td>";
+					break;
+				case "c2108":
+					echo "	<td>";
+					if ($data["lb2108"]!=""){
+						echo "<a href=\"https://www.kulturarv.dk/kid/VisVaerk.do?vaerkId=".$data["lb2108"]."\" title=\"".translate($lg,"KID")."\">".$data["lb2108"]."</a>";
+						if (!$csv) $csvtmp[]="https://www.kulturarv.dk/kid/VisVaerk.do?vaerkId=".$data["lb2108"];
 					}
 					else
 						if (!$csv) $csvtmp[]="";

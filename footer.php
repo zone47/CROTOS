@@ -18,7 +18,7 @@ echo number_format(intval($data['nbimg']),0,'',' ');
 if ($l=="fr")
 	echo " avec ";
 else
-	echo " with – ";
+	echo " with ";
 echo " image – ";
 
 $fp = fopen ($fold_crotos."dateupdate.txt", "r");
