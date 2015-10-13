@@ -199,7 +199,6 @@ if (isset($_GET['d'])){
 		}
 	}
 }
-echo "<!-- $y1 -->";
 //$n minimum number of results
 $n=3; 
 if (isset($_COOKIE['n']))
