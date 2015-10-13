@@ -372,10 +372,28 @@ while($data = mysqli_fetch_assoc($rep)) {
 						}
 				}
 			}
-			$license=esc_dblq(htmlentities($license), ENT_QUOTES, "UTF-8");
+			echo "<!-- $license -->";
+			$li=$license;
+			$license=esc_dblq(htmlentities($li), ENT_QUOTES, "UTF-8");
 		}
-		$commons_artist = esc_dblq(htmlentities(preg_replace("/<\/?img[^>]*\>/i", "",preg_replace("/<\/?ul[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?div[^>]*\>/i", "",$commons_artist))))), ENT_QUOTES, "UTF-8"));
-		$commons_credit = esc_dblq(htmlentities(preg_replace("/<ul[^>]+\>/i", "",preg_replace("/<li[^>]+\>/i", "",preg_replace("/<p[^>]+\>/i", "",preg_replace("/<dd[^>]+\>/i", "",preg_replace("/<dl[^>]+\>/i", "",preg_replace("/<img[^>]+\>/i", "",preg_replace("/<\/?td[^>]*\>/i", "",preg_replace("/<\/?tr[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "", preg_replace("/<\/?ul[^>]*\>/i", "", preg_replace("/<\/?hr[^>]*\>/i", "", preg_replace("/<\/?p[^>]*\>/i", "", preg_replace("/<\/?div[^>]*\>/i", "", $commons_credit)))))))))))))), ENT_QUOTES, "UTF-8"));
+		echo "<!-- $commons_artist-->";
+		/*$ca=preg_replace("/<p[^>]+\>/i","",preg_replace("/<\/?img[^>]*\>/i", "",preg_replace("/<\/?ul[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?div[^>]*\>/i", "",$commons_artist))))));*/
+
+		$ca=del_html($commons_artist);
+		$cc=del_html($commons_credit);
+
+		$commons_artist = esc_dblq(htmlentities($ca, ENT_QUOTES, "UTF-8"));
+		$commons_credit = esc_dblq(htmlentities($cc, ENT_QUOTES, "UTF-8"));
+
+		
+		$cred=$ca;
+		if (($cred!="")&&($li!=""))
+			$cred.="&nbsp;&nbsp;|&nbsp;&nbsp;";
+		$cred.=$li;
+		if (($cred!="")&&($cc!=""))
+			$cred.="&nbsp;&nbsp;|&nbsp;&nbsp;";
+		$cred.=$cc;
+		
 		$credits=$commons_artist;
 		if (($credits!="")&&($license!=""))
 			$credits.="&nbsp;&nbsp;|&nbsp;&nbsp;";
@@ -404,7 +422,8 @@ while($data = mysqli_fetch_assoc($rep)) {
 		$cartel.="\n					<a href=\"".$commons_link."\"><img src=\"img/commons_gray.png\" alt=\"\"></a>";
 		$cartel.="\n					</div>";
 		$cartel.="\n					<div class=\"credit_txt\">";
-		$cartel.=html_entity_decode(str_replace("&nbsp;"," ",$credits));
+		$cartel.=$cred;
+		//$cartel.=html_entity_decode(str_replace("&nbsp;"," ",$credits));
 		$cartel.="\n					</div>";
 		
 		$cartel.="\n				</div>";
