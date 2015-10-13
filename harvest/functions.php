@@ -64,10 +64,8 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 			$lab=$ent_qwd["labels"][$lg]["value"];
 		//page
 		$page="";
-		if ($ent_qwd["sitelinks"][$lg."wiki"]["title"]){
+		if ($ent_qwd["sitelinks"][$lg."wiki"]["title"])
 			$page=$ent_qwd["sitelinks"][$lg."wiki"]["title"];
-			$tab_miss["mw"]=0;
-		}
 		
 		if (($lab!="")||($page!="")){
 			$lab=esc_dblq($lab);
@@ -77,6 +75,9 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 		}
         if (($lab=="")&&($prop==1))
             $tab_miss[$lg]=1;
+			
+		if (($page!="")&&($prop==1))
+            $tab_miss["mw"]=0;
             
 		// alias
 		if ($ent_qwd["aliases"][$lg]){
@@ -375,7 +376,7 @@ function id_commons($p18_str){
 	$thumb_h="";
 	$large="";
 	$w_thumb_h=0;
-	$sql="SELECT id FROM commons_img WHERE P18=\"".esc_dblq($p18_str)."\"";
+	$sql="SELECT id FROM commons_img WHERE P18 = _utf8 \"".esc_dblq($p18_str)."\" collate utf8_bin";
 	$rep=mysqli_query($link,$sql);
 	if (mysqli_num_rows($rep)==0){
 		$img=str_replace(" ","_",$p18_str);
@@ -539,7 +540,7 @@ function id_commons($p18_str){
 				$sql="INSERT INTO commons_img (P18,commons_artist,commons_credit,commons_license,thumb,thumb_h,width_h,large,width,height) VALUES (\"".esc_dblq($p18_str)."\",\"".$commons_artist."\",\"".$commons_credit."\",\"".$commons_license."\",\"".$thumb."\",\"".$thumb_h."\",$w_thumb_h,\"".$large."\",$width,$height)";
 
 				$rep=mysqli_query($link,$sql);
-				$sql="SELECT id FROM commons_img WHERE P18=\"".esc_dblq($p18_str)."\"";
+				$sql="SELECT id FROM commons_img WHERE P18 = _utf8 \"".esc_dblq($p18_str)."\" collate utf8_bin";
 				$rep=mysqli_query($link,$sql);
 				$row = mysqli_fetch_assoc($rep);
 				$p18=$row['id'];

@@ -130,7 +130,7 @@ $p18=0;
 $hd=0;
 if ($tab_prop["P18"]!=""){
 	$img_exists=false;
-	$sql="SELECT id FROM commons_img WHERE P18=\"".esc_dblq($tab_prop["P18"])."\"";
+	$sql="SELECT id FROM commons_img WHERE P18 = _utf8 \"".esc_dblq($tab_prop["P18"])."\" collate utf8_bin";
 	$rep=mysqli_query($link,$sql);
 	if (mysqli_num_rows($rep)!=0)
 		$img_exists=true;		
