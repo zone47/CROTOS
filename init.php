@@ -46,6 +46,16 @@ if (isset($_GET['nb']))
 		$nb=$_GET['nb'];
 	}
 $nb=intval($nb);
+$nocartel=0; 
+if (isset($_COOKIE['nc']))
+	$nocartel=intval($_COOKIE['nc']);
+$nocartel++;
+if ($nocartel<3)
+	setcookie ("nc",$nocartel, time() + 31536000, "/");
+if ($nocartel>2)
+	$nocartel=1;
+else
+	$nocartel=0;
 
 $p=0; // numéro de page par défaut
 $lgs=array("ar","bn","br","ca","cs","da","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");

@@ -16,6 +16,13 @@ include "title_desc_index.php";
 include "header.php";
 ?>      
 <script>
+// "Experienced" badge to remove popin notice, still displayed on hover
+<?php
+	if ($nocartel)
+		echo "nocartel=1\n";
+	else
+		echo "nocartel=0\n";
+?>
 function disp_notice(e) {
 	var notice=document.getElementById("notice"+e.id.replace("iconot",""));
 	var notice_state=notice.style.display;
