@@ -23,7 +23,11 @@ echo " image – ";
 
 $fp = fopen ($fold_crotos."dateupdate.txt", "r");
 $update=fgets ($fp, 255);
-echo "<a href=\"lab/updates.php\">Last update</a>: ".substr($update, 6, 2)." / ".substr($update, 4, 2)." / ".substr($update, 0, 4);
+if ($l=="fr")
+	echo "<a href=\"lab/updates.php\">Dernière mise à jour</a> : ";
+else
+	echo "<a href=\"lab/updates.php\">Last update</a>: ";
+echo substr($update, 6, 2)." / ".substr($update, 4, 2)." / ".substr($update, 0, 4);
 
 fclose ($fp);
 ?></div>

@@ -251,7 +251,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 	}
 	if ($data['P2108']!=""){
 		$cartel_links.="<p><a href=\"https://www.kulturarv.dk/kid/VisVaerk.do?vaerkId=".$data['P2108']."\"><img src=\"img/kid_ico.png\" alt=\"KID\"/></a> <a href=\"https://www.kulturarv.dk/kid/VisVaerk.do?vaerkId=".$data['P2108']."\" class=\"externe\">".translate($l,"KID")."</a></p>";
-		$yox_links.=" <a href=\"https://www.kulturarv.dk/kid/VisVaerk.do?vaerkId=".$data['P2108']."\" title=\"".translate($l,"KID")."\"><img src=\"img/kid_ico.png\" alt=\"KID\"/></a>";
+		$yox_links.=" <a href=\"https://www.kulturarv.dk/kid/VisVaerk.do?vaerkId=".$data['P2108']."\" title=\"".translate($l,"KID")."\"><img src=\"img/kid_ico_small.png\" alt=\"KID\"/></a>";
 	}
 	if ($data['P373']!=""){
 		$cartel_links.="<p><a href=\"https://commons.wikimedia.org/wiki/Category:".str_replace(" ","_",$data['P373'])."\"><img src=\"img/commons.png\" alt=\"Commons\"/></a> <a href=\"https://commons.wikimedia.org/wiki/Category:".str_replace(" ","_",$data['P373'])."\" class=\"externe\">".translate($l,"CommonsCat")."</a></p>";
