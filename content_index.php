@@ -80,9 +80,10 @@ while($data = mysqli_fetch_assoc($rep)) {
 			$thumb_h=$data_p18['thumb_h'];
 			$width_h=$data_p18['width_h'];
 			$large=$data_p18['large'];
+			$width=$data_p18['width'];
+			$height=$data_p18['height'];
 			// Hack to move to compilation
 			if ((substr ($thumb_h,-3)=="tif")||(substr ($thumb_h,-3)=="iff")){
-				$width=$data_p18['width'];
 				$thumb_h=str_replace("tif/","tif/lossy-page1-",$thumb_h).".jpg";
 				$large=str_replace($width_h,$width,$thumb_h);
 			}
@@ -182,9 +183,9 @@ while($data = mysqli_fetch_assoc($rep)) {
 	if ($thumb_h!=""){
 		$commons_link="http://commons.wikimedia.org/wiki/File:".htmlentities(str_replace("?","%3F",str_replace(" ","_",$p18_str)), ENT_QUOTES, "UTF-8");
 		if ($disp==0)
-			$cartel.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")."\"><img src=\"img/commons_ico.png\" alt=\"\"/></a>";
+			$cartel.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;px\"><img src=\"img/commons_ico.png\" alt=\"\"/></a>";
 		else
-			$cartel.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")."\"><img src=\"img/commons_ico_day.png\" alt=\"\"/></a>";
+			$cartel.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;px\"><img src=\"img/commons_ico_day.png\" alt=\"\"/></a>";
 	}
 	else{
 		$dp=test_dp($id_artw);
@@ -378,15 +379,11 @@ while($data = mysqli_fetch_assoc($rep)) {
 		}
 		echo "<!-- $commons_artist-->";
 		/*$ca=preg_replace("/<p[^>]+\>/i","",preg_replace("/<\/?img[^>]*\>/i", "",preg_replace("/<\/?ul[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?div[^>]*\>/i", "",$commons_artist))))));*/
-
+		$cf="<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;px\" class=\"commons_link\">".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;px</a><br/>";
 		$ca=del_html($commons_artist);
 		$cc=del_html($commons_credit);
 
-		$commons_artist = esc_dblq(htmlentities($ca, ENT_QUOTES, "UTF-8"));
-		$commons_credit = esc_dblq(htmlentities($cc, ENT_QUOTES, "UTF-8"));
-
-		
-		$cred=$ca;
+		$cred=$cf.$ca;
 		if (($cred!="")&&($li!=""))
 			$cred.="&nbsp;&nbsp;|&nbsp;&nbsp;";
 		$cred.=$li;
@@ -394,7 +391,11 @@ while($data = mysqli_fetch_assoc($rep)) {
 			$cred.="&nbsp;&nbsp;|&nbsp;&nbsp;";
 		$cred.=$cc;
 		
-		$credits=$commons_artist;
+		$commons_file = esc_dblq(htmlentities($cf, ENT_QUOTES, "UTF-8"));
+		$commons_artist = esc_dblq(htmlentities($ca, ENT_QUOTES, "UTF-8"));
+		$commons_credit = esc_dblq(htmlentities($cc, ENT_QUOTES, "UTF-8"));
+
+		$credits=$commons_file.$commons_artist;
 		if (($credits!="")&&($license!=""))
 			$credits.="&nbsp;&nbsp;|&nbsp;&nbsp;";
 		$credits.=$license;

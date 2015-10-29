@@ -440,6 +440,9 @@ a.interne:hover,a.interne:focus,a.interne:active {
 .cartel img{
 	border:0;	
 }
+.commons_link{
+	font-weight:bold;
+}
 .credit_img{
 	float:left;	
 	margin-left:-4px;

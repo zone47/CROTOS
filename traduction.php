@@ -62,7 +62,8 @@ $trads = array(
 	"everything"=> "كل شيء",
 	"minimum" => "الأصغر",
 	"alias"=> "تعرف أيضا باسم",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "بكسل"
 ),
 "bn" => array(
 	"lang_code"=> "bn",
@@ -125,7 +126,8 @@ $trads = array(
 	"everything"=> "সমস্তকিছু",
 	"minimum" => "নূন্যতম",
 	"alias"=> "আরও যে নামে পরিচিত",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "পিক্সেল"
 ),
 "br" => array(
 	"lang_code"=> "br",
@@ -188,7 +190,8 @@ $trads = array(
 	"everything"=> "Pep tra",
 	"minimum" => "Bihanañ",
 	"alias"=> "Anvet ivez",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "piksel"
 ),
 "ca" => array(
 	"lang_code"=> "ca",
@@ -250,7 +253,8 @@ $trads = array(
 	"everything"=> "Tot",
 	"minimum" => "mínim",
 	"alias"=> "També conegut com",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "píxels"
 ),
 "cs" => array(
 	"lang_code"=> "cs",
@@ -313,7 +317,8 @@ $trads = array(
 	"everything"=> "Všechno",
 	"minimum" => "Minimum",
 	"alias"=> "Aliasy",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "pixelů"
 ),
 "da" => array(
 	"lang_code"=> "da",
@@ -376,7 +381,8 @@ $trads = array(
 	"everything"=> "alt",
 	"minimum" => "Mindste",
 	"alias"=> "Alias",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "punkter"
 ),
 "de" => array(
 	"lang_code"=> "de",
@@ -439,7 +445,8 @@ $trads = array(
 	"everything"=> "Alles",
 	"minimum" => "Minimum",
 	"alias"=> "Auch bekannt als",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "Pixel"
 ),
 "el" => array(
 	"lang_code"=> "el",
@@ -502,7 +509,8 @@ $trads = array(
 	"everything"=> "Καθετί",
 	"minimum" => "Ελάχιστο",
 	"alias"=> "Γνωστό επίσης ως",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "εικονοστοιχεία"
 ),
 "en" => array(
 	"lang_code"=> "en",
@@ -565,7 +573,8 @@ $trads = array(
 	"everything"=> "everything",
 	"minimum" => "Minimum",
 	"alias"=> "Also known as",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "pixels"
 ),
 "eo" => array(
 	"lang_code"=> "eo",
@@ -628,7 +637,8 @@ $trads = array(
 	"everything"=> "Ĉio",
 	"minimum" => "minimumo",
 	"alias"=> "Kromnomita",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "rastrumeroj"
 ),
 "es" => array(
 	"lang_code"=> "es",
@@ -691,7 +701,8 @@ $trads = array(
 	"everything"=> "Todo",
 	"minimum" => "mínimo",
 	"alias"=> "Alias",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "píxeles"
 ),
 "fa" => array(
 	"lang_code"=> "fa",
@@ -754,7 +765,8 @@ $trads = array(
 	"everything"=> "همه چیز",
 	"minimum" => "کمترین",
 	"alias"=> "نام(های) دیگر",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "پیکسل"
 ),
 "fi" => array(
 	"lang_code"=> "fi",
@@ -817,7 +829,8 @@ $trads = array(
 	"everything"=> "Kaikki",
 	"minimum" => "vähimmäis",
 	"alias"=> "Tunnetaan myös nimellä",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "kuvapistettä"
 ),
 "fr" => array(
 	"lang_code"=> "fr",
@@ -880,7 +893,8 @@ $trads = array(
 	"everything"=> "tout",
 	"minimum" => "Minimum",
 	"alias"=> "Autre(s) titre(s)",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "pixels"
 ),
 "he" => array(
 	"lang_code"=> "he",
@@ -943,7 +957,8 @@ $trads = array(
 	"everything"=> "הכול",
 	"minimum" => "מינימום",
 	"alias"=> "מכונה גם",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "פיקסלים"
 ),
 "hi" => array(
 	"lang_code"=> "hi",
@@ -1006,7 +1021,8 @@ $trads = array(
 	"everything"=> "सब कुछ",
 	"minimum" => "न्यूनतम",
 	"alias"=> "इस रूप में भी जाना जाता है",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "चित्रतत्व"
 ),
 "id" => array(
 	"lang_code"=> "id",
@@ -1069,7 +1085,8 @@ $trads = array(
 	"everything"=> "Segalanya",
 	"minimum" => "Minimum",
 	"alias"=> "Nama lain",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "piksel"
 ),
 "it" => array(
 	"lang_code"=> "it",
@@ -1132,7 +1149,8 @@ $trads = array(
 	"everything"=> "tutto",
 	"minimum" => "minimo",
 	"alias"=> "Anche conosciuto come",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "pixel"
 ),
 "ja" => array(
 	"lang_code"=> "ja",
@@ -1195,7 +1213,8 @@ $trads = array(
 	"everything"=> "すべてのもの",
 	"minimum" => "最小",
 	"alias"=> "別名",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "ピクセル"
 ),
 "jv" => array(
 	"lang_code"=> "jv",
@@ -1258,7 +1277,8 @@ $trads = array(
 	"everything"=> "Kabèh",
 	"minimum" => "minimal",
 	"alias"=> "Nama lain",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "piksel"
 ),
 "ko" => array(
 	"lang_code"=> "ko",
@@ -1321,7 +1341,8 @@ $trads = array(
 	"everything"=> "모든 문서",
 	"minimum" => "최소한의",
 	"alias"=> "다른 이름",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "픽셀"
 ),
 "mu" => array(
 	"lang_code"=> "mu",
@@ -1384,7 +1405,8 @@ $trads = array(
 	"everything"=> "Houba",
 	"minimum" => "Houba",
 	"alias"=> "Houba",
-	"2" => "Houba"
+	"2" => "Houba",
+	"px" => "Houba"
 ),
 "nl" => array(
 	"lang_code"=> "nl",
@@ -1447,7 +1469,8 @@ $trads = array(
 	"everything"=> "Alles",
 	"minimum" => "Minimum",
 	"alias"=> "Ook bekend als",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "pixels"
 ),
 "pa" => array(
 	"lang_code"=> "pa",
@@ -1510,7 +1533,8 @@ $trads = array(
 	"everything"=> "ਸਭ ਕੁਝ",
 	"minimum" => "ਘੱਟੋ-ਘੱਟ",
 	"alias"=> "ਇਹ ਵੀ ਦੇ ਤੌਰ ਤੇ ਜਾਣਿਆ",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "ਪਿਕਸਲ"
 ),
 "pl" => array(
 	"lang_code"=> "pl",
@@ -1573,7 +1597,8 @@ $trads = array(
 	"everything"=> "wszystko",
 	"minimum" => "minimalny",
 	"alias"=> "Inne nazwy",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "pikseli"
 ),
 "pt" => array(
 	"lang_code"=> "pt",
@@ -1636,7 +1661,8 @@ $trads = array(
 	"everything"=> "Tudo",
 	"minimum" => "mínimo",
 	"alias"=> "Nomes alternativos",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "pixels"
 ),
 "ru" => array(
 	"lang_code"=> "ru",
@@ -1699,7 +1725,8 @@ $trads = array(
 	"everything"=> "Все",
 	"minimum" => "Минимальный",
 	"alias"=> "Также известен как",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "пикселей"
 ),
 "sv" => array(
 	"lang_code"=> "sv",
@@ -1762,7 +1789,8 @@ $trads = array(
 	"everything"=> "allt",
 	"minimum" => "Minsta",
 	"alias"=> "Även känd som",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "pixlar"
 ),
 "sw" => array(
 	"lang_code"=> "sw",
@@ -1825,7 +1853,8 @@ $trads = array(
 	"everything"=> "Zote",
 	"minimum" => "Minimum",
 	"alias"=> "Pia inajulikana kama",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "piseli"
 ),
 "te" => array(
 	"lang_code"=> "te",
@@ -1888,7 +1917,8 @@ $trads = array(
 	"everything"=> "ప్రతిదీ",
 	"minimum" => "కనీస",
 	"alias"=> "గా కూడా తెలిసిన",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "పిక్సెళ్ళు"
 ),
 "th" => array(
 	"lang_code"=> "th",
@@ -1951,7 +1981,8 @@ $trads = array(
 	"everything"=> "ทุกอย่าง",
 	"minimum" => "ขั้นต่ำ",
 	"alias"=> "หรือที่เรียกว่า",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "พิกเซล"
 ),
 "tr" => array(
 	"lang_code"=> "tr",
@@ -2014,7 +2045,8 @@ $trads = array(
 	"everything"=> "Her şey",
 	"minimum" => "asgari",
 	"alias"=> "Şu şekilde de bilinir",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "piksel"
 ),
 "uk" => array(
 	"lang_code"=> "uk",
@@ -2077,7 +2109,8 @@ $trads = array(
 	"everything"=> "Всі",
 	"minimum" => "Мінімальний",
 	"alias"=> "Додаткові назви",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "пікселів"
 ),
 "vi" => array(
 	"lang_code"=> "vi",
@@ -2140,7 +2173,8 @@ $trads = array(
 	"everything"=> "Tất cả mọi thứ",
 	"minimum" => "Tối thiểu",
 	"alias"=> "Còn được gọi",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "điểm ảnh"
 ),
 "zh" => array(
 	"lang_code"=> "zh",
@@ -2203,7 +2237,8 @@ $trads = array(
 	"everything"=> "一切",
 	"minimum" => "最低限度",
 	"alias"=> "别名",
-	"2" => "HD"
+	"2" => "HD",
+	"px" => "像素"
 )
 );
 ?>

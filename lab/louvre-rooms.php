@@ -152,7 +152,7 @@ else
 <div>
 <?php
 if ($l=="fr")
-	echo "<a href=\"artworks/?l=fr&p=195&c0=1&c1=1&c170=1&c571=1&c3=1&c347=1&c1212=1&c18=1&q=19675\">Liste des œuvres des collections Louvre sur Wikidata</a>";
+	echo "<a href=\"artworks/?l=fr&p=195&c0=1&c1=1&c170=1&c571=1&c3=1&c347=1&c1212=1&c18=1&q=19675\">Liste des œuvres des collections du Louvre sur Wikidata</a>";
 else
 	echo "<a href=\"artworks/?l=en&p=195&c0=1&c1=1&c170=1&c571=1&c3=1&c347=1&c1212=1&c18=1&q=19675\">List of artworks from collections of the Musée du Louvre on Wikidata</a>";
 ?>
