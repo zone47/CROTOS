@@ -183,9 +183,9 @@ while($data = mysqli_fetch_assoc($rep)) {
 	if ($thumb_h!=""){
 		$commons_link="http://commons.wikimedia.org/wiki/File:".htmlentities(str_replace("?","%3F",str_replace(" ","_",$p18_str)), ENT_QUOTES, "UTF-8");
 		if ($disp==0)
-			$cartel.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;px\"><img src=\"img/commons_ico.png\" alt=\"\"/></a>";
+			$cartel.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;".translate($l,"px")."\"><img src=\"img/commons_ico.png\" alt=\"\"/></a>";
 		else
-			$cartel.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;px\"><img src=\"img/commons_ico_day.png\" alt=\"\"/></a>";
+			$cartel.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;".translate($l,"px")."\"><img src=\"img/commons_ico_day.png\" alt=\"\"/></a>";
 	}
 	else{
 		$dp=test_dp($id_artw);
@@ -379,7 +379,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 		}
 		echo "<!-- $commons_artist-->";
 		/*$ca=preg_replace("/<p[^>]+\>/i","",preg_replace("/<\/?img[^>]*\>/i", "",preg_replace("/<\/?ul[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?div[^>]*\>/i", "",$commons_artist))))));*/
-		$cf="<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;px\" class=\"commons_link\">".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;px</a><br/>";
+		$cf="<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;".translate($l,"px")."\" class=\"commons_link\">".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;".translate($l,"px")."</a><br/>";
 		$ca=del_html($commons_artist);
 		$cc=del_html($commons_credit);
 
