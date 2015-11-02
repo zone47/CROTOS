@@ -375,7 +375,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 			}
 			echo "<!-- $license -->";
 			$li=$license;
-			//$license=esc_dblq(htmlentities($li), ENT_QUOTES, "UTF-8");
+			$license = esc_dblq(htmlentities($li, ENT_QUOTES, "UTF-8"));
 		}
 		echo "<!-- $commons_artist-->";
 		/*$ca=preg_replace("/<p[^>]+\>/i","",preg_replace("/<\/?img[^>]*\>/i", "",preg_replace("/<\/?ul[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?div[^>]*\>/i", "",$commons_artist))))));*/
@@ -387,7 +387,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 		if (($ca!="")&&($li!=""))
 			$cred.="&nbsp;&nbsp;|&nbsp;&nbsp;";
 		$cred.=$li;
-		if (($cred!="")&&($cc!=""))
+		if ((($ca!="")&&($cc!=""))||(($li!="")&&($cc!="")))
 			$cred.="&nbsp;&nbsp;|&nbsp;&nbsp;";
 		$cred.=$cc;
 		
@@ -399,7 +399,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 		if (($commons_artist!="")&&($license!=""))
 			$credits.="&nbsp;&nbsp;|&nbsp;&nbsp;";
 		$credits.=$license;
-		if (($credits!="")&&($commons_credit!=""))
+		if ((($credits!="")&&($commons_credit!=""))||(($license!="")&&($commons_credit!="")))
 			$credits.="&nbsp;&nbsp;|&nbsp;&nbsp;";
 		$credits.=$commons_credit;
 		if ($multi_res)

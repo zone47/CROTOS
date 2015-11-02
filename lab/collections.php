@@ -30,7 +30,7 @@ function nb_prop($prop, $id_prop,$glob=0){
 	if ($prop=="217")
 		$clause=" P217!='' ";
 	if ($prop=="link")
-		$clause=" (P347!='' OR P350!='' OR P727!='' OR P1212!='' OR link!='')";
+		$clause=" (P347!='' OR P350!='' OR P727!='' OR P1212!='' OR P2108!='' OR link!='')";
 	
 	if ($glob!=1){
 		$where="(id_prop=$id_prop";
@@ -108,7 +108,7 @@ caption {
     <th>N° inv</th>  
     <th>Genre</th>
     <th>Basé sur</th>  
-    <th>Réf. autorité</th>  
+    <!--<th>Réf. autorité</th>  -->
     <th>Dépeint p180 (moyenne)</th>  
     <th></th>  
     <th></th>  
@@ -131,7 +131,7 @@ $nb_date=nb_prop("571",$id_prop,1);
 $nb_inv=nb_prop("217",$id_prop,1);
 $nb_genre=nb_prop("136",$id_prop,1);
 $nb_base=nb_prop("144",$id_prop,1);
-$nb_link=nb_prop("link",$id_prop,1);
+//$nb_link=nb_prop("link",$id_prop,1);
 $nb_dep=nb_prop("180",$id_prop,1);
 
 echo "<tr>\n";
@@ -146,7 +146,7 @@ echo "	<td class=\"images\">".percent($nb_date,$nbartworks)."</td>\n";
 echo "	<td class=\"images\">".percent($nb_inv,$nbartworks)."</td>\n";
 echo "	<td class=\"images\">".percent($nb_genre,$nbartworks)."</td>\n";
 echo "	<td class=\"images\">".percent($nb_base,$nbartworks)."</td>\n";
-echo "	<td class=\"images\">".percent($nb_link,$nbartworks)."</td>\n";
+//echo "	<td class=\"images\">".percent($nb_link,$nbartworks)."</td>\n";
 echo "	<td class=\"images\">".round(intval($nb_dep)/intval($nbartworks),2)."</td>\n";
 echo "	<td><a href=\"/crotos/\">";
 if ($l=="fr") echo "voir les œuvres"; else echo "view artworks";
@@ -171,7 +171,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 	$nb_inv=nb_prop("217",$id_prop);
 	$nb_genre=nb_prop("136",$id_prop);
 	$nb_base=nb_prop("144",$id_prop);
-	$nb_link=nb_prop("link",$id_prop);
+	//$nb_link=nb_prop("link",$id_prop);
 	$nb_dep=nb_prop("180",$id_prop);
 	
 	if ($data['qwd']!=0){
@@ -187,7 +187,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 		echo "	<td class=\"images\">".percent($nb_inv,$nbartworks)."</td>\n";
 		echo "	<td class=\"images\">".percent($nb_genre,$nbartworks)."</td>\n";
 		echo "	<td class=\"images\">".percent($nb_base,$nbartworks)."</td>\n";
-		echo "	<td class=\"images\">".percent($nb_link,$nbartworks)."</td>\n";
+		//echo "	<td class=\"images\">".percent($nb_link,$nbartworks)."</td>\n";
 		echo "	<td class=\"images\">".round(intval($nb_dep)/intval($nbartworks),2)."</td>\n";
 		echo "	<td><a href=\"/crotos/?p$prop_query=".$data['qwd']."\">";
 		if ($l=="fr") echo "voir les œuvres"; else echo "view artworks";
@@ -203,7 +203,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 </table>
 <p id="min_list"> Liste des institutions avec plus de 50 œuvres dont moins de 10% avec image :<br/>
 <?php 
-$museum_min = array(1464509,705551,671384,1192305,188740,1416890,49133,239303,160236,510324,430682,844926,842858,2296362,526170,214867,2983474,5476145,1952033);
+$museum_min = array(1464509,705551,671384,1192305,188740,1416890,49133,239303,160236,510324,430682,844926,842858,2296362,526170,214867,2983474,5476145,1952033,1700481);
 for ($i=0;$i<count($museum_min);$i++){
 	if ($i!=0)
 		echo " – ";

@@ -1809,7 +1809,7 @@
                 titleHeight = infoPanelMinHeight;
             
             if (infoPanel.height() !== titleHeight){
-                infoPanel.stop().animate({height : titleHeight}, 500, function(){ 
+                infoPanel.stop().animate({height : titleHeight}, 100, function(){ 
                 
                     if (options.renderInfoExternally){
                     
@@ -1833,7 +1833,7 @@
         function hideInfoPanel(callback)
         {
             clearTimeout(hideInfoTimeout);
-            infoPanel.stop().animate({ height: 0 }, 500, function(){
+            infoPanel.stop().animate({ height: 0 }, 0, function(){
                 if (callback)
                     callback();
             });
@@ -1843,7 +1843,7 @@
             if (menuPanel)
             {
                 clearTimeout(hideMenuTimeout);
-                menuPanel.stop().animate({ top: menuHidePosition }, 500, function(){
+                menuPanel.stop().animate({ top: menuHidePosition }, 0, function(){
                     if (callback)
                         callback();
                 });

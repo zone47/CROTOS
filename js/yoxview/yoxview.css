@@ -222,6 +222,10 @@
 }
 #yoxview_infoPanel a, #yoxview .yoxview_error a{ text-decoration:underline; text-decoration-style:dotted; outline: none; }
 #yoxview_infoPanel a:hover, #yoxview .yoxview_error a:hover{text-decoration: underline;  }
+#yoxview_infoNotice a,#yoxview_infoNotice a:link,#yoxview_infoNotice a:visited{ text-decoration:none;border-bottom: 1px dotted #333;}
+#yoxview_infoNotice a:focus,#yoxview_infoNotice a:hover,#yoxview_infoNotice a:active{ text-decoration:none;border-bottom: 1px solid #d3d3d3;}
+#yoxview_infoNotice .yox_links a,#yoxview_infoNotice .yox_links a:link,#yoxview_infoNotice .yox_links a:visited { text-decoration:none;border-bottom:00;}
+#yoxview_infoNotice .yox_links a:focus,#yoxview_infoNotice .yox_links a:hover,#yoxview_infoNotice .yox_links a:active { text-decoration:none;border-bottom:0;}
 #yoxview_infoPanel #yoxview_infoText a, #yoxview .yoxview_error a{ text-decoration:none; text-decoration-style:dotted; outline: none; }
 #yoxview_infoPanel #yoxview_infoText a:hover, #yoxview .yoxview_error a:hover{text-decoration: underline;  }
 #yoxview_infoPanel a.yoxviewInfoLink
