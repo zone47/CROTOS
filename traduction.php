@@ -2,6 +2,7 @@
 /* / */
 $trads = array(
 "ar" => array(
+	"artwork"=> "عمل فني",
 	"lang_code"=> "ar",
 	"language"=> "اللغة",
 	"result"=> "النتائج",
@@ -66,6 +67,7 @@ $trads = array(
 	"px" => "بكسل"
 ),
 "bn" => array(
+	"artwork"=> "চারু ও কারু কলা কাজ",
 	"lang_code"=> "bn",
 	"language"=> "ভাষা",
 	"result"=> "ফলাফল",
@@ -130,6 +132,7 @@ $trads = array(
 	"px" => "পিক্সেল"
 ),
 "br" => array(
+	"artwork"=> "artwork",
 	"lang_code"=> "br",
 	"language"=> "Yezh",
 	"result"=> "disoc'h",
@@ -194,6 +197,7 @@ $trads = array(
 	"px" => "piksel"
 ),
 "ca" => array(
+	"artwork"=> "obra d'art",
 	"lang_code"=> "ca",
 	"language"=> "Idioma",
 	"result"=> "resultat",
@@ -257,6 +261,7 @@ $trads = array(
 	"px" => "píxels"
 ),
 "cs" => array(
+	"artwork"=> "umělecké dílo",
 	"lang_code"=> "cs",
 	"language"=> "Jazyk",
 	"result"=> "výsledek",
@@ -321,6 +326,7 @@ $trads = array(
 	"px" => "pixelů"
 ),
 "da" => array(
+	"artwork"=> "kunstværk",
 	"lang_code"=> "da",
 	"language"=> "Sprog",
 	"result"=> "resultat",
@@ -385,6 +391,7 @@ $trads = array(
 	"px" => "punkter"
 ),
 "de" => array(
+	"artwork"=> "Kunstwerk",
 	"lang_code"=> "de",
 	"language"=> "Sprache",
 	"result"=> "Ergebnis",
@@ -449,6 +456,7 @@ $trads = array(
 	"px" => "Pixel"
 ),
 "el" => array(
+	"artwork"=> "έργο τέχνης",
 	"lang_code"=> "el",
 	"language"=> "Γλώσσα",
 	"result"=> "Αποτέλεσμα",
@@ -513,6 +521,7 @@ $trads = array(
 	"px" => "εικονοστοιχεία"
 ),
 "en" => array(
+	"artwork"=> "artwork",
 	"lang_code"=> "en",
 	"language"=> "Language",
 	"result"=> "result",
@@ -577,6 +586,7 @@ $trads = array(
 	"px" => "pixels"
 ),
 "eo" => array(
+	"artwork"=> "artverko",
 	"lang_code"=> "eo",
 	"language"=> "Lingvo",
 	"result"=> "rezulto",
@@ -641,6 +651,7 @@ $trads = array(
 	"px" => "rastrumeroj"
 ),
 "es" => array(
+	"artwork"=> "obra de arte",
 	"lang_code"=> "es",
 	"language"=> "Idioma",
 	"result"=> "resultado",
@@ -705,6 +716,7 @@ $trads = array(
 	"px" => "píxeles"
 ),
 "fa" => array(
+	"artwork"=> "کار هنری",
 	"lang_code"=> "fa",
 	"language"=> "زبان",
 	"result"=> "نتیجهٔ",
@@ -769,6 +781,7 @@ $trads = array(
 	"px" => "پیکسل"
 ),
 "fi" => array(
+	"artwork"=> "taideteos",
 	"lang_code"=> "fi",
 	"language"=> "Kieli",
 	"result"=> "tulokset",
@@ -833,6 +846,7 @@ $trads = array(
 	"px" => "kuvapistettä"
 ),
 "fr" => array(
+	"artwork"=> "œuvre d’art",
 	"lang_code"=> "fr",
 	"language"=> "Langue",
 	"result"=> "résultat",
@@ -897,6 +911,7 @@ $trads = array(
 	"px" => "pixels"
 ),
 "he" => array(
+	"artwork"=> "יצירה",
 	"lang_code"=> "he",
 	"language"=> "שפת",
 	"result"=> "תוצאה",
@@ -961,6 +976,7 @@ $trads = array(
 	"px" => "פיקסלים"
 ),
 "hi" => array(
+	"artwork"=> "कला का काम",
 	"lang_code"=> "hi",
 	"language"=> "भाषा",
 	"result"=> "परिणाम",
@@ -1025,6 +1041,7 @@ $trads = array(
 	"px" => "चित्रतत्व"
 ),
 "id" => array(
+	"artwork"=> "Karya seni",
 	"lang_code"=> "id",
 	"language"=> "Bahasa",
 	"result"=> "Hasil",
@@ -1089,6 +1106,7 @@ $trads = array(
 	"px" => "piksel"
 ),
 "it" => array(
+	"artwork"=> "opera d'arte",
 	"lang_code"=> "it",
 	"language"=> "Lingua",
 	"result"=> "risultato",
@@ -1153,6 +1171,7 @@ $trads = array(
 	"px" => "pixel"
 ),
 "ja" => array(
+	"artwork"=> "作品",
 	"lang_code"=> "ja",
 	"language"=> "使用言語",
 	"result"=> "検索結果 ",
@@ -1217,6 +1236,7 @@ $trads = array(
 	"px" => "ピクセル"
 ),
 "jv" => array(
+	"artwork"=> "artwork",
 	"lang_code"=> "jv",
 	"language"=> "Basa",
 	"result"=> "asil",
@@ -1281,6 +1301,7 @@ $trads = array(
 	"px" => "piksel"
 ),
 "ko" => array(
+	"artwork"=> "예술작품",
 	"lang_code"=> "ko",
 	"language"=> "언어",
 	"result"=> "결과",
@@ -1345,6 +1366,7 @@ $trads = array(
 	"px" => "픽셀"
 ),
 "mu" => array(
+	"artwork"=> "Houba",
 	"lang_code"=> "mu",
 	"language"=> "Houba",
 	"result"=> "Houba",
@@ -1409,6 +1431,7 @@ $trads = array(
 	"px" => "Houba"
 ),
 "nl" => array(
+	"artwork"=> "kunstwerk",
 	"lang_code"=> "nl",
 	"language"=> "Taal",
 	"result"=> "resultaat",
@@ -1473,6 +1496,7 @@ $trads = array(
 	"px" => "pixels"
 ),
 "pa" => array(
+	"artwork"=> "ਕਲਾ ਦਾ ਕੰਮ",
 	"lang_code"=> "pa",
 	"language"=> "ਭਾਸ਼ਾ",
 	"result"=> "ਨਤੀਜੇ",
@@ -1537,6 +1561,7 @@ $trads = array(
 	"px" => "ਪਿਕਸਲ"
 ),
 "pl" => array(
+	"artwork"=> "dzieło sztuki",
 	"lang_code"=> "pl",
 	"language"=> "Język",
 	"result"=> "wynik",
@@ -1601,6 +1626,7 @@ $trads = array(
 	"px" => "pikseli"
 ),
 "pt" => array(
+	"artwork"=> "obra de arte",
 	"lang_code"=> "pt",
 	"language"=> "Língua",
 	"result"=> "resultado",
@@ -1665,6 +1691,7 @@ $trads = array(
 	"px" => "pixels"
 ),
 "ru" => array(
+	"artwork"=> "произведение искусства",
 	"lang_code"=> "ru",
 	"language"=> "Язык",
 	"result"=> "результаты",
@@ -1729,6 +1756,7 @@ $trads = array(
 	"px" => "пикселей"
 ),
 "sv" => array(
+	"artwork"=> "konstverk",
 	"lang_code"=> "sv",
 	"language"=> "Språk",
 	"result"=> "resultat",
@@ -1793,6 +1821,7 @@ $trads = array(
 	"px" => "pixlar"
 ),
 "sw" => array(
+	"artwork"=> "Kazi ya sanaa",
 	"lang_code"=> "sw",
 	"language"=> "Lugha",
 	"result"=> "tokeo",
@@ -1857,6 +1886,7 @@ $trads = array(
 	"px" => "piseli"
 ),
 "te" => array(
+	"artwork"=> "కళాకృతి",
 	"lang_code"=> "te",
 	"language"=> "భాష",
 	"result"=> "ఫలితాలు",
@@ -1921,6 +1951,7 @@ $trads = array(
 	"px" => "పిక్సెళ్ళు"
 ),
 "th" => array(
+	"artwork"=> "งานศิลปะ",
 	"lang_code"=> "th",
 	"language"=> "ภาษา",
 	"result"=> "ผลการค้นหา",
@@ -1985,6 +2016,7 @@ $trads = array(
 	"px" => "พิกเซล"
 ),
 "tr" => array(
+	"artwork"=> "Sanat eseri",
 	"lang_code"=> "tr",
 	"language"=> "Dil",
 	"result"=> "sonuçtan",
@@ -2049,6 +2081,7 @@ $trads = array(
 	"px" => "piksel"
 ),
 "uk" => array(
+	"artwork"=> "твір",
 	"lang_code"=> "uk",
 	"language"=> "Мова",
 	"result"=> "результат",
@@ -2113,6 +2146,7 @@ $trads = array(
 	"px" => "пікселів"
 ),
 "vi" => array(
+	"artwork"=> "nghệ phẩm",
 	"lang_code"=> "vi",
 	"language"=> "Ngôn ngữ",
 	"result"=> "kết quả",
@@ -2177,6 +2211,7 @@ $trads = array(
 	"px" => "điểm ảnh"
 ),
 "zh" => array(
+	"artwork"=> "艺术作品",
 	"lang_code"=> "zh",
 	"language"=> "语言",
 	"result"=> "条结果",

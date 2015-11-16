@@ -103,6 +103,7 @@ else
 $txtnav=str_replace("\'","'",$txtnav);
 if ($random){
 	$txtnav= "<a href=\"cosmos/\" class=\"nav_sec\">Cosmos</a> \n";
+	$txtnav.= "<a href=\"callisto/\" class=\"nav_sec\">Callisto</a> \n";
 	$txtnav.= "<a href=\"".$script_name."?".$liennav."\" class=\"page_ec\">".mb_ucfirst(translate($l,"random"))."</a> \n";
 	$txtnav.= "<a href=\"".$script_name."?".$liennav."&amp;p=1\" class=\"nav_sec\">".translate($l,"chronology")."</a>\n";
 	

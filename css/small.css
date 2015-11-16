@@ -9,7 +9,7 @@
 }
 #global #entete #bl_titre{
 	padding-left:2%;
-	width:170px;
+	width:190px;
 	padding-top:13px;
 }
 #global #img_crotos{
@@ -22,13 +22,19 @@
 	font-weight:bold;
 	font-size:22px ;
 } 
-#global #lab,#global #cosmos{
+#global #callisto,#global #lab,#global #cosmos{
 	display:inline;
 }
 #global #cosmos{
 	margin-left:6px
 }
 #global #cosmos::after { 
+	content: " - ";
+}
+#global #callisto{
+	margin-left:0px
+}
+#global #callisto::after { 
 	content: " - ";
 }
 #global #lab{

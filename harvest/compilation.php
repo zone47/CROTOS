@@ -32,7 +32,7 @@ $dirname = $fold_crotos.'harvest/items/';
 $dir = opendir($dirname); 
 $cpt=0;
 while($file = readdir($dir)) {
-	//Test if ($cpt==20) break;  
+	 //Test if ($cpt==30) break;  
 	if($file != '.' && $file != '..' && !is_dir($dirname.$file)){
 		$item=str_replace(".json","",$file);
 		$cpt++;
@@ -105,6 +105,7 @@ $tab_prop = array(
 	"P347"=> "", // Joconde ID
 	"P350"=> "", // RKDimages ID
 	"P373"=> "", // Commons Category
+    "P625"=> "", // Commons Category
 	"P727"=> "", // Europeana ID
 	"P856"=> "", // Official website
 	"P973"=> "", // described at URL
@@ -149,6 +150,12 @@ if ($tab_prop["P18"]!=""){
 	
 	if (($p18!=0)and(!($img_exists)))
 		$new_img=1;
+}
+$lat="";
+$lon="";
+if ($tab_prop["P625"]!=""){
+	$lat=$tab_prop["P625"]["latitude"];
+    $lon=$tab_prop["P625"]["longitude"];
 }
 
 //date P571 or P585
@@ -242,7 +249,7 @@ else{
 	$publi_img=$new_img;
 }
 
-$sql="INSERT INTO artworks (qwd,P18,hd,P214,P217,P347,P350,P373,P727,link,P1212,P2108,year1,year2,b_date,crea,img) VALUES ($item,".$p18.",$hd,\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$offic_url."\",\"".$tab_prop["P1212"]."\",\"".$tab_prop["P2108"]."\",$year1,$year2,\"".$b_date."\",".$publi_crea.",".$publi_img.")";
+$sql="INSERT INTO artworks (qwd,P18,hd,P214,P217,P347,P350,P373,P727,link,P1212,P2108,year1,year2,b_date,crea,img,lat,lon) VALUES ($item,".$p18.",$hd,\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$offic_url."\",\"".$tab_prop["P1212"]."\",\"".$tab_prop["P2108"]."\",$year1,$year2,\"".$b_date."\",".$publi_crea.",".$publi_img.",\"".$lat."\",\"".$lon."\")";
 $rep=mysqli_query($link,$sql);
 
 

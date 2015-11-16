@@ -10,6 +10,13 @@ $search_query=false;
 //define ("t_start", (float)$g_usec + (float)$g_sec);
 if ($s!=""){	
 	$tab_keywords=explode(" ",$s);
+	$stopwords=array("a", "an", "and", "in", "of", "on", "or", "so", "the", "to", "up","à","au", "de", "de", "des", "du", "en", "et", "la", "le", "les", "ou","un","une");
+	for ($i=0;$i<count($tab_keywords);$i++){
+		for ($j=0;$j<count($stopwords);$j++){
+			if ($tab_keywords[$i]==$stopwords[$j])
+				array_splice($tab_keywords,$i,1);
+		}
+	}
 	for ($i=0;$i<count($tab_keywords);$i++){
 		if (($tab_keywords[$i]!="")&&(strlen($tab_keywords[$i])>2)){
 			$search_query=true;

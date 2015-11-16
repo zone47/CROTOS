@@ -112,8 +112,32 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 				}
 			}
 		}
+        if ($ent_qwd["claims"]["P625"]){
+			$coord=$ent_qwd["claims"]["P625"];
+            foreach ($coord as $value){
+                $latitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["latitude"],10,'.',''),"0");
+				if ($latitem{strlen($latitem)-1}==".") $latitem.="0";
+                $lonitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["longitude"],10,'.',''),"0");
+				if ($lonitem{strlen($lonitem)-1}==".") $lonitem.="0";
+                $sql="UPDATE p".$prop." SET lat=\"".$latitem."\", lon=\"".$lonitem."\" WHERE qwd=$val_item";
+                $rep=mysqli_query($link,$sql);
+            }
+		}
 		
 	}
+    if ($prop==180){
+       if ($ent_qwd["claims"]["P625"]){
+			$coord=$ent_qwd["claims"]["P625"];
+            foreach ($coord as $value){
+                $latitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["latitude"],10,'.',''),"0");
+				if ($latitem{strlen($latitem)-1}==".") $latitem.="0";
+                $lonitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["longitude"],10,'.',''),"0");
+				if ($lonitem{strlen($lonitem)-1}==".") $lonitem.="0";
+                $sql="UPDATE p".$prop." SET lat=\"".$latitem."\", lon=\"".$lonitem."\" WHERE qwd=$val_item";
+                $rep=mysqli_query($link,$sql);
+            }
+		} 
+    }
 	// if 170 life dates
 	if ($prop==170){
 		$dates="";
