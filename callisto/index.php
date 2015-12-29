@@ -1,4 +1,13 @@
 <?php
+$m=0;
+if (isset($_COOKIE['m']))
+	$m=intval($_COOKIE['m']);
+if (isset($_GET['m']))
+	if ($_GET['m']!=""){ 
+		setcookie ("m",$_GET['m'], time() + 31536000, "/");
+		$m=$_GET['m'];
+	}
+	
 $l="fr"; 
 if (isset($_COOKIE['l']))
 	$l=$_COOKIE['l'];
@@ -66,7 +75,7 @@ for ($i=0;$i<count($lgs);$i++){
               <input id="searchbox" type="text" placeholder="" class="form-control">
               <span id="searchicon" class="fa fa-search form-control-feedback"></span>
             </div>
-          </form>-->
+          </form>
           <ul class="nav navbar-nav">
             <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;</a></li>
           </ul>
@@ -122,9 +131,11 @@ for ($i=0;$i<count($lgs);$i++){
           <div class="modal-header">
             <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">
-              <a href="https://twitter.com/shona_gon">/* / */</a>, powered by  <a href="hopenstreetmap.org" title="OpenStreetMap">OpenStreetMap</a>, <a href="http://www.mapquest.com" title="Mapquest">Mapquest</a>, <a href="http://leafletjs.com/" title="Leaflet">Leaflet</a>,  <a href='http://bryanmcbride.com'>bryanmcbride.com</a>, <a href="http://www.wikidata.org" title="Wikidata">Wikidata</a>, <a href="http://commons.wikimedia.org" title="Wikimedia Commons">Wikimedia Commons</a>, al. and <3
+              <a href="https://twitter.com/shona_gon">/* / */</a>, powered by  <a href="hopenstreetmap.org" title="OpenStreetMap">OpenStreetMap</a>, <a href="http://www.mapquest.com" title="Mapquest">Mapquest</a>, <a href="http://leafletjs.com/" title="Leaflet">Leaflet</a>, <a href="http://getbootstrap.com/" title="Bootstrap">Bootstrap</a>, <a href='https://github.com/bmcbride/bootleaf'>Bootleaf</a>, <a href="http://www.wikidata.org" title="Wikidata">Wikidata</a>, <a href="http://commons.wikimedia.org" title="Wikimedia Commons">Wikimedia Commons</a>, al. and <3
             </h4>
-            <p>Ce truc a été codé à Paris 11e, le week-end du 13 novembre 2015. Pour continuer à aimer, créer, s'émerveiller et partager. En mémoire de toutes ces vies fauchées</p>
+            <p>Ce truc a été codé à Paris 11e, le week-end du 13 novembre 2015. Continuer à aimer, créer, s'émerveiller et partager. <a href="http://www.liberation.fr/apps/2015/11/13-novembre/">En mémoire de toutes ces vies fauchées</a> ⚘</p>
+            <p id="cartel"><img src="assets/img/degas_au_cafe.jpg" /><br>
+<span id="legende"><i>Au Café</i>, Edgar Degas, 1878, Collection Oskar Reinhart</span></p>
           </div>
           <div class="modal-body">
             <div id="attribution"></div>
@@ -156,8 +167,16 @@ echo "var results=\"".mb_ucfirst(translate($l,"results"))."\";\n";
     <script src="assets/js/app_fr.js"></script>-->
 <script>
 $( document ).ready(function() {
-var map, featureList, depictSearch = [], museumSearch = [], artworkSearch = [];
-
+var map, featureList, <?php 
+switch($m){
+	case 0:
+		echo " depictSearch = []";break;
+	case 1:
+		echo " museumSearch = []";break;
+	case 2:
+		echo " artworkSearch = []";break;
+}
+?>;
 function isInt(value) {
  var x;
  return isNaN(value) ? !1 : (x = parseFloat(value), (0 | x) === x);
@@ -246,7 +265,9 @@ function syncSidebar() {
   /* Empty sidebar features */
   $("#feature-list tbody").empty();
 
-  /* Loop through museums layer and add only features which are in the map bounds */
+<?php 
+switch($m){
+	case 0: ?>
   depicts.eachLayer(function (layer) {
     if (map.hasLayer(depictLayer)) {
       if (map.getBounds().contains(layer.getLatLng())) {
@@ -254,6 +275,9 @@ function syncSidebar() {
       }
     }
   });
+<?php break;
+	case 1:
+?>
   museums.eachLayer(function (layer) {
     if (map.hasLayer(museumLayer)) {
       if (map.getBounds().contains(layer.getLatLng())) {
@@ -261,6 +285,9 @@ function syncSidebar() {
       }
     }
   });
+<?php break;
+	case 2:
+?>
   artworks.eachLayer(function (layer) {
     if (map.hasLayer(artworkLayer)) {
       if (map.getBounds().contains(layer.getLatLng())) {
@@ -268,6 +295,9 @@ function syncSidebar() {
       }
     }
   });
+<?php break;
+}
+?>
   /* Update list.js featureList */
   featureList = new List("features", {
     valueNames:["feature-name"]
@@ -316,7 +346,7 @@ var markerClusters = new L.MarkerClusterGroup({
   zoomToBoundsOnClick: true,
   disableClusteringAtZoom: 9
 });
-/* Empty layer placeholder to add to layer control for listening when to add/remove museums to markerClusters layer */
+
 var depictLayer = L.geoJson(null);
 var depicts = L.geoJson(null, {
   pointToLayer: function (feature, latlng) {
@@ -365,12 +395,7 @@ var depicts = L.geoJson(null, {
     }
   }
 });
-$.getJSON("data/depicts_" + l + ".geojson", function (data) {
-  depicts.addData(data);
-  map.addLayer(depictLayer);
-});
 
-/* Empty layer placeholder to add to layer control for listening when to add/remove museums to markerClusters layer */
 var museumLayer = L.geoJson(null);
 var museums = L.geoJson(null, {
   pointToLayer: function (feature, latlng) {
@@ -421,11 +446,7 @@ var museums = L.geoJson(null, {
     }
   }
 });
-$.getJSON("data/museums_" + l + ".geojson", function (data) {
-  museums.addData(data);
-});
 
-/* Empty layer placeholder to add to layer control for listening when to add/remove museums to markerClusters layer */
 var artworkLayer = L.geoJson(null);
 var artworks = L.geoJson(null, {
   pointToLayer: function (feature, latlng) {
@@ -470,10 +491,30 @@ var artworks = L.geoJson(null, {
     }
   }
 });
+<?php 
+switch($m){
+	case 0: ?>
+$.getJSON("data/depicts_" + l + ".geojson", function (data) {
+  depicts.addData(data);
+  map.addLayer(depictLayer);
+});
+<?php break;
+	case 1:
+?>
+$.getJSON("data/museums_" + l + ".geojson", function (data) {
+  museums.addData(data);
+  map.addLayer(museumLayer);
+});
+<?php break;
+	case 2:
+?>
 $.getJSON("data/artworks_" + l + ".geojson", function (data) {
   artworks.addData(data);
+  map.addLayer(artworkLayer);
 });
-
+<?php break;
+}
+?>
 
 map = L.map("map", {
   zoom: 3,
@@ -485,33 +526,57 @@ map = L.map("map", {
 
 /* Layer control listeners that allow for a single markerClusters layer */
 map.on("overlayadd", function(e) {
+<?php 
+switch($m){
+	case 0: ?>
   if (e.layer === depictLayer) {
     markerClusters.addLayer(depicts);
     syncSidebar();
   }	
+<?php break;
+	case 1:
+?>
   if (e.layer === museumLayer) {
     markerClusters.addLayer(museums);
     syncSidebar();
   }
+<?php break;
+	case 2:
+?>
   if (e.layer === artworkLayer) {
     markerClusters.addLayer(artworks);
     syncSidebar();
   }
+<?php break;
+}
+?>
 });
 
 map.on("overlayremove", function(e) {
+<?php 
+switch($m){
+	case 0: ?>
   if (e.layer === depictLayer) {
     markerClusters.removeLayer(depicts);
     syncSidebar();
   }
+<?php break;
+	case 1:
+?>
   if (e.layer === museumLayer) {
     markerClusters.removeLayer(museums);
     syncSidebar();
   }
+<?php break;
+	case 2:
+?>
   if (e.layer === artworkLayer) {
     markerClusters.removeLayer(artworks);
     syncSidebar();
   }
+<?php break;
+}
+?>
 });
 
 /* Filter sidebar feature list to only show features in current map bounds */
@@ -624,9 +689,27 @@ $("#featureModal").on("hidden.bs.modal", function (e) {
 $(document).one("ajaxStop", function () {
   $("#loading").hide();
   sizeLayerControl();
-  featureList = new List("features", {valueNames:["depicts"]});
-  featureList.sort("depicts", {order:"desc"});
+  featureList = new List("features", {valueNames:["feature-name"]});
+<?php 
+switch($m){
+	case 0: ?>
+  featureList.sort("feature-name", {order:"desc"});    
+<?php break;
+	case 1:
+?>
+  featureList.sort("feature-name", {order:"desc"});
+<?php break;
+	case 2:
+?>
   
+  featureList.sort("feature-name", {order:"asc"});
+<?php break;
+}
+?>
+
+ <?php 
+switch($m){
+	case 0: ?>
   var depictsBH = new Bloodhound({
     name: "Depicts",
     datumTokenizer: function (d) {
@@ -635,8 +718,11 @@ $(document).one("ajaxStop", function () {
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     local: depictSearch,
     limit: 10
-  });
-  	
+  });    
+  depictsBH.initialize();
+<?php break;
+	case 1:
+?>
   var museumsBH = new Bloodhound({
     name: "Museums",
     datumTokenizer: function (d) {
@@ -646,7 +732,10 @@ $(document).one("ajaxStop", function () {
     local: museumSearch,
     limit: 10
   });
-  
+  museumsBH.initialize();
+<?php break;
+	case 2:
+?>
   var artworksBH = new Bloodhound({
     name: "Artworks",
     datumTokenizer: function (d) {
@@ -656,17 +745,20 @@ $(document).one("ajaxStop", function () {
     local: artworkSearch,
     limit: 10
   });
-
-  depictsBH.initialize();
-  museumsBH.initialize();
   artworksBH.initialize();
+<?php break;
+}
+?> 
   
   /* instantiate the typeahead UI */
   $("#searchbox").typeahead({
     minLength: 3,
     highlight: true,
     hint: false
-  }, {
+  },<?php 
+switch($m){
+	case 0: ?>
+ {
     name: "Depicts",
     displayKey: "name",
     source: depictsBH.ttAdapter(),
@@ -674,7 +766,11 @@ $(document).one("ajaxStop", function () {
       header: "<h4 class='typeahead-header'><img src='assets/img/depicts.png' width='24' height='28'>&nbsp;<?php echo mb_ucfirst(translate($l,"180")) ?></h4>",
       suggestion: Handlebars.compile(["{{name}}"].join(""))
     }
-  }, {
+  }    
+<?php break;
+	case 1:
+?>
+{
     name: "Museums",
     displayKey: "name",
     source: museumsBH.ttAdapter(),
@@ -682,7 +778,11 @@ $(document).one("ajaxStop", function () {
       header: "<h4 class='typeahead-header'><img src='assets/img/museum.png' width='24' height='28'>&nbsp;<?php echo mb_ucfirst(translate($l,"195")) ?></h4>",
       suggestion: Handlebars.compile(["{{name}}"].join(""))
     }
-  }, {
+  }
+<?php break;
+	case 2:
+?>
+{
     name: "Artworks",
     displayKey: "name",
     source: artworksBH.ttAdapter(),
@@ -690,8 +790,14 @@ $(document).one("ajaxStop", function () {
       header: "<h4 class='typeahead-header'><img src='assets/img/artwork.png' width='24' height='28'>&nbsp;<?php echo mb_ucfirst(translate($l,"artwork")) ?></h4>",
       suggestion: Handlebars.compile(["{{name}}"].join(""))
     }
-  }).on("typeahead:selected", function (obj, datum) {
-    if (datum.source === "Depicts") {
+  }
+<?php break;
+}
+?>).on("typeahead:selected", function (obj, datum) {
+<?php 
+switch($m){
+	case 0: ?>
+   if (datum.source === "Depicts") {
       if (!map.hasLayer(depictLayer)) {
         map.addLayer(depictLayer);
       }
@@ -699,9 +805,11 @@ $(document).one("ajaxStop", function () {
       if (map._layers[datum.id]) {
         map._layers[datum.id].fire("click");
       }
-    }
-	
-	if (datum.source === "Museums") {
+    }    
+<?php break;
+	case 1:
+?>
+    if (datum.source === "Museums") {
       if (!map.hasLayer(museumLayer)) {
         map.addLayer(museumLayer);
       }
@@ -710,7 +818,9 @@ $(document).one("ajaxStop", function () {
         map._layers[datum.id].fire("click");
       }
     }
-	
+<?php break;
+	case 2:
+?>
 	if (datum.source === "Artworks") {
       if (!map.hasLayer(artworkLayer)) {
         map.addLayer(artworkLayer);
@@ -720,6 +830,14 @@ $(document).one("ajaxStop", function () {
         map._layers[datum.id].fire("click");
       }
     }
+<?php break;
+}
+?>
+
+	
+
+	
+
 	
     if ($(".navbar-collapse").height() > 50) {
       $(".navbar-collapse").collapse("hide");
@@ -744,8 +862,6 @@ if (!L.Browser.touch) {
 } else {
   L.DomEvent.disableClickPropagation(container);
 }
-
-
 
 });
 </script>

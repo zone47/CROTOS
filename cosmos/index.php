@@ -33,11 +33,6 @@ else {
 include "../header.php";
 ?>      
 <script>
-$(document).ready(function() {
-	$('#lg,#nb,#d1,#d2,#listp31,#miss_props input,.crit_sel').change(function() {
-		$('#form').submit();
-	});
-});
 $(function(){
 	$('#topic_title').autoComplete({
 		minChars: 2,
@@ -85,10 +80,12 @@ $(function(){
 include "../access.php";
 ?>  
 <div id="entete">
+<form action="<?php echo $script_name; ?>" method="get" id="form"  name="form"  accept-charset="UTF-8">
 	<?php 
 	include "../top.php";
 	include "../form.php"; 
-?>    
+?>
+</form>   
 </div>
 <?php
 	include "../nav_index.php"; 

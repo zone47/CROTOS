@@ -476,6 +476,10 @@ footer img{
 	margin-left:5px;
 	margin-right:5px;
 }
+footer .licence{
+	position:relative;
+	bottom:-2px;
+}
 footer.marge{
 	margin-top:3em;	
 }	

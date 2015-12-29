@@ -15,6 +15,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 	$cpt++;
 	$id_artw=$data['id'];
 	$qwd_art=$data['qwd'];
+	$hd=$data['hd'];
 	$inv=$data['P217'];
 	$described_link=$data['link'];
 	$titre="";
@@ -186,6 +187,14 @@ while($data = mysqli_fetch_assoc($rep)) {
 			$cartel.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;".translate($l,"px")."\"><img src=\"img/commons_ico.png\" alt=\"\"/></a>";
 		else
 			$cartel.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;".translate($l,"px")."\"><img src=\"img/commons_ico_day.png\" alt=\"\"/></a>";
+		if ($hd==1){
+			$hd_link="https://tools.wmflabs.org/zoomviewer/index.php?f=".htmlentities(str_replace("?","%3F",str_replace(" ","_",$p18_str)), ENT_QUOTES, "UTF-8");
+			if ($disp==0)
+				$cartel.="	<a href=\"".$hd_link."\" target=\"_blank\" title=\"Zoom HD\"><img src=\"img/magnifying_ico.png\" alt=\"\"/></a>";
+			else
+				$cartel.="	<a href=\"".$hd_link."\" target=\"_blank\" title=\"Zoom HD\"><img src=\"img/magnifying_ico_day.png\" alt=\"\"/></a>";
+			$yox_links.=" <a href=\"".$hd_link."\" title=\"Zoom HD\" target=\"_blank\"><img src=\"img/magnifying_ico.png\" alt=\"\"/></a>";
+		}
 	}
 	else{
 		$dp=test_dp($id_artw);

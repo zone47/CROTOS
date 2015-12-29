@@ -158,7 +158,7 @@ L.Control.GroupedLayers = L.Control.extend({
 
     for (i in this._layers) {
       obj = this._layers[i];
-      this._addItem(obj);
+      this._addItem(obj,i);
       overlaysPresent = overlaysPresent || obj.overlay;
       baseLayersPresent = baseLayersPresent || !obj.overlay;
     }
@@ -199,7 +199,7 @@ L.Control.GroupedLayers = L.Control.extend({
     return radioFragment.firstChild;
   },
 
-  _addItem: function (obj) {
+  _addItem: function (obj,i) {
     var label = document.createElement('label'),
         input,
         checked = this._map.hasLayer(obj.layer),
@@ -207,7 +207,9 @@ L.Control.GroupedLayers = L.Control.extend({
 
     if (obj.overlay) {
       input = document.createElement('input');
-      input.type = 'checkbox';
+      input.type = 'radio';
+	  input.name = 'm';
+	  input.value = i-27;
       input.className = 'leaflet-control-layers-selector';
       input.defaultChecked = checked;
     } else {
@@ -259,18 +261,16 @@ L.Control.GroupedLayers = L.Control.extend({
     var i, input, obj,
         inputs = this._form.getElementsByTagName('input'),
         inputsLen = inputs.length;
-
+	
     this._handlingClick = true;
 
     for (i = 0; i < inputsLen; i++) {
       input = inputs[i];
       obj = this._layers[input.layerId];
-
+	  
       if (input.checked && !this._map.hasLayer(obj.layer)) {
         this._map.addLayer(obj.layer);
-
-      } else if (!input.checked && this._map.hasLayer(obj.layer)) {
-        this._map.removeLayer(obj.layer);
+		window.location="?m="+i;
       }
     }
 

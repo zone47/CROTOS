@@ -445,7 +445,7 @@ function id_commons($p18_str){
 					$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$width."px-". urlencode($img).".png";
 			}
 			else{
-				$ext = pathinfo($img, PATHINFO_EXTENSION);
+				$ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));
 				$filename = pathinfo($img, PATHINFO_FILENAME);
 				$lossy="";
 				$tif=false;
