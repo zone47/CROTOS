@@ -1,6 +1,6 @@
 <?php
 /* / */
-set_time_limit(600);
+set_time_limit(1800);
 error_reporting(E_ALL & ~E_NOTICE);
 
 $host = '***'; 
@@ -10,8 +10,6 @@ $db = '***';
 $fic_sql_tmp="crotos_tmp.sql";
 $fic_sql="crotos.sql";
 $path="***";
-
-$link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 
 $file = $path."bdd/".$fic_sql_tmp.".zip";
 $pathzip=$path."bdd/";
@@ -27,10 +25,12 @@ if ($res === TRUE) {
 $cmd="mysql --default-character-set=utf8 -h ".$host." -u ".$user." -p".$pass." ".$db." < ".$path."bdd/".$fic_sql_tmp;
 exec($cmd);
 
+$link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 mysqli_query($link,"ALTER TABLE `artw_prop` ADD INDEX ( `id_artw` )");
 mysqli_query($link,"ALTER TABLE `artw_prop` ADD INDEX ( `id_prop` )");
 mysqli_query($link,"ALTER TABLE `label_page` ADD INDEX ( `qwd` )");
-
+mysqli_query($link,"ALTER TABLE `label_page` ADD INDEX(`label`)");
+mysqli_close($link);
 echo "updated";
 
 $cmd="mysqldump --default-character-set=utf8 -h ".$host." -u ".$user." -p".$pass." ".$db." > ".$path."bdd/".$fic_sql;
@@ -38,7 +38,7 @@ exec($cmd);
 
 $cmd="zip -j ".$path."bdd/".$fic_sql.".zip ".$path."bdd/".$fic_sql;
 exec($cmd);
-
+$link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 $ficdate = fopen("../dateupdate.txt", 'w');
 $res=mysqli_query($link,"select max(crea) as crea from publi");
 $data = mysqli_fetch_assoc($res);
@@ -86,7 +86,7 @@ exec($cmd);
 
 $to = "***"; 
 $subject = "Crotos - Mise à jour"; 
-$body = "Mise à jour effectuée."; 
+$body = "Mise à jour effectuée.<br/><a href=\"http://zone47.com/crotos/new.php\">http://zone47.com/crotos/new.php</a>"; 
 mail($to, $subject, $body);
 
 ?>
