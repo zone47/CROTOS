@@ -1,7 +1,7 @@
 <?php
 /* / */
 $cosmos=1;
-$tab_facets=array(31,170,135,136,144,921,180,195);
+$tab_facets=array(31,170,135,136,144,921,180,608,195);
 $prop=31;
 if (isset($_GET['f']))
 	if ($_GET['f']!="31") 

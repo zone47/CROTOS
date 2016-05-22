@@ -1,4 +1,5 @@
 <?php
+
 if ($num_rows>1)
 	$multi_res=true;
 else
@@ -7,8 +8,7 @@ if ($multi_res)
 	echo "<div id=\"contenu\" class=\"yoxview\" >";
 else
 	echo "<div id=\"contenu\" class=\"yoxview contentsolo\" >";	
-?>
-<?php
+
 $cpt=0;
 while($data = mysqli_fetch_assoc($rep)) {
 	$content="";
@@ -18,6 +18,18 @@ while($data = mysqli_fetch_assoc($rep)) {
 	$hd=$data['hd'];
 	$inv=$data['P217'];
 	$described_link=$data['link'];
+	if ($described_link==""){
+		if ($data['P727']!="")
+			$described_link="http://europeana.eu/portal/record/".$data['P727'].".html";
+		if ($data['P350']!="")
+			$described_link="https://rkd.nl/nl/explore/images/".$data['P350'];
+		if ($data['P2108']!="")
+			$described_link="https://www.kulturarv.dk/kid/VisVaerk.do?vaerkId=".$data['P2108'];
+		if ($data['P347']!="")
+			$described_link="http://www.culture.gouv.fr/public/mistral/joconde_fr?ACTION=CHERCHER&amp;FIELD_1=REF&amp;VALUE_1=".$data['P347'];
+		if ($data['P1212']!="")
+			$described_link="http://cartelfr.louvre.fr/cartelfr/visite?srv=car_not_frame&idNotice=".$data['P1212'];
+	}
 	$titre="";
 	$titre=label_item($qwd_art,$l);
 	$trunc_title=truncate($titre);
@@ -59,6 +71,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 	$subject=txt_prop($id_artw,921,$l);
 	$inspired=txt_prop($id_artw,941,$l);
 	$pendant=txt_prop($id_artw,1639,$l);
+	$exhibition=txt_prop($id_artw,608,$l);
 	
 	$p18=$data['P18'];
 	
@@ -234,7 +247,10 @@ while($data = mysqli_fetch_assoc($rep)) {
 
 	}
 	$url="/crotos/?q=".$qwd_art;	
-	$cartel.="\n <a href=\"".$url."\" title=\"Crotos\"><img src=\"img/crotos_ico.png\" alt=\"Crotos\" title=\"Crotos\"/></a>";
+	if ($disp==0)
+		$cartel.="\n <a href=\"".$url."\" title=\"Crotos\"><img src=\"img/crotos_ico.png\" alt=\"Crotos\" title=\"Crotos\"/></a>";
+	else
+		$cartel.="\n <a href=\"".$url."\" title=\"Crotos\"><img src=\"img/crotos_ico_day.png\" alt=\"Crotos\" title=\"Crotos\"/></a>";
 	
 	$cartel_links="\n				<div class=\"liens\">";
 	if ($loc_link!="")
@@ -320,6 +336,10 @@ while($data = mysqli_fetch_assoc($rep)) {
 	if ($location!="")
 		$cartel.="\n<p>".$location."</p>";
 		
+	if ($exhibition!=""){
+		$cartel.="\n<p>".$exhibition."</p>";		
+		$yox_cartel.="&nbsp;&nbsp;|&nbsp;&nbsp;".$exhibition;
+	}	
 	if ($mouvement!=""){
 		$cartel.="\n<p>".$mouvement."</p>";
 		$yox_cartel.="&nbsp;&nbsp;|&nbsp;&nbsp;".$mouvement;
