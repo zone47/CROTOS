@@ -1,6 +1,6 @@
 <div id="facets">
 <?php
-if (($y1=="-40000")&&($y2=="2015"))		
+if (($y1=="-40000")&&($y2=="2016"))		
 	echo "   		<div class=\"mode_plus\">";
 ?>
    		<div id="slider">
@@ -10,7 +10,7 @@ if (($y1=="-40000")&&($y2=="2015"))
             <input type="submit" id="ok2" value=" " />
         </div>
 <?php
-if (($y1=="-40000")&&($y2=="2015"))		
+if (($y1=="-40000")&&($y2=="2016"))		
 	echo "</div>";
 ?>
 <?php
@@ -48,8 +48,44 @@ if ($txt_crit!="")
 	echo "<span class=\"criteres\" >".$txt_crit."</span>";
 ?>
     </div>
+<?php
+if ($random){
+	if ($disp==0)
+		$day="";
+	else
+		$day="_day";
+	$tabalea=array(11824917,12838427,15280947,15284134,15290965,17355339,18433328,18573245,18674429,18890989,19005056,19609471,19759050,19912545,19960948,19961660,20087509,20198270,20489577,20749112,20891278,21665908,3439636,3630746,3842587,3950743,596683); 
+	$alea_rand = $tabalea[array_rand($tabalea, 1)];
+	$sql="SELECT artworks.qwd,commons_img.thumb FROM artworks, commons_img WHERE artworks.qwd=". $alea_rand." AND commons_img.id=artworks.P18";
+	$rep_pres=mysqli_query($link,$sql);
+	$data = mysqli_fetch_assoc($rep_pres);
+	$img1=str_replace("/200px","/99px",$data['thumb']);	
+	$qwd1=$data['qwd'];
 
-    <?php
+	echo "<div id=\"presentation\">";
+	echo "<a href=\"/crotos/?q=".$qwd1."\" id=\"art_pres\"><img src=\"".$img1."\" width=\"99\" height=\"75\"></a>";
+	if ($l=="fr")
+		echo "<p><a href=\"/crotos/\"><b>Crotos</b></a> <img src=\"/crotos/img/crotos_ico".$day.".png\" alt=\"\" /> est un moteur de recherche et d'affichage d'œuvres d'art s'appuyant sur <a href=\"https://www.wikidata.org\"><b>Wikidata</b></a> <img src=\"/crotos/img/wd_ico".$day.".png\" alt=\"\" /> et  <a href=\"https://commons.wikimedia.org/\"><b>Wikimedia Commons</b></a><img src=\"/crotos/img/commons_ico".$day.".png\" alt=\"\" /></p>";
+	else
+		echo "<p><a href=\"/crotos/\"><b>Crotos</b></a> <img src=\"/crotos/img/crotos_ico".$day.".png\" alt=\"\" /> is a search and display engine for visual artworks powered by <a href=\"https://www.wikidata.org\"><b>Wikidata</b></a> <img src=\"/crotos/img/wd_ico".$day.".png\" alt=\"\" /> and  <a href=\"https://commons.wikimedia.org/\"><b>Wikimedia Commons</b></a><img src=\"/crotos/img/commons_ico".$day.".png\" alt=\"\" /></p>";
+
+	$sql="SELECT count(id) as nbimg FROM artworks WHERE P18!=0";
+	$rep_nb=mysqli_query($link,$sql);
+	$data = mysqli_fetch_assoc($rep_nb);
+	$nb1=number_format(intval($data['nbimg']),0,'',' ');
+	$sql="SELECT count(id) as nbimg FROM artworks WHERE hd=1";
+	$rep_nb=mysqli_query($link,$sql);
+	$data = mysqli_fetch_assoc($rep_nb);
+	$nb2=number_format(intval($data['nbimg']),0,'',' ');
+
+	if ($l=="fr")
+		echo "<p class=\"pres_detail\">• <b>$nb1 œuvres</b>, dont $nb2 avec <b>image HD</b> <img src=\"/crotos/img/magnifying_ico".$day.".png\" alt=\"\" /></p><p class=\"pres_detail\">• Liens vers <b>Wikipédia</b> <img src=\"/crotos/img/wp_ico".$day.".png\" alt=\"\" />, <b>sites de référence</b> <img src=\"/crotos/img/site_link.png\" alt=\"\" /> – <b>multilingue</b> <img src=\"/crotos/img/i18n_ico".$day.".png\" alt=\"\" /> – <b>libre</b> <img src=\"/crotos/img/pd_ico".$day.".png\" alt=\"Domaine public\" /><img src=\"/crotos/img/cc0_ico".$day.".png\" alt=\"CC 0\" /><img src=\"/crotos/img/by_ico".$day.".png\" alt=\"Attribution\" /><img src=\"/crotos/img/sa_ico".$day.".png\" alt=\"Partage dans les mêmes conditions\" /> – <a href=\"/crotos/lab\"><b>Lab</b></a><img src=\"/crotos/img/lab_ico_day.png\" alt=\"\" /></p>";
+	else
+		echo "<p class=\"pres_detail\">• <b>$nb1 artworks</b>, including $nb2 with <b>HD image</b> <img src=\"/crotos/img/magnifying_ico".$day.".png\" alt=\"\" /></p><p class=\"pres_detail\">• Links to <b>Wikipedia</b> <img src=\"/crotos/img/wp_ico".$day.".png\" alt=\"\" />, <b>reference websites</b> <img src=\"/crotos/img/site_link.png\" alt=\"\" /> – <b>multilingual</b> <img src=\"/crotos/img/i18n_ico".$day.".png\" alt=\"\" /> – <b>free and open</b> <img src=\"/crotos/img/pd_ico".$day.".png\" alt=\"Domaine public\" /><img src=\"/crotos/img/cc0_ico".$day.".png\" alt=\"CC 0\" /><img src=\"/crotos/img/by_ico".$day.".png\" alt=\"BY\" /><img src=\"/crotos/img/sa_ico".$day.".png\" alt=\"Share alike\" /> – <a href=\"/crotos/lab/?l=en\"><b>Lab</b></a><img src=\"/crotos/img/lab_ico_day.png\" alt=\"\" /></p>";
+		
+	echo "</div>";
+}
+
 if ($mode==1){
 	echo "<div id=\"miss_props\">";//<b>".translate($l,"missing")."</b> : ";
 	$missing_props=array(1,18,2,170,571,195,276,180);
