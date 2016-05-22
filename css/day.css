@@ -111,6 +111,9 @@ input,select{
 .criteres{
 	color:#0f0f0f;
 }
+#presentation{
+	border:1px solid #afafaf;		
+}
 #tout{
 	color:#4F4F4F;	
 }

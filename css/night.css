@@ -82,6 +82,10 @@ a.wikidata:after {
 .libelle_criteres{
 	color:#efefef;
 }
+#presentation{
+	border:1px solid #333;		
+}
+
 #tout{
 	color:#4F4F4F;	
 }

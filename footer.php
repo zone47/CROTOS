@@ -3,24 +3,21 @@
     <span class="bl_foot"><a href="http://www.wikidata.org" title="<?php echo translate($l,"Wikidata"); ?>"><img src="/crotos/img/wikidata.png" alt="<?php echo translate($l,"Wikidata"); ?>"/></a>  <a href="http://commons.wikimedia.org" title="<?php echo translate($l,"Commons"); ?>"><img src="/crotos/img/wikimedia-commons.png" alt="<?php echo translate($l,"Commons"); ?>" /></a>  <a href="http://www.semanticpedia.org/" title="Sémanticpédia"><img src="/crotos/img/semanticpedia.png" alt="Sémanticpédia" /></a>    <img src="/crotos/img/photographer.png" alt="Photographers" />  al.</span>
     <span class="bl_foot"> and &lt;3</span>
     <div class="update"><?php
-$sql="SELECT count(id) as nbartworks FROM artworks";
-$rep=mysqli_query($link,$sql);
-$data = mysqli_fetch_assoc($rep);
-echo number_format(intval($data['nbartworks']),0,'',' ');
-if ($l=="fr")
-	echo " œuvres d'art – ";
-else
-	echo " artworks – ";
 $sql="SELECT count(id) as nbimg FROM artworks WHERE P18!=0";
 $rep=mysqli_query($link,$sql);
 $data = mysqli_fetch_assoc($rep);
 echo number_format(intval($data['nbimg']),0,'',' ');
 if ($l=="fr")
-	echo " avec ";
+	echo " œuvres d'art avec image";
 else
-	echo " with ";
+	echo "artworks with image";
 ?>
- image<a href="https://creativecommons.org/publicdomain/mark/1.0/" title="Public Domain Mark 1.0"><img src="/crotos/img/licence/PDM-icon.png" alt="Public Domain Mark 1.0" class="licence"></a>↔<a href="https://creativecommons.org/licenses/by-sa/4.0/" title="CC Attribution-ShareAlike"><img src="/crotos/img/licence/CC-BY-SA-icon.png" alt="CC Attribution-ShareAlike" class="licence"></a>– <?php 
+ <a href="https://creativecommons.org/publicdomain/mark/1.0/" title="Public Domain Mark 1.0"><img src="/crotos/img/licence/PDM-icon.png" alt="Public Domain Mark 1.0" class="licence"></a>↔<a href="https://creativecommons.org/licenses/by-sa/4.0/" title="CC Attribution-ShareAlike"><img src="/crotos/img/licence/CC-BY-SA-icon.png" alt="CC Attribution-ShareAlike" class="licence"></a>– <?php 
+if ($l=="fr")
+	echo "<a href=\"https://www.youtube.com/watch?v=-PiS-A3w3AM\">N'hésitez pas !</a> – ";
+else
+	echo "<a href=\"https://www.youtube.com/watch?v=-PiS-A3w3AM\">Be bold!</a> –  "; 
+ 
 $fp = fopen ($fold_crotos."dateupdate.txt", "r");
 $update=fgets ($fp, 255);
 if ($l=="fr")

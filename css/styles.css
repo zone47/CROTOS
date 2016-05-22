@@ -252,6 +252,32 @@ ul#access {
 	position:relative;
 	bottom:1px;
 }
+#presentation{
+	padding:10px;
+	margin:10px 20px 10px 0;
+	font-size:15px;
+	min-height:77px;
+	border-radius:10px;
+}
+#presentation p{
+	margin-left:126px;
+	margin-top:1px;
+	margin-bottom:4px;
+}
+#presentation .pres_detail{
+	margin-left:137px;
+	margin-bottom:1px;
+}
+#presentation p  img{
+	vertical-align:bottom;
+}
+#art_pres{
+	float:left;
+	display:block;
+}
+#art_pres img{
+	border:0;	
+}
 #facets{
 	clear:both;	
 	padding-top:12px;
@@ -375,7 +401,7 @@ ul#access {
 }
 .entete{
 	min-height:21px;	
-	padding:0 10px 0 5px;
+	padding:0 10px 0 3px;
 }
 .cartel{
 	margin-top:4px;
@@ -394,7 +420,7 @@ a.interne:hover,a.interne:focus,a.interne:active {
 }
 .btn_notice{
 	padding-top:4px;
-	padding-left:2px;
+	padding-left:0;
 	float:left;
 }
 .notice{
