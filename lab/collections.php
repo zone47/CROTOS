@@ -78,7 +78,7 @@ function nb_prop($prop, $id_prop,$glob=0){
     <script>
 $(document).ready(function() 
     { 
-        $("#occ").tablesorter( {sortList: [[2,1]]} );  
+        $("#occ").tablesorter( {sortList: [[1,1]]} );  
     } 
 ); 
     </script>
@@ -96,13 +96,11 @@ caption {
 	
 <table id="occ" class="tablesorter ">
 <caption style="padding-bottom:20px;"><strong>Statistiques par collection (50+ items) sur Crotos (données issues de <a href="http://www.wikidata.org/">Wikidata</a>)</strong><br>
-<small>Les ensembles des collections sont récupérés à partir de Wikidata et non-exhaustifs car filtrés selon certains types d'œuvres (cf <a href="http://zone47.com/dozo/crotos-moteur-de-recherche-sur-les-oeuvres-dart-dans-wikidata#selection">sélection</a>) et pour certaines institutions avec beaucoup d'œuvres mais dont moins de 10% avec image, seules les œuvres avec image ont été incorporées dans Crotos (cf <a href="#min_list">liste</a>).</small></caption>
+<small>Les ensembles des collections sont récupérés à partir de Wikidata et non-exhaustifs car filtrés selon certains types d'œuvres (cf <a href="http://zone47.com/dozo/crotos-moteur-de-recherche-sur-les-oeuvres-dart-dans-wikidata#selection">sélection</a>) et seuls les items avec image ou article Wikipédia sont récuéprés</caption>
 <thead> 
 <tr> 
     <th>Institution</th> 
     <th id="artworks">Œuvres</th> 
-    <th id="images">Image</th>
-    <th id="images">% Images</th>
     <th>Créateur</th>  
     <th>Date</th>  
     <th>N° inv</th>  
@@ -121,11 +119,6 @@ $rep=mysqli_query($link,$sql);
 $data = mysqli_fetch_assoc($rep);
 $nbartworks=$data['nbartworks'];
 
-$sql="SELECT count(id) as nbimg FROM artworks WHERE P18!=0";
-$rep=mysqli_query($link,$sql);
-$data = mysqli_fetch_assoc($rep);
-$nbimg=$data['nbimg'];
-
 $nb_crea=nb_prop("170",$id_prop,1);
 $nb_date=nb_prop("571",$id_prop,1);
 $nb_inv=nb_prop("217",$id_prop,1);
@@ -139,8 +132,6 @@ echo "	<td>";
 echo "Global";
 echo "</td>\n";
 echo "	<td class=\"artworks\">$nbartworks</td>\n";
-echo "	<td class=\"images\">$nbimg</td>\n";
-echo "	<td class=\"images\">".percent($nbimg,$nbartworks)."</td>\n";
 echo "	<td class=\"images\">".percent($nb_crea,$nbartworks)."</td>\n";
 echo "	<td class=\"images\">".percent($nb_date,$nbartworks)."</td>\n";
 echo "	<td class=\"images\">".percent($nb_inv,$nbartworks)."</td>\n";
@@ -180,8 +171,6 @@ while($data = mysqli_fetch_assoc($rep)) {
 		echo label_item($data['qwd'],$l)." <a href=\"https://www.wikidata.org/wiki/Q".$data['qwd']."\"> (Q".$data['qwd'].")</a>";
 		echo "</td>\n";
 		echo "	<td class=\"artworks\">$nbartworks</td>\n";
-		echo "	<td class=\"images\">$nbimg</td>\n";
-		echo "	<td class=\"images\">".percent($nbimg,$nbartworks)."</td>\n";
 		echo "	<td class=\"images\">".percent($nb_crea,$nbartworks)."</td>\n";
 		echo "	<td class=\"images\">".percent($nb_date,$nbartworks)."</td>\n";
 		echo "	<td class=\"images\">".percent($nb_inv,$nbartworks)."</td>\n";
@@ -199,19 +188,10 @@ while($data = mysqli_fetch_assoc($rep)) {
 	}
 }
 
-?>
-</table>
-<p id="min_list"> Liste des institutions avec plus de 50 œuvres dont moins de 10% avec image :<br/>
-<?php 
-$museum_min = array(2983474,5476145,705551,671384,1464509,1192305,188740,1416890,49133,239303,160236,510324,430682,844926,2296362,526170,214867,1952033,842858,2817221,18572999,18573057,1471477,2365880,1948674,132783);
-for ($i=0;$i<count($museum_min);$i++){
-	if ($i!=0)
-		echo " – ";
-	$wdq_link="https://tools.wmflabs.org/autolist/index.php?wdq=claim[195:%28tree[".$museum_min[$i]."][][361]%29]&run=Run";
-	echo "<a href=\"".$wdq_link."\"  class=\"externe\">".label_item($museum_min[$i],$l)."</a>";
-}
 mysqli_close($link);
 ?>
+</table>
+
 </p>
 </body>
 </html>

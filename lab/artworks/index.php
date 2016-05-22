@@ -154,21 +154,8 @@ jQuery(function($) {
         <div ng-repeat="collection in dataModel.collection">
         <form id="prop_form">
         	<div id="top_form">
-		  	<label for="lg" id="label_lg"><?php echo translate($lg,"language") ?></label>
-				<select name="l" id="lg">
-<?php
-for ($i=0;$i<count($lgs);$i++){
-	/* Easter egg */if (($lgs[$i]=="mu")&&($lg!="mu")) echo "<!--\n ";
-    echo "				<option value=\"".translate($lgs[$i],"lang_code")."\"";
-	if ($lg==translate($lgs[$i],"lang_code"))
-		 echo " selected=\"selected\"";
-	echo " >".translate($lgs[$i],"lg")."</option>\n";	
-	/* Easter egg */if (($lgs[$i]=="mu")&&($lg!="mu")) echo " -->\n";
-}
-?>
-		</select>
-        
-    	  <label for="props" id="label_prop"><b><?php if ($lg=="fr") echo "Propriété"; else echo "Property"; ?></b></label>  
+            
+            <label for="props" id="label_prop"><?php if ($lg=="fr") echo "Propriété"; else echo "Property"; ?></label>  
          <select name="p" id="props"><b>
 <?php
 //$tab_props=array(31,135,136,144,170,180,186,195,276,921,941);
@@ -187,6 +174,22 @@ for ($i=0;$i<count($tab_props);$i++){
 }
 ?>
 		</b></select>    
+            
+		  	<label for="lg" id="label_lg"><?php echo translate($lg,"language") ?></label>
+				<select name="l" id="lg">
+<?php
+for ($i=0;$i<count($lgs);$i++){
+	/* Easter egg */if (($lgs[$i]=="mu")&&($lg!="mu")) echo "<!--\n ";
+    echo "				<option value=\"".translate($lgs[$i],"lang_code")."\"";
+	if ($lg==translate($lgs[$i],"lang_code"))
+		 echo " selected=\"selected\"";
+	echo " >".translate($lgs[$i],"lg")."</option>\n";	
+	/* Easter egg */if (($lgs[$i]=="mu")&&($lg!="mu")) echo " -->\n";
+}
+?>
+		</select>
+        
+    	  
        	<div id="bl_search">
 
     	  <label for="search_wd" id="lb_search"><?php echo translate($lg,"search") ?></label>  
