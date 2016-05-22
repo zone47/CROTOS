@@ -21,6 +21,7 @@ mysqli_query($link,"TRUNCATE `p186`");
 mysqli_query($link,"TRUNCATE `p195`");
 mysqli_query($link,"TRUNCATE `p276`");
 mysqli_query($link,"TRUNCATE `p361`");
+mysqli_query($link,"TRUNCATE `p608`");
 mysqli_query($link,"TRUNCATE `p921`");
 mysqli_query($link,"TRUNCATE `p941`");
 mysqli_query($link,"TRUNCATE `p1639`");
@@ -264,7 +265,7 @@ $id_artwork=$row['id'];
 insert_label_page(1,$item,$id_artwork);
 
 // Other properties
-$tab_multi=array(31,135,136,144,170,179,180,186,195,276,361,921,941,1639);	
+$tab_multi=array(31,135,136,144,170,179,180,186,195,276,361,608,921,941,1639);	
 for ($i=0;$i<count($tab_multi);$i++){
 	if ($claims["P".$tab_multi[$i]])
 		foreach ($claims["P".$tab_multi[$i]] as $value){
@@ -325,7 +326,7 @@ for ($i=0;$i<count($tab_multi);$i++){
 			}
 		}
 	else
-		if (!(($tab_multi[$i]=="31")||($tab_multi[$i]=="1639")))
+		if (!(($tab_multi[$i]=="31")||($tab_multi[$i]=="608")||($tab_multi[$i]=="1639")))
 			$tab_miss["m".$tab_multi[$i]]=1;
 }
 

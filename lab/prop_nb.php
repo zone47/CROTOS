@@ -45,7 +45,7 @@ $h_thumb=80;
     <script>
 $(document).ready(function() 
     { 
-        $("#occ").tablesorter( {sortList: [[2,1], [1,0]]} ); 
+        $("#occ").tablesorter( {sortList: [[1,1]]} ); 
     } 
 ); 
     </script>
@@ -59,7 +59,7 @@ $(document).ready(function()
     	<label for="props" id="label_lg"><?php if ($l=="fr") echo "Propriété"; else echo "Property"; ?></label>
     	<select name="prop" id="props">
 <?php
-$tab_props=array(31,135,136,144,170,180,186,195,276,921,941);
+$tab_props=array(31,135,136,144,170,180,186,195,276,608,921,941);
 for ($i=0;$i<count($tab_props);$i++){
     echo "			<option value=\"".$tab_props[$i]."\"";
 	if ($prop==$tab_props[$i]) echo " selected=\"selected\"";
@@ -110,7 +110,6 @@ else { ?>
 <tr> 
     <th><?php echo ucfirst($lb_prop) ?></th> 
     <th id="artworks"><?php if ($l=="fr") echo "Œuvres"; else echo "Artworks"; ?></th> 
-    <th id="images"><?php if ($l=="fr") echo "avec images"; else echo "with images"; ?></th>
     <th></th>  
     <th></th>  
 </tr> 
@@ -151,7 +150,6 @@ while($data = mysqli_fetch_assoc($rep)) {
 			echo "</span>";
 		echo "</td>\n";
 		echo "	<td class=\"artworks\">$nbartworks</td>\n";
-		echo "	<td class=\"images\">$nbimg</td>\n";
 		echo "	<td><a href=\"/crotos/?p$prop_query=".$data['qwd']."\">";
 		if ($l=="fr") echo "voir les œuvres"; else echo "view artworks";
 		echo "</a></td>\n";

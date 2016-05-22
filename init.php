@@ -75,7 +75,7 @@ else
 $s=""; // Search
 $q="";
 $y1=-40000;
-$y2=2015;
+$y2=2016;
 $d=0;// publication date
 $tab_idx = array(
 	"p31" => "",// qwd type
@@ -89,6 +89,7 @@ $tab_idx = array(
 	"p195"=> "",// qwd collection
 	"p276"=> "",// qwd location
 	"p361"=> "",// qwd part of
+	"p608"=> "",// qwd exhibtion
 	"p921"=> "",// qwd subject heading
 	"p941"=> "",// qwd inspired by
 	"p1639"=> ""// qwd pendant of
