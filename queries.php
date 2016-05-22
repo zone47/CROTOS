@@ -15,6 +15,7 @@ if ($s!=""){
 		for ($j=0;$j<count($stopwords);$j++){
 			if ($tab_keywords[$i]==$stopwords[$j])
 				array_splice($tab_keywords,$i,1);
+			
 		}
 	}
 	for ($i=0;$i<count($tab_keywords);$i++){
@@ -157,7 +158,7 @@ foreach($tab_check as $key=>$value){
 	}
 }
 $search_date=false;
-if (!(($y1==-40000)&&($y2==2015)))
+if (!(($y1==-40000)&&($y2==2016)))
 	$search_date=true;
 $search_publi=false;
 if ($d!=0)

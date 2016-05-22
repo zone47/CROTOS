@@ -49,7 +49,7 @@ foreach($tab_check as $key=>$value)
 	if ($value!="")
 		$liennav.="&amp;$key=".$value;
 if ($s!="") $liennav.="&amp;s=".$s;
-if(!(($y1==-40000)&&(($y2==2015)))){
+if(!(($y1==-40000)&&(($y2==2016)))){
 	if ($y1!="") $liennav.="&amp;y1=".$y1;
 	if ($y2!="") $liennav.="&amp;y2=".$y2;
 }
