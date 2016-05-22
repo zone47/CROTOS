@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!-- Liz Fischer, 2016
+github.com/lizfischer -->
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+
+	<title>IIIF Crop</title>
+
+	<link rel="stylesheet" href="css/jquery.Jcrop.min.css"> <!-- required for jcrop to work right! -->
+	<link rel="stylesheet" href="css/main.css">
+	<link rel=stylesheet href="css/colors.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/jquery.Jcrop.min.js"></script>
+	<script type="text/javascript" src="js/clipboard.min.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/cropper.js"></script>
+    <style>
+#output{
+width:145px;
+}    
+#fragment{
+width:150px;
+}
+    </style>
+</head>
+<body>
+	<div id="container">
+		<h1>IIIF Image Cropper for Wikidata</h1>
+		<p>A simple little tool to provide values of image fragments for the Wikidata property <a href="https://www.wikidata.org/wiki/Property:P2677" target="_blank">relative position within image / P2677</a>, with <a href="http://www.iiif.io" target="_blank">IIIF</a> URLs. Input the filename if Wikimedia Commons file, then click and drag on the image to crop.</p>
+
+		<div id="fields">
+			<label for="URL">Commons file:</label>
+			<input type="text" id="URL" name="URL">
+			<button type="button" id="submit">Load</button>
+
+			<label for="output">Relative position:</label>
+			<input type="text" name="output" id="output" readonly>
+
+			<!-- Copy to clipboad -->
+			<div class="tooltip-wrap" id="copy-tip">
+				<button class="btn" id="copy" data-clipboard-target="#output">
+					<img src="img/clippy.svg" alt="Copy to clipboard">
+				</button>
+				<div class="tooltip" id="copy-tip-text">Copied!</div>
+			</div>
+            
+            <label for="fragment">IIIF Url:</label>
+			<input type="text" name="fragment" id="fragment" readonly>
+
+			<!-- Copy to clipboad -->
+			<div class="tooltip-wrap" id="copy-tip">
+				<button class="btn" id="copy" data-clipboard-target="#fragment">
+					<img src="img/clippy.svg" alt="Copy to clipboard">
+				</button>
+				<div class="tooltip" id="copy-tip-text">Copied!</div>
+			</div>
+		</div>
+
+		<!-- img placeholder -->
+		<img style="display:none" src="" id="target">
+	</div>
+
+	<div id="footer">
+		<a href="https://github.com/lizfischer/iiif-tools" target="_blank">Liz Fischer</a>, 2016, forked by /* / */, <a href="cropper.zip">source</a> [zip file].
+	</div>
+</body>
+</html>

@@ -1,0 +1,118 @@
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+body {
+	position: relative;
+	padding-bottom: 6rem;
+	min-height: 100%;
+	font-family: "Helvetica Neue", Arial, sans-serif;
+	margin: 0;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+h1 {
+	text-align: center;
+}
+
+input[type="text"] {
+	height: 25px;
+	width: 250px;
+}
+
+.btn {
+	height: 25px;
+	margin: 0;
+}
+.btn img {
+	width: 13px;
+	height: 13px;
+}
+
+#container {
+	min-height:100%;
+	position:relative;
+	padding:10px;
+	padding-bottom:60px;
+	width: 90%;
+	margin-left:5px;
+	/*margin: auto;*/
+}
+#container h1{
+	font-size:150%;	
+}
+#fields {
+	margin-bottom: 20px;
+}
+
+#footer {
+   position:absolute;
+   bottom:0;
+   width:100%;
+   height:60px;   /* Height of the footer */
+}
+
+/**
+ * Footer Styles
+ */
+
+#footer {
+	position: absolute;
+	right: 0;
+	bottom: 0px;
+	left: 0;
+	padding: 1rem;
+	background-color: #efefef;
+	text-align: center;
+	font-size: .7em;
+}
+
+
+/**
+	Tooltip
+*/
+.tooltip-wrap {
+  color: #555;
+  cursor: help;
+  font-family: "Gill Sans", Impact, sans-serif;
+  font-size: 12px;
+	display: inline-block;
+  position: relative;
+  text-align: center;
+  -webkit-transform: translateZ(0); /* webkit flicker fix */
+  -webkit-font-smoothing: antialiased; /* webkit text rendering fix */
+}
+
+.tooltip-wrap .tooltip {
+	display: none;
+	position: absolute;
+	z-index: 1;
+	padding: 5px 8px;
+	top: 37px;
+	left: -50%;
+	background-color: #666;
+	color: white;
+	border-radius: 3px;
+}
+
+/* CSS Triangle */
+.tooltip-wrap .tooltip:after {
+	width: 0;
+	height: 0;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-bottom: 8px solid #666;
+	top: -8px;
+	content: " ";
+	height: 0;
+	left: 50%;
+	margin-left: -15%;
+	position: absolute;
+	width: 0;
+}
