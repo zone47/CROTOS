@@ -145,7 +145,7 @@ $id_Louvre=$data['id'];
 $nb=$data['nb'];
 
 if ($l=="fr")
-	echo "Œuvres du<a href=\"http://www.zone47.com/crotos/?p195=19675\"> Louvre</a> localisées par salles sur Wikidata (".$nb." items)";
+	echo "Œuvres du <a href=\"http://www.zone47.com/crotos/?p195=19675\">Louvre</a> localisées par salles sur Wikidata (".$nb." items)";
 else
 	echo "Visual artworks of the <a href=\"http://www.zone47.com/crotos/?p195=19675\">Musée du Louvre</a> located by rooms on Wikidata (".$nb." items)";
 ?></h1>
@@ -162,8 +162,36 @@ else
 
 children_search($id_Louvre,$l);
 
-mysqli_close($link);
 ?>
+<p>
+<?php
+$sql_sub="SELECT id_sub FROM prop_sub, p195 WHERE prop_sub.prop=195 AND prop_sub.id_prop=p195.id AND p195.qwd=19675";
+$rep_sub=mysqli_query($link,$sql_sub);
+$where="(p195.qwd=19675";
+while($data = mysqli_fetch_assoc($rep_sub))
+	$where.=" OR p195.id=".$data['id_sub'];
+$where.=")";
 
+$sql_s="select count(distinct artworks.id) as total
+			from p195, artw_prop, artworks WHERE ".$where." AND artw_prop.id_prop=p195.id AND artw_prop.prop=195 AND artworks.id=artw_prop.id_artw
+			AND artworks.m276=1";
+$sql_s2=$sql_s." AND artworks.P18=0";
+
+$rep=mysqli_query($link,$sql_s);
+$data=mysqli_fetch_assoc($rep);
+$nbartworks=$data['total'];
+
+$rep=mysqli_query($link,$sql_s2);
+$data=mysqli_fetch_assoc($rep);
+$nbmiss=$data['total'];
+
+mysqli_close($link);
+if ($l=="fr")
+	echo "Œuvres du Louvre sans localisation : <b>".$nbartworks." items</b> - ".$nbmiss." images manquantes ";
+else
+	echo "Visual artworks of the Musée du louvre without location: <b>".$nbartworks." items</b> - ".$nbmiss." missing images";
+?>
+- <a href="http://www.zone47.com/crotos/?p195=19675&m276=1&mode=1">Crotos</a>
+</p>
 </body>
 </html>
