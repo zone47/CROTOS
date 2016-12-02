@@ -1,6 +1,6 @@
 /* / */
 /* Display max 600px" */
-#global #entete #contrib,#global .nav a.nav_sec,#global .nav_sec,#global .mode_plus,#global #facets .mode_plus{
+#global #entete #contrib,#global .nav a.nav_sec,#global .nav_sec,#global .mode_plus,#global #facets .mode_plus,#global #art_pres{
 	display:none;	
 }
 #global nav{
@@ -87,6 +87,12 @@ body{
 #global #entete #topic_title{
 	width:65%;
 }
+#global #presentation p{
+	margin-left:0;
+}
+#global #presentation{
+	margin-left:10px;
+}
 #global #facets{
 	padding-top:4px;
 }
@@ -144,6 +150,9 @@ body{
 	width:100%;
 	max-width:none;
 	min-width:none;
+}
+#global .it_h{
+	height:auto;
 }
 #global .thumb{
 	height:auto;

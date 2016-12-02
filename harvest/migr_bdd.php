@@ -86,7 +86,7 @@ exec($cmd);
 
 $to = "***"; 
 $subject = "Crotos - Mise à jour"; 
-$body = "Mise à jour effectuée.<br/><a href=\"http://zone47.com/crotos/new.php\">http://zone47.com/crotos/new.php</a>"; 
+$body = "Mise à jour effectuée http://zone47.com/crotos/new.php"; 
 mail($to, $subject, $body);
 
 ?>

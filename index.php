@@ -60,7 +60,12 @@ function img_magnify(){
 		loadSprite(id_link,fic, function() {});
 	});
 }
+function initdiv(num){ 
+	document.getElementById('notice'+num).style.display = 'none';
+	document.getElementById('item'+num).classList.add("it_h");
+}
 function init_display(){ 
+	//document.getElementByClassName("item").style.height = "200px";
 	if ($(window).width()>=680){
 		$(".yoxview").yoxview({
 			linkToOriginalContext:true,
@@ -248,6 +253,7 @@ $(function(){
 				document.location.href=$(".selected").attr("data-val");
 	});
 });
+
 </script>
 	<style><?php
 	if (($l=="ar")||($l=="fa")||($l=="he"))

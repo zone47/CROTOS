@@ -376,12 +376,16 @@ ul#access {
 	padding-right:20px;
 }
 .item { 
-	height:340px;
+	/*height:340px;*/
 	float:left;
 	font-size:12px;
 	margin-right:10px;
 	max-width:322px;
 	min-width:202px;
+}
+.it_h{
+	height:340px;
+	font-weight:normal;
 }
 .thumb{
 	text-align:center;

@@ -10,7 +10,7 @@ echo number_format(intval($data['nbimg']),0,'',' ');
 if ($l=="fr")
 	echo " œuvres d'art avec image";
 else
-	echo "artworks with image";
+	echo " artworks with image";
 ?>
  <a href="https://creativecommons.org/publicdomain/mark/1.0/" title="Public Domain Mark 1.0"><img src="/crotos/img/licence/PDM-icon.png" alt="Public Domain Mark 1.0" class="licence"></a>↔<a href="https://creativecommons.org/licenses/by-sa/4.0/" title="CC Attribution-ShareAlike"><img src="/crotos/img/licence/CC-BY-SA-icon.png" alt="CC Attribution-ShareAlike" class="licence"></a>– <?php 
 if ($l=="fr")

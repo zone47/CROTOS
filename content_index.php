@@ -110,7 +110,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 		$width_item=intval($width_h)+2;	
 	
 	if ($multi_res){
-		$content.="	<div style=\"width:".$width_item."px\" class=\"item\" data-width=\"".$width_item."px\" >\n";
+		$content.="	<div style=\"width:".$width_item."px\" class=\"item\" data-width=\"".$width_item."px\" id=\"item".$cpt."\">\n";
 	}
 	else{ 
 		if ($large!=""){
@@ -153,12 +153,19 @@ while($data = mysqli_fetch_assoc($rep)) {
 	}
 	$date="";
 	if ((!(is_null($data['year2'])))||($data['year1']!=$data['year2'])){
-		if ($data['b_date']==1)
-			$date.="~";
-		if (!(is_null($data['year1'])))
-			$date.=$data['year1'];
-		if ((!(is_null($data['year2'])))&&($data['year1']!=$data['year2']))
-			$date.=" / ".$data['year2'];
+		// tmp; pb avec circa et after+1
+		$date1=intval($data['year1']);
+		$date2=intval($data['year2']);
+		if (($date2-$date1)==1)
+			$date.="~".$data['year1'];
+		else{
+			if ($data['b_date']==1)
+				$date.="~";
+			if (!(is_null($data['year1'])))
+				$date.=$data['year1'];
+			if ((!(is_null($data['year2'])))&&($data['year1']!=$data['year2'])) 
+				$date.="-".$data['year2'];
+		}
 	}
 	if ($date!="")
 		$yox_cartel.=", ".$date;
@@ -402,11 +409,11 @@ while($data = mysqli_fetch_assoc($rep)) {
 						}
 				}
 			}
-			echo "<!-- $license -->";
+			//echo "<!-- $license -->";
 			$li=$license;
 			$license = esc_dblq(htmlentities($li, ENT_QUOTES, "UTF-8"));
 		}
-		echo "<!-- $commons_artist-->";
+		//echo "<!-- $commons_artist-->";
 		/*$ca=preg_replace("/<p[^>]+\>/i","",preg_replace("/<\/?img[^>]*\>/i", "",preg_replace("/<\/?ul[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?div[^>]*\>/i", "",$commons_artist))))));*/
 		$cf="<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;".translate($l,"px")."\" class=\"commons_link\">".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;".translate($l,"px")."</a><br/>";
 		$ca=del_html($commons_artist);
@@ -467,7 +474,8 @@ while($data = mysqli_fetch_assoc($rep)) {
 	
 	$content.="\n	</div>";
 	if ($multi_res)
-		$content.="\n	<script>document.getElementById('notice$cpt').style.display = 'none';</script>\n";
+		/* //$content.="\n	<script>document.getElementById('notice$cpt').style.display = 'none';</script>\n"; */
+        $content.="\n	<script>initdiv($cpt);</script>\n";
 	
 	echo $content;	
 }
