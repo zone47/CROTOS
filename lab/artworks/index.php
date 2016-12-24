@@ -78,18 +78,38 @@ if ($q!=""){
 	$cqitem_path=$fold_crotos."lab/artworks/queries/cQ".$q."-p".$prop.".json";
 	$wqitem_path=$fold_crotos."lab/artworks/queries/wQ".$q."-p".$prop.".json";
 	$nqitem_path=$fold_crotos."lab/artworks/queries/nQ".$q."-p".$prop.".json";
-	if (intval($prop)==195)
+	/*if (intval($prop)==195)
 		$query="q=claim[".$prop.":%28tree[".$q."][][361]%29,276:%28tree[".$q."][][361]%29]&run=Run";
 	elseif (intval($prop)==276)
 		$query="q=claim[276:%28tree[".$q."][][361]%29,276:%28tree[".$q."][][276]%29]&run=Run";
 	else
 		$query="q=claim[".$prop.":%28tree[".$q."][][279]%29]&run=Run";
 	$wdq_link="https://tools.wmflabs.org/autolist/index.php?wd".$query;
+*/
 
+	if (intval($prop)==195)
+		$query="SELECT DISTINCT ?item WHERE {?item wdt:P195/wdt:P361* wd:Q".$q."}";
+	elseif (intval($prop)==276)
+		$query="SELECT DISTINCT ?item WHERE {{?item wdt:P276/wdt:P361* wd:Q".$q."}UNION{?item wdt:P276/wdt:P276* wd:Q".$q."}}";
+	else
+		$query="SELECT DISTINCT ?item WHERE {?item wdt:P31/wdt:P279* wd:Q".$q."}";
+	
+	$query.=" ORDER BY ?item";
 	if (!(file_exists($cqitem_path))){
-		$url_api="http://wdq.wmflabs.org/api?".$query."&download=1";	
+		$sparqlurl=urlencode($query);
+		$req="https://query.wikidata.org/sparql?format=json&query=".$sparqlurl;
+		$res  = file_get_contents($req);
+		$respArray = json_decode($res,true);
+		$nbartworks=count($responseArray["results"]["bindings"]);
+		$responseArray=array();//["items"]
+		foreach ($respArray["results"]["bindings"] as $key => $value){
+			$Qitem=$value["item"]["value"];
+			$numQ=str_replace("http://www.wikidata.org/entity/Q","",$Qitem);
+			$responseArray["items"][]=$numQ;
+		}
+		/*$url_api="http://wdq.wmflabs.org/api?".$query."&download=1";	
 		$res =file_get_contents($url_api,true);
-		$responseArray = json_decode($res,true);
+		$responseArray = json_decode($res,true);*/
 		$nbartworks=count($responseArray["items"]);
 	}
 	else
@@ -297,12 +317,13 @@ if (!$csv)
 	$qwd_data=array();
 	if (!(file_exists($cqitem_path))){
 		$sql_artw="";
+		
 		for ($i=0;$i<$nbartworks;$i++){
 			if ($sql_artw!="")
 				$sql_artw.=" OR";
 			$sql_artw.=" qwd=".$responseArray["items"][$i];	
 		}
-	
+		
 		$sql_artw="SELECT * from artworks WHERE ".$sql_artw. " ORDER by qwd";
 		//echo $sql_artw;
 		$rep=mysqli_query($link,$sql_artw);

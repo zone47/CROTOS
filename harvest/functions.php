@@ -2,7 +2,7 @@
 /* / */
 if ( !function_exists('json_decode') ){
 	require_once ('JSON.php');
-    function json_decode($content, $assoc=false){
+	function json_decode($content, $assoc=false){
 		if ( $assoc ){
 			$json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
 		} else {
@@ -24,22 +24,32 @@ function get_WDjson($qitem){
 function get_query($prop,$qwd){
 	global $fold_crotos;
 	if (($prop==31)||($prop==136)||($prop==186))
-		$req="http://wdq.wmflabs.org/api?q=claim[279:%28tree[".$qwd."][][279]%29]";
+		$req="SELECT ?item WHERE { ?item wdt:P279* wd:Q".$qwd." }";
 	elseif (($prop==195))
-		$req="http://wdq.wmflabs.org/api?q=claim[361:%28tree[".$qwd."][][361]%29]";
+		$req="SELECT ?item WHERE { ?item wdt:P361* wd:Q".$qwd." }";
 	elseif ($prop==276)
-		$req="http://wdq.wmflabs.org/api?q=claim[276:%28tree[".$qwd."][][276]%29,361:%28tree[".$qwd."][][361]%29]";
+		$req="SELECT ?item WHERE {{ ?item wdt:P361* wd:Q".$qwd." }UNION{ ?item wdt:P276* wd:Q".$qwd."}}";
 	elseif (($prop==135)||($prop==144)||($prop==180)||($prop==921)||($prop==941))
-		$req="http://wdq.wmflabs.org/api?q=claim[279:%28tree[".$qwd."][][279]%29,361:%28tree[".$qwd."][][361]%29]";
+		$req="SELECT ?item WHERE {{ ?item wdt:P279* wd:Q".$qwd." }UNION{ ?item wdt:P361* wd:Q".$qwd."}}";
 	else 
 		$req="";
 	if ($req!=""){
 		$query_path=$fold_crotos."harvest/queries/".$prop."_".$qwd.".json";
 		if (file_exists($query_path))
-			return file_get_contents($query_path,true);
+			return json_decode(file_get_contents($query_path,true));
 		else{
-			copy($req."&download=1", $query_path);
-			return file_get_contents($query_path,true);
+			$sparqlurl=urlencode($req);
+			$req="https://query.wikidata.org/sparql?format=json&query=".$sparqlurl;
+			$res  = file_get_contents($req);
+			$responseArray = json_decode($res,true);
+			$items=array();
+			foreach ($responseArray["results"]["bindings"] as $key => $value)
+				$items[]=str_replace("http://www.wikidata.org/entity/Q","",$value["item"]["value"]);;
+			$js_res=json_encode($items);
+			$resfile = fopen($query_path, 'w');
+			fputs($resfile, $js_res); 
+			fclose($resfile);
+			return $items;
 		}
 	}
 	else 
@@ -73,12 +83,12 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 			$sql="INSERT INTO label_page (type,prop,qwd,label,page,lg,id_art_or_prop) VALUES (1,$prop,$val_item,\"$lab\",\"$page\",\"$lg\",$id_art_or_prop)";
 			$rep=mysqli_query($link,$sql);
 		}
-        if (($lab=="")&&($prop==1))
-            $tab_miss[$lg]=1;
+		if (($lab=="")&&($prop==1))
+			$tab_miss[$lg]=1;
 			
 		if (($page!="")&&($prop==1))
-            $tab_miss["mw"]=0;
-            
+			$tab_miss["mw"]=0;
+			
 		// alias
 		if ($ent_qwd["aliases"][$lg]){
 			foreach ($ent_qwd["aliases"][$lg] as $vallab){
@@ -112,32 +122,32 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 				}
 			}
 		}
-        if ($ent_qwd["claims"]["P625"]){
+		if ($ent_qwd["claims"]["P625"]){
 			$coord=$ent_qwd["claims"]["P625"];
-            foreach ($coord as $value){
-                $latitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["latitude"],10,'.',''),"0");
+			foreach ($coord as $value){
+				$latitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["latitude"],10,'.',''),"0");
 				if ($latitem{strlen($latitem)-1}==".") $latitem.="0";
-                $lonitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["longitude"],10,'.',''),"0");
+				$lonitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["longitude"],10,'.',''),"0");
 				if ($lonitem{strlen($lonitem)-1}==".") $lonitem.="0";
-                $sql="UPDATE p".$prop." SET lat=\"".$latitem."\", lon=\"".$lonitem."\" WHERE qwd=$val_item";
-                $rep=mysqli_query($link,$sql);
-            }
+				$sql="UPDATE p".$prop." SET lat=\"".$latitem."\", lon=\"".$lonitem."\" WHERE qwd=$val_item";
+				$rep=mysqli_query($link,$sql);
+			}
 		}
 		
 	}
-    if ($prop==180){
-       if ($ent_qwd["claims"]["P625"]){
+	if ($prop==180){
+	   if ($ent_qwd["claims"]["P625"]){
 			$coord=$ent_qwd["claims"]["P625"];
-            foreach ($coord as $value){
-                $latitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["latitude"],10,'.',''),"0");
+			foreach ($coord as $value){
+				$latitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["latitude"],10,'.',''),"0");
 				if ($latitem{strlen($latitem)-1}==".") $latitem.="0";
-                $lonitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["longitude"],10,'.',''),"0");
+				$lonitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["longitude"],10,'.',''),"0");
 				if ($lonitem{strlen($lonitem)-1}==".") $lonitem.="0";
-                $sql="UPDATE p".$prop." SET lat=\"".$latitem."\", lon=\"".$lonitem."\" WHERE qwd=$val_item";
-                $rep=mysqli_query($link,$sql);
-            }
+				$sql="UPDATE p".$prop." SET lat=\"".$latitem."\", lon=\"".$lonitem."\" WHERE qwd=$val_item";
+				$rep=mysqli_query($link,$sql);
+			}
 		} 
-    }
+	}
 	// if 170 life dates
 	if ($prop==170){
 		$dates="";
@@ -309,61 +319,61 @@ function parent_cherche($prop,$val_prop,$id_artw,$new_ids){
 function request($url){
    // is curl installed?
    if (!function_exists('curl_init'))
-      die('CURL is not installed!');
+	  die('CURL is not installed!');
    // get curl handle
    $ch= curl_init();
    // set request url
    curl_setopt($ch,
-      CURLOPT_URL,
-      $url);
+	  CURLOPT_URL,
+	  $url);
    // return response, don't print/echo
    curl_setopt($ch,
-      CURLOPT_RETURNTRANSFER,
-      true);
+	  CURLOPT_RETURNTRANSFER,
+	  true);
    $response = curl_exec($ch);
    curl_close($ch);
    return $response;
 }
 function getjpegsize($img_loc) {
-    $handle = fopen($img_loc, "rb");// or die("Invalid file stream.");
-    $new_block = NULL;
-    if(!feof($handle)) {
-        $new_block = fread($handle, 32);
-        $i = 0;
-        if($new_block[$i]=="\xFF" && $new_block[$i+1]=="\xD8" && $new_block[$i+2]=="\xFF" && $new_block[$i+3]=="\xE0") {
-            $i += 4;
-            if($new_block[$i+2]=="\x4A" && $new_block[$i+3]=="\x46" && $new_block[$i+4]=="\x49" && $new_block[$i+5]=="\x46" && $new_block[$i+6]=="\x00") {
-                // Read block size and skip ahead to begin cycling through blocks in search of SOF marker
-                $block_size = unpack("H*", $new_block[$i] . $new_block[$i+1]);
-                $block_size = hexdec($block_size[1]);
-                while(!feof($handle)) {
-                    $i += $block_size;
-                    $new_block .= fread($handle, $block_size);
-                    if($new_block[$i]=="\xFF") {
-                        // New block detected, check for SOF marker
-                        $sof_marker = array("\xC0", "\xC1", "\xC2", "\xC3", "\xC5", "\xC6", "\xC7", "\xC8", "\xC9", "\xCA", "\xCB", "\xCD", "\xCE", "\xCF");
-                        if(in_array($new_block[$i+1], $sof_marker)) {
-                            // SOF marker detected. Width and height information is contained in bytes 4-7 after this byte.
-                            $size_data = $new_block[$i+2] . $new_block[$i+3] . $new_block[$i+4] . $new_block[$i+5] . $new_block[$i+6] . $new_block[$i+7] . $new_block[$i+8];
-                            $unpacked = unpack("H*", $size_data);
-                            $unpacked = $unpacked[1];
-                            $height = hexdec($unpacked[6] . $unpacked[7] . $unpacked[8] . $unpacked[9]);
-                            $width = hexdec($unpacked[10] . $unpacked[11] . $unpacked[12] . $unpacked[13]);
-                            return array($width, $height);
-                        } else {
-                            // Skip block marker and read block size
-                            $i += 2;
-                            $block_size = unpack("H*", $new_block[$i] . $new_block[$i+1]);
-                            $block_size = hexdec($block_size[1]);
-                        }
-                    } else {
-                        return FALSE;
-                    }
-                }
-            }
-        }
-    }
-    return FALSE;
+	$handle = fopen($img_loc, "rb");// or die("Invalid file stream.");
+	$new_block = NULL;
+	if(!feof($handle)) {
+		$new_block = fread($handle, 32);
+		$i = 0;
+		if($new_block[$i]=="\xFF" && $new_block[$i+1]=="\xD8" && $new_block[$i+2]=="\xFF" && $new_block[$i+3]=="\xE0") {
+			$i += 4;
+			if($new_block[$i+2]=="\x4A" && $new_block[$i+3]=="\x46" && $new_block[$i+4]=="\x49" && $new_block[$i+5]=="\x46" && $new_block[$i+6]=="\x00") {
+				// Read block size and skip ahead to begin cycling through blocks in search of SOF marker
+				$block_size = unpack("H*", $new_block[$i] . $new_block[$i+1]);
+				$block_size = hexdec($block_size[1]);
+				while(!feof($handle)) {
+					$i += $block_size;
+					$new_block .= fread($handle, $block_size);
+					if($new_block[$i]=="\xFF") {
+						// New block detected, check for SOF marker
+						$sof_marker = array("\xC0", "\xC1", "\xC2", "\xC3", "\xC5", "\xC6", "\xC7", "\xC8", "\xC9", "\xCA", "\xCB", "\xCD", "\xCE", "\xCF");
+						if(in_array($new_block[$i+1], $sof_marker)) {
+							// SOF marker detected. Width and height information is contained in bytes 4-7 after this byte.
+							$size_data = $new_block[$i+2] . $new_block[$i+3] . $new_block[$i+4] . $new_block[$i+5] . $new_block[$i+6] . $new_block[$i+7] . $new_block[$i+8];
+							$unpacked = unpack("H*", $size_data);
+							$unpacked = $unpacked[1];
+							$height = hexdec($unpacked[6] . $unpacked[7] . $unpacked[8] . $unpacked[9]);
+							$width = hexdec($unpacked[10] . $unpacked[11] . $unpacked[12] . $unpacked[13]);
+							return array($width, $height);
+						} else {
+							// Skip block marker and read block size
+							$i += 2;
+							$block_size = unpack("H*", $new_block[$i] . $new_block[$i+1]);
+							$block_size = hexdec($block_size[1]);
+						}
+					} else {
+						return FALSE;
+					}
+				}
+			}
+		}
+	}
+	return FALSE;
 }
 function esc_dblq($text){
 	return str_replace("\"","\\\"",$text);
@@ -373,8 +383,8 @@ function simplexml_load_file_from_url($url, $timeout = 30){
   $context = stream_context_create(array('http'=>array('user_agent' => 'PHP script','timeout' => (int)$timeout)));
   $data = file_get_contents($url, false, $context);
   if(!$data){
-    trigger_error('Cannot load data from url: ' . $url, E_USER_NOTICE);
-    return false;
+	trigger_error('Cannot load data from url: ' . $url, E_USER_NOTICE);
+	return false;
   }
   return simplexml_load_string($data);
 }

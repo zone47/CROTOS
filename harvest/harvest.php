@@ -28,6 +28,7 @@ where {
 	UNION {?item wdt:P31/wdt:P279* wd:Q16905563} # cycle of paintings
 	UNION {?item wdt:P31/wdt:P279* wd:Q125191.}  # photograph
 	UNION {?item wdt:P31 wd:Q220659}             # artifact
+    UNION {?item wdt:P195/wdt:P361* wd:Q19675}   # in the collections of the Louvre
 
 	{?item wdt:P18 ?img.}                        # With image
 	UNION {                                      # OR
@@ -35,6 +36,8 @@ where {
 	FILTER regex(str(?article), \"wikipedia\")}  # With Wikipedia article
 	UNION {                                      # OR
 	?item wdt:P195/wdt:P361* wd:Q19675}          # in the collections of the Louvre
+    UNION {                                      # OR
+	?item wdt:P195 wd:Q1376}                     # in the collections of the musée Saint-Raymond
 }";
 $sparqlurl=urlencode($sparql);
 $req="https://query.wikidata.org/sparql?format=json&query=".$sparqlurl;
