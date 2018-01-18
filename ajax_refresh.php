@@ -20,7 +20,8 @@ $trads = array(
 	"361" => "جزء من",
 	"144" => "على أساس",
 	"921" => "عنوان الموضوع",
-	"941" => "مستوحاة من"
+	"941" => "مستوحاة من",
+	"608" => "Exhibtion"
 ),
 "bn" => array(
 	"1" => "লেবেল [bn]",
@@ -36,7 +37,8 @@ $trads = array(
 	"361" => "সদস্য",
 	"144" => "এর উপর ভিত্তি করে",
 	"921" => "বিষয় শিরোনাম",
-	"941" => "দ্বারা অনুপ্রাণিত"
+	"941" => "দ্বারা অনুপ্রাণিত",
+	"608" => "Exhibtion"
 ),
 "br" => array(
 	"1" => "Anv [br]",
@@ -52,7 +54,8 @@ $trads = array(
 	"361" => "Ezel eus"
 	/*"144" => "Based on",
 	"921" => "Subject heading",
-	"941" => "Inspired by"*/
+	"941" => "Inspired by"*/,
+	"608" => "Exhibtion"
 ),
 "ca" => array(
 	"1" => "Etiqueta [ca]",
@@ -68,7 +71,8 @@ $trads = array(
 	"361" => "Part de",
 	"144" => "Basat enn",
 	"921" => "Tema principal",
-	"941" => "Inspirat per"
+	"941" => "Inspirat per",
+	"608" => "Exhibtion"
 ),
 "cs" => array(
 	"1" => "Štítek [cs]",
@@ -84,7 +88,8 @@ $trads = array(
 	"361" => "část",
 	"144" => "Podle",
 	"921" => "Hlavní námět díla",
-	"941" => "Inspirován"
+	"941" => "Inspirován",
+	"608" => "Exhibtion"
 ),
 "de" => array(
 	"1" => "Bezeichnung [de]",
@@ -100,7 +105,8 @@ $trads = array(
 	"361" => "Ist Teil von",
 	"144" => "Vorlage",
 	"921" => "Schlagwort",
-	"941" => "Inspiriert von"
+	"941" => "Inspiriert von",
+	"608" => "Exhibtion"
 ),
 "el" => array(
 	"1" => "Ετικέτα [el]",
@@ -116,7 +122,8 @@ $trads = array(
 	"361" => "Μέρος τουf",
 	"144" => "Βασίζεται στο",
 	"921" => "Θέμα ενός έργου δημιουργίας",
-	"941" => "Εμπνευσμένο από"
+	"941" => "Εμπνευσμένο από",
+	"608" => "Exhibtion"
 ),
 "en" => array(
 	"1" => "Title [en]",
@@ -132,7 +139,8 @@ $trads = array(
 	"361" => "Part of",
 	"144" => "Based on",
 	"921" => "Subject heading",
-	"941" => "Inspired by"
+	"941" => "Inspired by",
+	"608" => "Exhibtion"
 ),
 "eo" => array(
 	"1" => "Etikedo [eo]",
@@ -148,7 +156,8 @@ $trads = array(
 	"361" => "Parto de",
 	"144" => "Surbaze de",
 	"921" => "Ceftemo",
-	"941" => "Inspirita"
+	"941" => "Inspirita",
+	"608" => "Exhibtion"
 ),
 "es" => array(
 	"1" => "Etiqueta [es]",
@@ -164,7 +173,8 @@ $trads = array(
 	"361" => "Parte de",
 	"144" => "Basado en",
 	"921" => "Tema principal",
-	"941" => "Inspirado por"
+	"941" => "Inspirado por",
+	"608" => "Exhibtion"
 ),
 "fa" => array(
 	"1" => "برچسب [fa]",
@@ -180,7 +190,8 @@ $trads = array(
 	"361" => "جزئی از",
 	"144" => "بر پایهٔ",
 	"921" => "موضوع اصلی",
-	"941" => "با الهام از"
+	"941" => "با الهام از",
+	"608" => "Exhibtion"
 ),
 "fi" => array(
 	"1" => "Nimi [fi]",
@@ -196,7 +207,8 @@ $trads = array(
 	"361" => "Osa kohdetta",
 	"144" => "Based on",
 	"921" => "Subject heading",
-	"941" => "Inspired by"
+	"941" => "Inspired by",
+	"608" => "Exhibtion"
 ),
 "fr" => array(
 	"1" => "Titre [fr]",
@@ -212,7 +224,8 @@ $trads = array(
 	"361" => "Partie de",
 	"144" => "Basé sur",
 	"921" => "Sujet de l'œuvre",
-	"941" => "Inspiré de"
+	"941" => "Inspiré de",
+	"608" => "Exposition"
 ),
 "he" => array(
 	"1" => "לְכַנוֹת [he]",
@@ -228,7 +241,8 @@ $trads = array(
 	"361" => "חלק מתוך",
 	"144" => "מבוסס על",
 	"921" => "נושא היצירה",
-	"941" => "השראה"
+	"941" => "השראה",
+	"608" => "Exhibtion"
 ),
 "hi" => array(
 	"1" => "उपनाम [hi]",
@@ -244,7 +258,8 @@ $trads = array(
 	"361" => "का भाग",
 	"144" => "पर आधारित",
 	"921" => "विषय - सूची",
-	"941" => "से प्रेरित"
+	"941" => "से प्रेरित",
+	"608" => "Exhibtion"
 ),
 "id" => array(
 	"1" => "Label [id]",
@@ -260,7 +275,8 @@ $trads = array(
 	"361" => "Part of",
 	"144" => "Berdasarkan",
 	"921" => "Judul subjek",
-	"941" => "Terinspirasi oleh"
+	"941" => "Terinspirasi oleh",
+	"608" => "Exhibtion"
 ),
 "it" => array(
 	"1" => "Etichetta [it]",
@@ -276,7 +292,8 @@ $trads = array(
 	"361" => "Parte di",
 	"144" => "Basato su",
 	"921" => "Argomento principale",
-	"941" => "Ispirato da"
+	"941" => "Ispirato da",
+	"608" => "Exhibtion"
 ),
 "ja" => array(
 	"1" => "Label [ja]",
@@ -292,7 +309,8 @@ $trads = array(
 	"361" => "以下の一部分",
 	"144" => "原作",
 	"921" => "著作物の主要議題",
-	"941" => "触発され"
+	"941" => "触発され",
+	"608" => "Exhibtion"
 ),
 "jv" => array(
 	"1" => "Label [jv]",
@@ -308,7 +326,8 @@ $trads = array(
 	"361" => "Bagean",
 	"144" => "Adhedhasar",
 	"921" => "Subyek judhul",
-	"941" => "Inspirasi dening"
+	"941" => "Inspirasi dening",
+	"608" => "Exhibtion"
 ),
 "ko" => array(
 	"1" => "레이블 [ko]",
@@ -324,7 +343,8 @@ $trads = array(
 	"361" => "전체 부분",
 	"144" => "원작",
 	"921" => "주요 소재",
-	"941" => "영감을 준 것"
+	"941" => "영감을 준 것",
+	"608" => "Exhibtion"
 ),
 "mu" => array(
 	"1" => "Houba",
@@ -340,7 +360,8 @@ $trads = array(
 	"361" => "Houba",
 	"144" => "Houba",
 	"921" => "Houba",
-	"941" => "Houba"
+	"941" => "Houba",
+	"608" => "Exhibtion"
 ),
 "nl" => array(
 	"1" => "Label [nl]",
@@ -356,7 +377,8 @@ $trads = array(
 	"361" => "Onderdeel van",
 	"144" => "Gebaseerd op",
 	"921" => "Hoofdonderwerp",
-	"941" => "Geïnspireerd door"
+	"941" => "Geïnspireerd door",
+	"608" => "Exhibtion"
 ),
 "pa" => array(
 	"1" => "ਲੇਬਲ [pa]",
@@ -372,7 +394,8 @@ $trads = array(
 	"361" => "ਦੇ ਭਾਗ",
 	"144" => "'ਤੇ ਆਧਾਰਿਤ",
 	"921" => "ਵਿਸ਼ਾ ਸਿਰਲੇਖ",
-	"941" => "ਕੇ ਪ੍ਰੇਰਿਤ"
+	"941" => "ਕੇ ਪ੍ਰੇਰਿਤ",
+	"608" => "Exhibtion"
 ),
 "pl" => array(
 	"1" => "Etykieta [pl]",
@@ -389,6 +412,7 @@ $trads = array(
 	"144" => "Na podstawie",
 	"921" => "Temat nagłówek",
 	"941" => "Zainspirowane przez",
+	"608" => "Exhibtion"
 ),
 "pt" => array(
 	"1" => "Etiqueta [pt]",
@@ -405,6 +429,7 @@ $trads = array(
 	"144" => "Adaptado de",
 	"921" => "Tópico principal",
 	"941" => "Inspirado por",
+	"608" => "Exhibtion"
 ),
 "ru" => array(
 	"1" => "Метка [ru]",
@@ -421,6 +446,7 @@ $trads = array(
 	"144" => "Создано на основе",
 	"921" => "Основная тема ",
 	"941" => "Вдохновлено",
+	"608" => "Exhibtion"
 ),
 "sv" => array(
 	"1" => "Etikett [sv]",
@@ -436,7 +462,8 @@ $trads = array(
 	"361" => "Sel av",
 	"144" => "Baserad på",
 	"921" => "Ämnesord",
-	"941" => "Inspirerad av"
+	"941" => "Inspirerad av",
+	"608" => "Exhibtion"
 ),
 "sw" => array(
 	"1" => "Lebo [sw]",
@@ -452,7 +479,8 @@ $trads = array(
 	"361" => "Sehemu ya",
 	"144" => "Msingi",
 	"921" => "Somo kichwa",
-	"941" => "Aliongoza kwa"
+	"941" => "Aliongoza kwa",
+	"608" => "Exhibtion"
 ),
 "te" => array(
 	"1" => "లేబుల్ [te]",
@@ -469,6 +497,7 @@ $trads = array(
 	"144" => "ఆధారితం",
 	"921" => "విషయపు శీర్షిక",
 	"941" => "స్ఫూర్తి పొందినది",
+	"608" => "Exhibtion"
 ),
 "th" => array(
 	"1" => "ติดป้าย  [th]",
@@ -484,7 +513,8 @@ $trads = array(
 	"361" => "ส่วนหนึ่งของ",
 	"144" => "อยู่บนพื้นฐานของ",
 	"921" => "หัวเรื่อง",
-	"941" => "แรงบันดาลใจจาก"
+	"941" => "แรงบันดาลใจจาก",
+	"608" => "Exhibtion"
 ),
 "tr" => array(
 	"1" => "Etiket [tr]",
@@ -500,7 +530,8 @@ $trads = array(
 	"361" => "Bir parçası",
 	"144" => "Uyarlandığı eser",
 	"921" => "Konu başlığı",
-	"941" => "Esinlenilmiştir"
+	"941" => "Esinlenilmiştir",
+	"608" => "Exhibtion"
 ),
 "uk" => array(
 	"1" => "Мітка [uk]",
@@ -516,7 +547,8 @@ $trads = array(
 	"361" => "Частина від",
 	"144" => "Ґрунтується на",
 	"921" => "Предметна рубрика",
-	"941" => "Натхненний"
+	"941" => "Натхненний",
+	"608" => "Exhibtion"
 ),
 "vi" => array(
 	"1" => "Danh hiệu [vi]",
@@ -532,7 +564,8 @@ $trads = array(
 	"361" => "Một phần của",
 	"144" => "Phỏng theo",
 	"921" => "Chủ đề",
-	"941" => "Lấy cảm hứng từ"
+	"941" => "Lấy cảm hứng từ",
+	"608" => "Exhibtion"
 ),
 "zh" => array(
 	"1" => "标签 [zh]",
@@ -548,7 +581,8 @@ $trads = array(
 	"361" => "属于",
 	"144" => "改編自",
 	"921" => "作品主题",
-	"941" => "灵感来自"
+	"941" => "灵感来自",
+	"608" => "Exhibtion"
 )
 
 );

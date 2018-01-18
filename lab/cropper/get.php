@@ -8,9 +8,41 @@ include "../../config.php";
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 mysqli_query($link,"SET NAMES 'utf8'");
 
+function label($wdq,$l){
+	$url_api="https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q".$wdq."&format=json&props=labels";
+		
+	$dfic =file_get_contents($url_api,true);
+	$data_item=json_decode($dfic,true);
+	$ent_qwd=$data_item["entities"]["Q".$wdq]["labels"];
+	$label="";
+	if ($ent_qwd[$l]["value"])
+		$label=$ent_qwd[$l]["value"];
+	else{
+		if ($ent_qwd["en"]["value"])
+			$label=$ent_qwd["en"]["value"];
+		else{
+			if ($ent_qwd)
+				$label=$ent_qwd[key($ent_qwd)]["value"];
+		}
+	}
+	if ($label!="")
+		return $label;
+	else 
+		return $wdq;
+}
+$sparql="select distinct ?depeint ?coord ?img ?article
+WHERE {
+  wd:Q".$q."  p:P180 ?DeclarationDepeint.
+  ?DeclarationDepeint ps:P180 ?depeint.
+  ?DeclarationDepeint pq:P2677 ?coord.
+  wd:Q".$q." wdt:P18 ?img.
+    
+  OPTIONAL {?article schema:about ?depeint .
+    FILTER (SUBSTR(str(?article), 1, 25) = \"https://".$l.".wikipedia.org/\") .}
+}";
 
-?>
-<?php
+$sparqlurl=urlencode($sparql);
+$query="https://query.wikidata.org/#".str_replace("+"," ",$sparqlurl);
 
 ?><!doctype html>
 <html lang="en">
@@ -30,6 +62,9 @@ $(document).ready(function(){
 
     </script>
  <style>
+#content{
+	font-size:110%;	
+}
  img{
 	 border:1px solid #afafaf;
  }
@@ -50,11 +85,22 @@ margin-top:30px}
 	max-height:200px;
 	vertical-align:middle;
 }
-#thumbs   div{
+.thumb {
 float:left;
 padding-right:15px;
 padding-bottom:10px;
+height:245px;
+position:relative;
 }
+.thumb span{
+font-size:80%;
+}
+/*.thumb_txt{
+	position:absolute;
+	white-space: nowrap;
+	bottom:0;
+	width:100%;
+}*/
 </style>
 </head>
 <body>
@@ -78,8 +124,11 @@ for ($i=0;$i<count($lgs);$i++){
 	}
 
 }
-?></select></h1>
+?></select>
+<input type="hidden"  name="q" value="<?php echo $q ?>" /></h1>
+ 
 </form>
+<div id="content">
 <?php 
 $sql="SELECT * from artworks WHERE qwd=$q";
 $rep=mysqli_query($link,$sql);
@@ -184,52 +233,40 @@ if ($pageWP!=""){
 }
 if ($links!="")
 	echo "<br/>".$links;
+echo "<br/>(";
+if ($l=="fr")  echo "<a href=\"".$query."\">requête SparQL</a>)"; else  echo "<a href=\"".$query."\">SparQL query</a>)"; 
 echo "</p>";
 
 
 
 echo "<div id=\"thumbs\">";
-$sparql="PREFIX p: <http://www.wikidata.org/prop/>
-PREFIX v: <http://www.wikidata.org/prop/statement/>
-PREFIX q: <http://www.wikidata.org/prop/qualifier/>
-select distinct ?depeint ?coord ?img ?article
-WHERE {
-  wd:Q".$q."  p:P180 ?DeclarationDepeint.
-  ?DeclarationDepeint  v:P180 ?depeint.
-  ?DeclarationDepeint q:P2677 ?coord.
-  wd:Q".$q." wdt:P18 ?img.
-    
-  OPTIONAL {?article schema:about ?depeint .";
-  
-  if ($l=="en")
-  	$sparql.=" FILTER (SUBSTR(str(?article), 1, 25) = \"https://wikipedia.org/\") .}";
-  else
-    $sparql.=" FILTER (SUBSTR(str(?article), 1, 25) = \"https://".$l.".wikipedia.org/\") .}";
-$sparql.="}";
 
-$sparqlurl=urlencode($sparql);
 $req="https://query.wikidata.org/sparql?format=json&query=".$sparqlurl;
 $res  = file_get_contents($req);
 $responseArray = json_decode($res,true);
 
 foreach ($responseArray["results"]["bindings"] as $key => $value){
-	$Qdepeint=$value["depeint"]["value"];
-	$Qdepeint=label_item(str_replace("http://www.wikidata.org/entity/Q","",$Qdepeint),$l);
+	$WDQdepeint=$value["depeint"]["value"];
+	$Qdepeint=str_replace("http://www.wikidata.org/entity/Q","",$WDQdepeint);
+	$labeldepeint=label_item($Qdepeint,$l);
+	if ($labeldepeint=="")
+		$labeldepeint=label($Qdepeint,$l);
 	$WP="";
 	$WP=$value["article"]["value"];
 	$coord=$value["coord"]["value"];
 	$vign="http://tools.wmflabs.org/zoomviewer/proxy.php?iiif=".$p18_str."/".$coord."/full/0/default.jpg";
-	echo "<div><img src=\"".$vign."\" /> ";
+	echo "<div class=\"thumb\"><div class=\"thumb_img\"><img src=\"".$vign."\" /></div><div class=\"thumb_txt\">";
 	if ($WP!="")
 		echo "<a href=\"".$WP."\">";
-	echo $Qdepeint;	
+	echo $labeldepeint;	
 	if ($WP!="")
 		echo "</a>";
+	echo"<br/><span><a href=\"https://www.wikidata.org/wiki/Q".$Qdepeint."?uselang=".$l."\">Q".$Qdepeint."</a></span></div>";
 	echo "</div>";
 }
 echo "</div>";
 ?>
 
-
+</div>
 </body>
 </html>

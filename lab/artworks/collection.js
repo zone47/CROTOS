@@ -21,6 +21,7 @@ app.factory('api', function($http) {
         'search' : q,
         'format' : 'json',
         'language' : lang,
+		'uselang' : lang,
         'type' : 'item',
         'callback' : 'JSON_CALLBACK'
       };

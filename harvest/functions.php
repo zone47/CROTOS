@@ -1,5 +1,6 @@
 <?php
 /* / */
+set_time_limit(480000);
 if ( !function_exists('json_decode') ){
 	require_once ('JSON.php');
 	function json_decode($content, $assoc=false){
@@ -24,13 +25,13 @@ function get_WDjson($qitem){
 function get_query($prop,$qwd){
 	global $fold_crotos;
 	if (($prop==31)||($prop==136)||($prop==186))
-		$req="SELECT ?item WHERE { ?item wdt:P279* wd:Q".$qwd." }";
+		$req="SELECT distinct ?item WHERE { ?item wdt:P279* wd:Q".$qwd." }";
 	elseif (($prop==195))
-		$req="SELECT ?item WHERE { ?item wdt:P361* wd:Q".$qwd." }";
+		$req="SELECT distinct ?item WHERE { ?item wdt:P361* wd:Q".$qwd." }";
 	elseif ($prop==276)
-		$req="SELECT ?item WHERE {{ ?item wdt:P361* wd:Q".$qwd." }UNION{ ?item wdt:P276* wd:Q".$qwd."}}";
+		$req="SELECT distinct ?item WHERE {{ ?item wdt:P361* wd:Q".$qwd." }UNION{ ?item wdt:P276* wd:Q".$qwd."}}";
 	elseif (($prop==135)||($prop==144)||($prop==180)||($prop==921)||($prop==941))
-		$req="SELECT ?item WHERE {{ ?item wdt:P279* wd:Q".$qwd." }UNION{ ?item wdt:P361* wd:Q".$qwd."}}";
+		$req="SELECT distinct ?item WHERE {{ ?item wdt:P279* wd:Q".$qwd." }UNION{ ?item wdt:P361* wd:Q".$qwd."}}";
 	else 
 		$req="";
 	if ($req!=""){
@@ -426,13 +427,13 @@ function id_commons($p18_str){
 		
 			$digest = md5($img);
 			$folder = $digest[0] . '/' . $digest[0] . $digest[1] . '/' . urlencode($img);
-			$urlimg = 'http://upload.wikimedia.org/wikipedia/commons/' . $folder;
+			$urlimg = 'https://upload.wikimedia.org/wikipedia/commons/' . $folder;
 			
 			if (substr ($img,-3)=="svg"){
 				if ($longfilename)
-					$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/200px-thumbnail.png";
+					$thumb="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/200px-thumbnail.png";
 				else
-					$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/200px-". urlencode($img).".png";
+					$thumb="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/200px-". urlencode($img).".png";
 				$size=getimagesize($thumb);
 				$width_tmp=$size[0];
 				$height_tmp=$size[1];
@@ -441,18 +442,18 @@ function id_commons($p18_str){
 				else
 					$w_thumb=floor(350*$width_tmp/$height_tmp);
 				if ($longfilename)
-					$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-thumbnail.png";
+					$thumb="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-thumbnail.png";
 				else
-					$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img).".png";
+					$thumb="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-". urlencode($img).".png";
 				if ($width_tmp/$height_tmp>1400/900)
 					$width=1400;
 				else
 					$width=floor(900*$width_tmp/$height_tmp);
 				$height=floor($height_tmp*$width/$width_tmp);
 				if ($longfilename)
-					$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$width."px-thumbnail.png";
+					$large="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$width."px-thumbnail.png";
 				else
-					$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$width."px-". urlencode($img).".png";
+					$large="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$width."px-". urlencode($img).".png";
 			}
 			else{
 				$ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));
@@ -497,12 +498,12 @@ function id_commons($p18_str){
 						$thumb=$urlimg;
 					else{
 						if ($longfilename)
-							$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb."px-thumbnail.".$ext;
+							$thumb="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb."px-thumbnail.".$ext;
 						else{
 							if (!$tif)
-								$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-".urlencode($img);
+								$thumb="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb."px-".urlencode($img);
 							else
-								$thumb="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb."px-".urlencode($filename).".".$ext;
+								$thumb="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb."px-".urlencode($filename).".".$ext;
 						}
 					}
 						
@@ -523,12 +524,12 @@ function id_commons($p18_str){
 						$thumb_h=$urlimg;
 					else{
 						if ($longfilename)
-							$thumb_h="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb_h."px-thumbnail.".$ext;
+							$thumb_h="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb_h."px-thumbnail.".$ext;
 						else{
 							if (!$tif)
-								$thumb_h="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb_h."px-". urlencode($img);
+								$thumb_h="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_thumb_h."px-". urlencode($img);
 							else
-								$thumb_h="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb_h."px-".urlencode($filename).".".$ext;
+								$thumb_h="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_thumb_h."px-".urlencode($filename).".".$ext;
 						}
 					}
 						
@@ -550,12 +551,12 @@ function id_commons($p18_str){
 						$large=$urlimg;
 					else{
 						if ($longfilename)
-							$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_large."px-thumbnail.".$ext;
+							$large="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_large."px-thumbnail.".$ext;
 						else{
 							if (!$tif)
-								$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_large."px-". urlencode($img);
+								$large="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$w_large."px-". urlencode($img);
 							else
-								$large="http://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_large."px-".urlencode($filename).".".$ext;
+								$large="https://upload.wikimedia.org/wikipedia/commons/thumb/" . $folder."/".$lossy.$w_large."px-".urlencode($filename).".".$ext;
 						}
 					}
 				}
@@ -586,6 +587,84 @@ function id_commons($p18_str){
 		$p18=$row['id'];
 	}
 	return $p18;
+	
+}
+function label($tab_labels,$l){
+	$label="";
+	if ($tab_labels[$l]["value"])
+		$label=$tab_labels[$l]["value"];
+	else{
+		if ($tab_labels["en"]["value"])
+			$label=$tab_labels["en"]["value"];
+		else{
+			if ($tab_labels)
+				$label=$tab_labels[key($tab_labels)]["value"];
+		}
+	}
+	if ($label!="")
+		return $label;
+	else 
+		return "";
+
+}
+function unit_search($qwd){
+	global $fold_crotos,$tab_lg,$link; 
+	$tab_lb_units = array();
+	$tab_lg_without = array("bn","el","he","hi","ko","pa","te","th","tr","vi");
+	for($k=0;$k<count($tab_lg);$k++)
+		$tab_lb_units[$tab_lg[$k]]="";
+	$qitem_path=$fold_crotos."harvest/units/".$qwd.".json";
+	if (!(file_exists($qitem_path))){
+		copy("https://www.wikidata.org/w/api.php?action=wbgetentities&ids=q".$qwd."&format=json", $qitem_path);
+		$file_unit=file_get_contents($qitem_path,true);
+		$data = json_decode($file_unit,true);
+
+		$varlab=$data["entities"]["Q".$qwd];
+		$claims=$varlab["claims"];
+		$labels=$varlab["labels"];
+		$latin_symbol="";
+		
+		foreach ($claims["P558"] as $value){
+			if (isset($value["qualifiers"]["P282"])){
+				$sys="";
+				$symbol=$value["mainsnak"]["datavalue"]["value"];
+				foreach ($value["qualifiers"]["P282"] as $value_sys){
+					$sys=$value_sys["datavalue"]["value"]["id"];
+					if ($sys=="Q8196"){
+						$tab_lb_units["ar"]=$symbol;
+						$tab_lb_units["fa"]=$symbol;
+					}
+					if ($sys=="Q8209"){
+						$tab_lb_units["ru"]=$symbol;
+						$tab_lb_units["uk"]=$symbol;
+					}
+					if ($sys=="Q82772")
+						$tab_lb_units["ja"]=$symbol;
+					if ($sys=="Q8229")
+						$latin_symbol=$symbol;
+				}
+			}
+		}
+		for($k=0;$k<count($tab_lg_without);$k++)
+			$tab_lb_units[$tab_lg_without[$k]]=label($labels,$tab_lg_without[$k]);
+				 
+		for($k=0;$k<count($tab_lg);$k++){
+			$lg=$tab_lg[$k];
+			if($tab_lb_units[$lg]==""){
+				if ($latin_symbol!="")
+					$tab_lb_units[$lg]=$latin_symbol;
+				else{
+					$tab_lb_units[$lg]=label($labels,$lg);
+					if($tab_lb_units[$lg]=="")
+						$tab_lb_units[$lg]=label($labels,"en");
+				}
+			}
+			if($tab_lb_units[$lg]!=""){
+				$sql="INSERT INTO units (qwd,label,lg) VALUES (".$qwd.",\"".$tab_lb_units[$lg]."\",\"".$lg."\")";
+				$rep=mysqli_query($link,$sql);
+			}
+		}
+	}
 	
 }
 ?>

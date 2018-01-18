@@ -17,4 +17,3 @@
     <script src="/crotos/js/jquery.auto-complete.js"></script>
     <script src="/crotos/js/imagesloaded.pkgd.min.js"></script>
     <script src="/crotos/js/yoxview/yoxview-init.js"></script>
-    <script>document.getElementsByClassName('item').style.display = 'none';</script>

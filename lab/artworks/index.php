@@ -10,7 +10,7 @@ list($g_usec, $g_sec) = explode(" ",microtime());
 $t_start=(float)$g_usec + (float)$g_sec;
 
 
-$lgs=array("ar","bn","br","ca","cs","da","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
+$lgs=array("ar","bn","br","ca","cs","cy","da","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 $lg="fr";
 if (isset($_COOKIE['l']))
 	$lg=$_COOKIE['l'];
@@ -92,9 +92,9 @@ if ($q!=""){
 	elseif (intval($prop)==276)
 		$query="SELECT DISTINCT ?item WHERE {{?item wdt:P276/wdt:P361* wd:Q".$q."}UNION{?item wdt:P276/wdt:P276* wd:Q".$q."}}";
 	else
-		$query="SELECT DISTINCT ?item WHERE {?item wdt:P31/wdt:P279* wd:Q".$q."}";
-	
+		$query="SELECT DISTINCT ?item WHERE {?item wdt:P".$prop." wd:Q".$q."}";
 	$query.=" ORDER BY ?item";
+	
 	if (!(file_exists($cqitem_path))){
 		$sparqlurl=urlencode($query);
 		$req="https://query.wikidata.org/sparql?format=json&query=".$sparqlurl;
@@ -316,8 +316,28 @@ if (!$csv)
 <?php
 	$qwd_data=array();
 	if (!(file_exists($cqitem_path))){
-		$sql_artw="";
 		
+		$ctext="";
+		
+		for ($i=0;$i<$nbartworks;$i++){
+			$sql_artw="SELECT * from artworks WHERE qwd=".$responseArray["items"][$i];
+			$rep=mysqli_query($link,$sql_artw);
+			$num_rows= mysqli_num_rows($rep);
+			if ($num_rows>0){
+				$row = mysqli_fetch_assoc($rep);
+				$id=$row['id'];
+				if ($ctext!="")
+					$ctext.=" OR";
+				$ctext.=" id=".$id;	
+				$qwd_data[]=data_qwd($row['qwd'],$row);
+			}
+			else{
+				$miss_w[]=$responseArray["items"][$i];
+				$qwd_data[]=data_qwd($responseArray["items"][$i],0);
+			}
+		}
+		
+		/*$sql_artw="";
 		for ($i=0;$i<$nbartworks;$i++){
 			if ($sql_artw!="")
 				$sql_artw.=" OR";
@@ -325,7 +345,7 @@ if (!$csv)
 		}
 		
 		$sql_artw="SELECT * from artworks WHERE ".$sql_artw. " ORDER by qwd";
-		//echo $sql_artw;
+		echo $sql_artw;
 		$rep=mysqli_query($link,$sql_artw);
 		$miss_list="";
 		$qog_idx=0;
@@ -343,10 +363,14 @@ if (!$csv)
 			$qog_idx=$qwd_idx;
 		}
 		for ($i=($qog_idx+1);$i<count($responseArray["items"]);$i++)
+			$miss_w[]=$responseArray["items"][$i];*/
+		/*	for ($i=($qog_idx+1);$i<count($responseArray["items"]);$i++){
 			$miss_w[]=$responseArray["items"][$i];
+			echo "\n*".$responseArray["items"][$i];
+		}*/
 		
-		for ($i=0;$i<count($miss_w);$i++)
-			$qwd_data[]=data_qwd($miss_w[$i],0);
+		/*for ($i=0;$i<count($miss_w);$i++)
+			$qwd_data[]=data_qwd($miss_w[$i],0);*/
 		
 		$fp=fopen($nqitem_path,"w");	
 		fputs($fp,$nbartworks);
@@ -372,7 +396,7 @@ if (!$csv)
 	foreach ($qwd_data as $key => $row)
 		$qwd_idx[$key] = $row["lb0"];
 	array_multisort($qwd_idx, SORT_ASC, $qwd_data);
-	
+
 	for ($i=0;$i<count($qwd_data);$i++){
 		if (!$csv){ 
 			$csvtmp= array();
@@ -501,6 +525,7 @@ if (!$csv)
 <a href="https://br.wikipedia.org/">br</a>, 
 <a href="https://ca.wikipedia.org/">ca</a>, 
 <a href="https://cs.wikipedia.org/">cs</a>, 
+<a href="https://cy.wikipedia.org/">cs</a>, 
 <a href="https://da.wikipedia.org/">da</a>, 
 <a href="https://de.wikipedia.org/">de</a>, 
 <a href="https://el.wikipedia.org/">el</a>, 

@@ -20,7 +20,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 	$described_link=$data['link'];
 	if ($described_link==""){
 		if ($data['P727']!="")
-			$described_link="http://europeana.eu/portal/record/".$data['P727'].".html";
+			$described_link="https://europeana.eu/portal/record/".$data['P727'].".html";
 		if ($data['P350']!="")
 			$described_link="https://rkd.nl/nl/explore/images/".$data['P350'];
 		if ($data['P2108']!="")
@@ -72,6 +72,13 @@ while($data = mysqli_fetch_assoc($rep)) {
 	$inspired=txt_prop($id_artw,941,$l);
 	$pendant=txt_prop($id_artw,1639,$l);
 	$exhibition=txt_prop($id_artw,608,$l);
+	$dimensions = array(
+		"length"=> dimension($data['P2043'],2043,$l),
+		"height"=> dimension($data['P2048'],2048,$l),
+		"width"=> dimension($data['P2049'],2049,$l),
+		"diameter"=> dimension($data['P2386'],2386,$l),
+		"depth"=> dimension($data['P2610'],2610,$l)
+	);
 	
 	$p18=$data['P18'];
 	
@@ -202,7 +209,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 	
 	$commons_link="";
 	if ($thumb_h!=""){
-		$commons_link="http://commons.wikimedia.org/wiki/File:".htmlentities(str_replace("?","%3F",str_replace(" ","_",$p18_str)), ENT_QUOTES, "UTF-8");
+		$commons_link="https://commons.wikimedia.org/wiki/File:".htmlentities(str_replace("?","%3F",str_replace(" ","_",$p18_str)), ENT_QUOTES, "UTF-8");
 		if ($disp==0)
 			$cartel.="	<a href=\"".$commons_link."\" title=\"".translate($l,"Commons")." – ".$width." × ".$height."&nbsp;".translate($l,"px")."\"><img src=\"img/commons_ico.png\" alt=\"\"/></a>";
 		else
@@ -264,7 +271,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 		$cartel_links.="\n<p>".$loc_link."</p>";
 	if ($data['P727']!=""){
 		$cartel_links.="<p><a href=\"http://europeana.eu/portal/record/".$data['P727'].".html\"><img src=\"img/europeana.png\" alt=\"Europeana\"/></a> <a href=\"http://europeana.eu/portal/record/".$data['P727'].".html\" class=\"externe\">".translate($l,"Europeana")."</a></p>";
-		$yox_links.=" <a href=\"http://europeana.eu/portal/record/".$data['P727'].".html\" title=\"".translate($l,"Europeana")."\"><img src=\"img/europeana_ico.png\" alt=\"Europeana\"/></a>";
+		$yox_links.=" <a href=\"https://europeana.eu/portal/record/".$data['P727'].".html\" title=\"".translate($l,"Europeana")."\"><img src=\"img/europeana_ico.png\" alt=\"Europeana\"/></a>";
 	}
 	if ($data['P214']!=""){
 		$cartel_links.="<p><a href=\"http://viaf.org/viaf/".$data['P214']."/\"><img src=\"img/viaf.png\" alt=\"VIAF\"/></a> <a href=\"http://viaf.org/viaf/".$data['P214']."/\" class=\"externe\">".translate($l,"VIAF")."</a></p>";
@@ -328,6 +335,18 @@ while($data = mysqli_fetch_assoc($rep)) {
 	$yox_cartel.=$type;
 	if ($material!="")
 		$cartel.="\n<p>".$material."</p>";
+	$txtdim="";
+	foreach($dimensions as $dim){
+		if ($dim!=""){
+			if ($txtdim !="")
+				$txtdim.=" – ";
+			$txtdim.=$dim;
+		}
+	}
+	if ($txtdim!="")
+		$cartel.="\n<p>".$txtdim."</p>";
+	if ($txtdim!="")
+		$yox_cartel.="&nbsp;&nbsp;|&nbsp;&nbsp;".$txtdim;
 	if ($inv!="")
 		$cartel.="\n<p><span class=\"libelle\">".translate($l,"217")."</span>&nbsp;: ".$inv."</p>";
 	if ($collection!="")

@@ -63,7 +63,7 @@ function val_prop($id_artw,$prop){
 }
 
 function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true){
-	global $mode,$l,$d;//,$tab_miss;
+	global $mode,$l,$d,$liennav;//,$tab_miss;
 	$txt="";
 	if ($id_art!=0){
 		$values=val_prop($id_art,$id_prop);
@@ -84,9 +84,10 @@ function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true)
 							$txt.=" <a href=\"?q=".$values[$i];
 						else
 							$txt.=" <a href=\"?p$id_prop=".$values[$i];
-						// For publication date, date added
+						/*// For publication date, date added
 						if ($d!=0)
-							$txt.="&amp;d=".$d;
+							$txt.="&amp;d=".$d;*/
+						$txt.=$liennav;
 
 						/*For adding filters to links
 						if ($mode==1)
@@ -251,5 +252,47 @@ function test_dp($id_art){
 }
 function del_html($str){
 	return preg_replace("/<ul[^>]+\>/i", "",preg_replace("/<li[^>]+\>/i", "",preg_replace("/<p[^>]+\>/i", "",preg_replace("/<dd[^>]+\>/i", "",preg_replace("/<dl[^>]+\>/i", "",preg_replace("/<img[^>]+\>/i", "",preg_replace("/<\/?td[^>]*\>/i", "",preg_replace("/<\/?tr[^>]*\>/i", "",preg_replace("/<\/?table[^>]*\>/i", "",preg_replace("/<\/?li[^>]*\>/i", "", preg_replace("/<\/?ul[^>]*\>/i", "",  preg_replace("/<\/?br[^>]*\>/i", " ",preg_replace("/<\/?hr[^>]*\>/i", " ", preg_replace("/<\/?p[^>]*\>/i", "", preg_replace("/<\/?div[^>]*\>/i", "", $str)))))))))))))));
+}
+
+function dimension($str_dim,$id_prop,$lg){
+	$txt="";
+	if ($str_dim!=""){
+		$tab_dim=explode("|",$str_dim);
+		for ($i=0;$i<count($tab_dim);$i++){
+			if ($i==0)
+				$txt.="<span class=\"libelle\">".translate($lg,$id_prop)."</span>&nbsp;: ";
+			else
+				$txt.=" ; ";
+			$val_dim=explode(";",$tab_dim[$i]);
+			$txt.=$val_dim[0];
+			if ($val_dim[1]!="1")
+				$txt.=" ".lb_unit($val_dim[1],$lg);	
+		}
+	}
+	return $txt;
+}
+function lb_unit($qwd,$lg){
+	global $link;
+    $sql="SELECT label from units WHERE qwd=$qwd AND lg='$lg' AND label!='' LIMIT 0,1";
+	$rep_lab=mysqli_query($link,$sql);
+	$num_rows= mysqli_num_rows($rep_lab);
+	if ($num_rows==0){
+		$sql="SELECT label from units WHERE qwd=$qwd AND lg='en' AND label!='' LIMIT 0,1";
+		$rep_lab=mysqli_query($link,$sql);
+		$num_rows = mysqli_num_rows($rep_lab);
+		if ($num_rows==0){
+			$sql="SELECT label from units WHERE qwd=$qwd AND label!='' LIMIT 0,1";
+			$rep_lab=mysqli_query($link,$sql);
+			$num_rows = mysqli_num_rows($rep_lab);
+		}
+	}
+	if ($num_rows!=0){
+		$data_lab = mysqli_fetch_assoc($rep_lab);
+		$label=$data_lab['label'];
+	}else
+		$label="";
+	
+	/* Easter egg */if ($lg=="mu") return "Houba"; else	
+	return $label;
 }
 ?>

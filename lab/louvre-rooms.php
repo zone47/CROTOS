@@ -145,10 +145,11 @@ $id_Louvre=$data['id'];
 $nb=$data['nb'];
 
 if ($l=="fr")
-	echo "Œuvres du <a href=\"http://www.zone47.com/crotos/?p195=19675\">Louvre</a> localisées par salles sur Wikidata (".$nb." items)";
+	echo "Œuvres conservées au <a href=\"http://zone47.com/crotos/?p276=1075988\">Louvre</a> localisées par salles sur Wikidata  <!--(".$nb." items)-->";
 else
-	echo "Visual artworks of the <a href=\"http://www.zone47.com/crotos/?p195=19675\">Musée du Louvre</a> located by rooms on Wikidata (".$nb." items)";
+	echo "Visual artworks at the <a href=\"http://zone47.com/crotos/?p276=1075988\">Musée du Louvre</a> located by rooms on Wikidata <!--(".$nb." items)-->";
 ?></h1>
+<!--
 <div>
 <?php
 if ($l=="fr")
@@ -156,14 +157,14 @@ if ($l=="fr")
 else
 	echo "<a href=\"artworks/?l=en&p=195&c0=1&c1=1&c170=1&c571=1&c3=1&c347=1&c1212=1&c18=1&q=19675\">List of artworks from collections of the Musée du Louvre on Wikidata</a>";
 ?>
-</div>
+</div>-->
 </form>
 <?php 
 
 children_search($id_Louvre,$l);
 
 ?>
-<p>
+<!--<p>
 <?php
 $sql_sub="SELECT id_sub FROM prop_sub, p195 WHERE prop_sub.prop=195 AND prop_sub.id_prop=p195.id AND p195.qwd=19675";
 $rep_sub=mysqli_query($link,$sql_sub);
@@ -192,6 +193,6 @@ else
 	echo "Visual artworks of the Musée du louvre without location: <b>".$nbartworks." items</b> - ".$nbmiss." missing images";
 ?>
 - <a href="http://www.zone47.com/crotos/?p195=19675&m276=1&mode=1">Crotos</a>
-</p>
+</p>-->
 </body>
 </html>

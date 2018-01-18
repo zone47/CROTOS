@@ -9,8 +9,6 @@ if (isset($_GET['l']))
 		$lg=$_GET['l'];
 	}
 ?><!DOCTYPE html>
-<!-- Liz Fischer, 2016
-github.com/lizfischer -->
 <html lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
@@ -83,7 +81,7 @@ h1.entete{
 
 	<div id="container">
     <form id="lgform">
-		<h1><?php if ($lg=="fr") echo "IIIF Image Cropper pour Wikidata"; else echo "IIIF Image Cropper for Wikidata" ; ?> - <select name="l" id="lg">
+		<h1><?php if ($lg=="fr") echo "IIIF Image Cropper pour Wikimedia Commons et Wikidata"; else echo "IIIF Image Cropper for Wikimedia Commons and Wikidata" ; ?> - <select name="l" id="lg">
 <?php 
 $lgs=array("en","fr");
 include "../../traduction.php";
@@ -97,16 +95,22 @@ for ($i=0;$i<count($lgs);$i++){
 ?></select></h1></form>
 <?php
 if ($lg=="fr") { ?>
-<p>Petit outil outil pour générer des valeurs de fragments d'image pour la propriété <a href="https://www.wikidata.org/wiki/Property:P2677" target="_blank">position relative dans l'image / P2677</a> (exemple : <a href="https://www.wikidata.org/wiki/Q21013224">Vierge entre les vierges</a> de Gérard David, avec URL <a href="http://www.iiif.io" target="_blank">IIIF</a>. Indiquer un nom de fichier de Wikimedia Commons, et ensuite cliquer-glisser pour délimiter un fragment rectangulaire.</p>
+<p>Outil  pour créer des fragments d'image avec URL <a href="http://www.iiif.io" target="_blank">IIIF</a> pour les fichiers image de Wikimedia Commons, et indiquer les valeurs à fournir pour la propriété Wikidata <a href="https://www.wikidata.org/wiki/Property:P2677" target="_blank">position relative dans l'image / P2677</a>. Exemples d'utilisation :<br/>
+&nbsp;- pour les fragments sur une œuvre, <a href="/crotos/lab/cropper/get.php?q=21013224">Vierge entre les vierges, Gérard David</a> – <a href="/crotos/lab/cropper/get.php?q=14619165">Galerie de vues de la Rome antique, Giovanni Paolo Panini</a>.</br>
+&nbsp;- pour un élement décrit sur plusieurs œuvres. <a href="/crotos/lab/cropper/p180iiif.php">Recherche</a>. Exemple : <a href="/crotos/lab/cropper/p180iiif.php?q=302">Jésus Christ</a></p>
+<!--<p>Indiquer un nom de fichier de Wikimedia Commons, et ensuite cliquer-glisser pour délimiter un fragment rectangulaire.</p>-->
 <?php
 } else {?>
-<p>A simple little tool to provide values of image fragments for the Wikidata property <a href="https://www.wikidata.org/wiki/Property:P2677" target="_blank">relative position within image / P2677</a> (example: <a href="https://www.wikidata.org/wiki/Q21013224">Virgin among the Virgins</a> by Gerard David, with <a href="http://www.iiif.io" target="_blank">IIIF</a> URLs. Input the filename if Wikimedia Commons file, then click and drag on the image to crop.</p>
+<p>A simple little tool to create image fragments with <a href="http://www.iiif.io" target="_blank">IIIF</a> URL for Wikimedia Commons image files, and to provide values for the Wikidata property <a href="https://www.wikidata.org/wiki/Property:P2677" target="_blank">relative position within image / P2677</a>. Example of use:</br>
+&nbsp;- for fragments on an artwork, <a href="/crotos/lab/cropper/get.php?q=21013224">Virgin among the Virgins, Gérard David</a> – <a href="/crotos/lab/cropper/get.php?q=14619165">Ancient Rome, Giovanni Paolo Panin</a>.</br>
+&nbsp;- for an item depicted by several artworks.  <a href="/crotos/lab/cropper/p180iiif.php">Search</a>. Example: <a href="/crotos/lab/cropper/p180iiif.php?q=302">Jesus Christ</a></p>
+ <!--(example: <a href="https://www.wikidata.org/wiki/Q21013224">Virgin among the Virgins</a> by Gerard David ; <a href="/crotos/lab/cropper/get.php?q=21013224">display</a> – <a href="/crotos/lab/cropper/get.php?q=14619165">example 2</a>)). Input the filename if Wikimedia Commons file, then click and drag on the image to crop.</p>-->
 <?php } ?>
 		
 		<div id="fields">
 			<label for="URL"><?php if ($lg=="fr") echo "Fichier Commons :"; else echo "Commons file:" ; ?></label>
 			<input type="text" id="URL" name="URL" value="David Virgin among the Virgins.jpg">
-			<button type="button" id="submit">Load</button>
+			<button type="button" id="submit"><?php if ($lg=="fr") echo "Charger"; else echo "Load" ; ?></button>
 
 			<label for="output"><?php if ($lg=="fr") echo "Posititon relative :"; else echo "Relative position:" ; ?></label>
 			<input type="text" name="output" id="output" readonly>

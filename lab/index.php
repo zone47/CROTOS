@@ -66,7 +66,7 @@ if ($lg=="fr")
 	Tableau des mises à jour de Crotos (tous les 3 jours), actif depuis août 2015, qui permet de suivre les évolutions du contenu publié et de retrouver par date de mise en ligne les œuvres ou images.";
 else
 	echo "Content updates on Crotos</a><br/>
-	Chart updates Crotos (every 3 days), active since August 2015, which tracks the developments of the published content and allows to retrieve by of publication artworks or images.";
+	Updates tabel of Crotos (every 3 days), active since August 2015, which tracks the developments of the published content and allows to retrieve by date of publication artworks or images.";
 echo "";
 
 ?></li>
@@ -83,7 +83,7 @@ if ($lg=="fr")
 	echo "Statistiques par collections</a><br/>
 	Cet outil donne des indicateurs sur le nombre d'œuvres par collection mais également sur leur indexation (proportion avec numéro d'inventaire, date, créateur ou nombre moyen d'éléments iconographiques).";
 else
-	echo "Artworks of the Musée du Louvre by rooms</a><br />
+	echo "Statistics by collection</a><br />
 	This tool provides indicators on the number of artworks by collection but also on indexing (proportion with inventory number, date, or creator average number of iconographic elements).";
 ?></li>
     <li><a href="louvre-rooms"><?php
@@ -94,21 +94,21 @@ else
 	echo "Artworks of the Musée du Louvre by rooms</a><br />
 	This tool lists the halls of the Louvre and points to the lists of corresponding artworks, also mentioning the artworks where the image is missing.";
 ?></li>
-    <li><a href="cropper/"><?php
-if ($lg=="fr")
-	echo "Cropper</a><br/>
-Petit outil outil pour générer des valeurs de fragments d'image pour la propriété <a href=\"https://www.wikidata.org/wiki/Property:P2677\" target=\"_blank\">position relative dans l'image / P2677</a> dans Wikidata, avec URLs <a href=\"http://www.iiif.io\" target=\"_blank\">IIIF</a>.";
-else
-	echo "Cropper</a><br/>
-A simple little tool to provide values of image fragments for the Wikidata property <a href=\"https://www.wikidata.org/wiki/Property:P2677\" target=\"_blank\">relative position within image / P2677</a>, with <a href=\"http://www.iiif.io\" target=\"_blank\">IIIF</a> URLs.";
-?></a></li>
     <li><a href="../callisto/"><?php
 if ($lg=="fr")
 	echo "Callisto</a><br/>
 	Carte interactive pour explorer et visualiser œuvres, musées et éléments dépeints selon leur géolocalisation.";
 else
-	echo "Callistos</a><br/>
+	echo "Callisto</a><br/>
 Interactive map to explore and visualize material, museum items and portrayed them as geolocation.";
+?></a></li>
+    <li><a href="cropper/"><?php
+if ($lg=="fr")
+	echo "IIIF Cropper</a><br/>
+Outil pour créer des fragments d'image avec URL <a href=\"http://www.iiif.io\" target=\"_blank\">IIIF</a> pour les fichiers image de Wikimedia Commons, et indiquer les valeurs à fournir pour la propriété Wikidata <a href=\"https://www.wikidata.org/wiki/Property:P2677\" target=\"_blank\">position relative dans l'image / P2677</a>.";
+else
+	echo "IIIF Cropper</a><br/>
+Tool to create image fragments with <a href=\"http://www.iiif.io\" target=\"_blank\">IIIF</a> URL for Wikimedia Commons image files, and to provide values for the Wikidata property <a href=\"https://www.wikidata.org/wiki/Property:P2677\" target=\"_blank\">relative position within image / P2677</a>.";
 ?></a></li>
 
 </ul>

@@ -27,8 +27,15 @@ where {
 	UNION {?item wdt:P31/wdt:P279* wd:Q19960510} # group of paintings
 	UNION {?item wdt:P31/wdt:P279* wd:Q16905563} # cycle of paintings
 	UNION {?item wdt:P31/wdt:P279* wd:Q125191.}  # photograph
+	UNION {?item wdt:P31/wdt:P279* wd:Q45791}    # geoglyph
+	UNION {?item wdt:P31/wdt:P279* wd:Q1758043}  # tsuba
 	UNION {?item wdt:P31 wd:Q220659}             # artifact
-
+    UNION {                                      # OR
+	?item wdt:P195/wdt:P361* wd:Q19675}          # in the collections of the Louvre
+	UNION {                                      # OR
+	?item wdt:P195 wd:Q1376}                     # in the collections of the musée Saint-Raymond
+	MINUS {?item wdt:P31/wdt:P279* wd:Q1004}
+	
 	{?item wdt:P18 ?img.}                        # With image
 	UNION {                                      # OR
 	?article schema:about ?item .         

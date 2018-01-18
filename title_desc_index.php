@@ -14,8 +14,8 @@ if ($q!=""){
 			$title.=" - ";
 		$title.=$creator;
 		echo $title;
-		if ($creator!="")
-			echo " - ";
+		echo " - ";
+		
 	}
 }
 ?>Crotos</title>

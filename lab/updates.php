@@ -69,10 +69,11 @@ for ($i=0;$i<count($lgs);$i++){
 
 if ($l=="fr")
 	echo "Mises à jour de Crotos<br/>
-<small>Indicateurs issus de rapports générés lors des mises à jour. Des variations sur l'état actuel de la mise à jour dans Crotos sont possibles (éléments supprimés ou restaurés, images ajoutées depuis).</small>";
+<small>* Les œuvres comptabilisées sont celles avec image, article Wikipédia ou des <a href=\"louvre-rooms.php\">collections du musée du Louvre</a>.<br />
+Indicateurs issus de rapports générés lors des mises à jour. Des variations sur l'état actuel de la mise à jour dans Crotos sont possibles (éléments supprimés ou restaurés, images ajoutées depuis).</small>";
 else
 	echo "Crotos - Updates<br/>
-<small>Indicators from reports generated after updates. Variations on the current status of the update in Crotos are possible (deleted or restored elements, images added).</small>";
+<small>* Counted artworks are the ones with image, article Wikipedia or from the <a href=\"louvre-rooms.php\">Louvre collections</a>.<br />Indicators from reports generated after updates. Variations on the current status of the update in Crotos are possible (deleted or restored elements, images added).</small>";
 ?></h1>
 <div>
 <table class="tablesorter">
@@ -82,7 +83,7 @@ else
             <th><?php if ($l=="fr") echo "Nouvelles œuvres"; else	echo "New artworks"; ?></th>
             <th><?php if ($l=="fr") echo "Nouvelles images"; else	echo "New images"; ?></th>
             <th><?php if ($l=="fr") echo "Éléments supprimés"; else	echo "Deleted items"; ?></th>
-            <th><?php if ($l=="fr") echo "Total œuvres"; else	echo "Total artworks"; ?></th>
+            <th><?php if ($l=="fr") echo "Total œuvres*"; else	echo "Total artworks*"; ?></th>
             <th><?php if ($l=="fr") echo "Total œuvres avec image"; else	echo "Total artworks with image"; ?></th>
 		</tr>
 	</thead>

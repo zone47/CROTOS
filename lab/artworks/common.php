@@ -28,7 +28,7 @@ function print_footer() {
 ?>	
 <div style="clear:both"></div>
 <hr />
-<small>by /* / */, on a tool under the <a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-Sharealike (BY-SA) license</a> made by <a href="https://www.wikidata.org/wiki/User:Poulpy">Poulpy</a>.</small>
+<small>Everything on that page is under the <a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-Sharealike (BY-SA) license</a>. Infos, help, rants can be directly expressed to <a href="https://www.wikidata.org/wiki/User:Poulpy">Poulpy</a>.</small>
 </div>
 </body>
 </html>

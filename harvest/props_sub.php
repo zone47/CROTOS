@@ -18,11 +18,12 @@ for ($i=0;$i<count($tab_props);$i++){
 		$id_prop=$data['id'];
 		$qwd=$data['qwd'];
 		$sub_query="";
-        if ($qwd!=0){
+        if (($qwd!=0)&&($qwd!=15989253)){
             if (($prop!=170)&&($prop!=179)&&($prop!=608)){
                 $res = get_query($prop,$qwd);
                 if (count($res)>0){
                     for ($j=0;$j<count($res);$j++){
+                        if ($res[$j]!="683074"){
                         $sql="SELECT id from p$prop WHERE qwd=".$res[$j];
                         $rep2=mysqli_query($link,$sql);
                         if (mysqli_num_rows($rep2)>0){
@@ -30,7 +31,7 @@ for ($i=0;$i<count($tab_props);$i++){
                             $id_sub=$row['id'];	
                             $rep3=mysqli_query($link,"INSERT INTO prop_sub (prop,id_prop,id_sub) VALUES (".$prop.",".$id_prop.",".$id_sub.") ");
                             $sub_query.=" OR id_prop=".$id_sub;
-                        }
+                        }}
                     }
                 }
             }
