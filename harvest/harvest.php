@@ -44,6 +44,8 @@ where {
 	?item wdt:P195/wdt:P361* wd:Q19675}          # in the collections of the Louvre
 	UNION {                                      # OR
 	?item wdt:P195 wd:Q1376}                     # in the collections of the musée Saint-Raymond
+	UNION {                                      # OR
+	?item wdt:P195 wd:Q3329624}                     # in the collections of the musée d'art et d'histoire de Saint-Brieuc 
 }";
 $sparqlurl=urlencode($sparql);
 $req="https://query.wikidata.org/sparql?format=json&query=".$sparqlurl;
