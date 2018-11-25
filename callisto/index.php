@@ -1,4 +1,5 @@
 <?php
+include "../lg.php";
 $m=0;
 if (isset($_COOKIE['m']))
 	$m=intval($_COOKIE['m']);
@@ -8,16 +9,7 @@ if (isset($_GET['m']))
 		$m=$_GET['m'];
 	}
 	
-$l="fr"; 
-if (isset($_COOKIE['l']))
-	$l=$_COOKIE['l'];
-if (isset($_GET['l']))
-	if ($_GET['l']!=""){ 
-		setcookie ("l",$_GET['l'], time() - 3600);
-		setcookie ("l",$_GET['l'], time() + 31536000, "/");
-		$l=$_GET['l'];
-	}
-$lgs=array("ar","bn","br","ca","cs","da","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
+$lgs=$lgsc;
 
 include "../functions.php";
 include "../traduction.php";
@@ -321,11 +313,27 @@ switch($m){
 }
 
 /* Basemap Layers */
-var mapquestOSM = L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+/*var mapquestOSM = L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
   maxZoom: 19,
   subdomains: ["otile1", "otile2", "otile3", "otile4"],
   attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+});*/
+//var cartoLight = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
+var cartoLight = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+//var cartoLight = L.tileLayer('http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
 });
+var usgsImagery = L.layerGroup([L.tileLayer("http://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}", {
+  maxZoom: 15,
+}), L.tileLayer.wms("http://raster.nationalmap.gov/arcgis/services/Orthoimagery/USGS_EROS_Ortho_SCALE/ImageServer/WMSServer?", {
+  minZoom: 16,
+  maxZoom: 19,
+  layers: "0",
+  format: 'image/jpeg',
+  transparent: true,
+  attribution: "Aerial Imagery courtesy USGS"
+})]);
 
 
 /* Overlay Layers */
@@ -344,7 +352,8 @@ var markerClusters = new L.MarkerClusterGroup({
   spiderfyOnMaxZoom: true,
   showCoverageOnHover: false,
   zoomToBoundsOnClick: true,
-  disableClusteringAtZoom: 9
+  disableClusteringAtZoom: 9,
+  maxClusterRadius:40
 });
 
 var depictLayer = L.geoJson(null);
@@ -365,7 +374,7 @@ var depicts = L.geoJson(null, {
     if (feature.properties) {
       var content = "<table class='table table-striped table-bordered table-condensed snipet'>" + "<tr><td><a href=\"http://tools.wmflabs.org/reasonator/?lang=" + l + "&q=" + layer.feature.properties.q + "\">" + layer.feature.properties.l + "</a> <a href=\"http://tools.wmflabs.org/reasonator/?lang=" + l + "&q=" + layer.feature.properties.q + "\"><img src=\"assets/img/reas_ico.png\" alt=\"\" /></a></td></tr>";
 	  if (feature.properties.t!=""){
-	    content = content + "<tr><td><a href=\"/crotos/?p180=" + layer.feature.properties.q + "\"><img src=\"https://upload.wikimedia.org/wikipedia/commons/" + layer.feature.properties.t + "\" /></a>";
+		content = content + "<tr><td><a href=\"/crotos/?p180=" + layer.feature.properties.q + "\"><img src=\"" + layer.feature.properties.t + "\" /></a>";
 		content = content + " <a href=\"https://commons.wikimedia.org/wiki/File:" + layer.feature.properties.i + "\"><img src=\"assets/img/commons_ico.png\" class=\"cms_ico\"/></a></td></tr>";
 		
 	  }
@@ -414,7 +423,7 @@ var museums = L.geoJson(null, {
     if (feature.properties) {
 	  var content = "<table class='table table-striped table-bordered table-condensed snipet'>" + "<tr><td><a href=\"http://tools.wmflabs.org/reasonator/?lang=" + l + "&q=" + layer.feature.properties.q + "\">" + layer.feature.properties.l + "</a> <a href=\"http://tools.wmflabs.org/reasonator/?lang=" + l + "&q=" + layer.feature.properties.q + "\"><img src=\"assets/img/reas_ico.png\" alt=\"\" /></a></td></tr>";
 	  if (feature.properties.t!=""){
-	    content = content + "<tr><td><a href=\"/crotos/?p195=" + layer.feature.properties.q + "\"><img src=\"https://upload.wikimedia.org/wikipedia/commons/" + layer.feature.properties.t + "\" /></a>";
+		content = content + "<tr><td><a href=\"/crotos/?p195=" + layer.feature.properties.q + "\"><img src=\"" + layer.feature.properties.t + "\" /></a>";
 		content = content + " <a href=\"https://commons.wikimedia.org/wiki/File:" + layer.feature.properties.i + "\"><img src=\"assets/img/commons_ico.png\" class=\"cms_ico\"/></a></td></tr>";
 		
 	  }
@@ -465,7 +474,7 @@ var artworks = L.geoJson(null, {
     if (feature.properties) {
 	  var content = "<table class='table table-striped table-bordered table-condensed snipet'>" + "<tr><td><a href=\"http://tools.wmflabs.org/reasonator/?lang=" + l + "&q=" + layer.feature.properties.q + "\">" + layer.feature.properties.l + "</a> <a href=\"http://tools.wmflabs.org/reasonator/?lang=" + l + "&q=" + layer.feature.properties.q + "\"><img src=\"assets/img/reas_ico.png\" alt=\"\" /></a></td></tr>";
 	  if (feature.properties.t!=""){
-	    content = content + "<tr><td><a href=\"http://tools.wmflabs.org/reasonator/?lang=" + l + "&q=" + layer.feature.properties.q + "\"><img src=\"https://upload.wikimedia.org/wikipedia/commons/" + layer.feature.properties.t + "\" /></a>";
+		content = content + "<tr><td><a href=\"http://tools.wmflabs.org/reasonator/?lang=" + l + "&q=" + layer.feature.properties.q + "\"><img src=\"" + layer.feature.properties.t + "\" /></a>";
 		content = content + " <a href=\"https://commons.wikimedia.org/wiki/File:" + layer.feature.properties.i + "\"><img src=\"assets/img/commons_ico.png\" class=\"cms_ico\"/></a></td></tr>";
 		
 	  }
@@ -494,21 +503,21 @@ var artworks = L.geoJson(null, {
 <?php 
 switch($m){
 	case 0: ?>
-$.getJSON("data/depicts_" + l + ".geojson", function (data) {
+$.getJSON("../geo/depicts_" + l + ".geojson", function (data) {
   depicts.addData(data);
   map.addLayer(depictLayer);
 });
 <?php break;
 	case 1:
 ?>
-$.getJSON("data/museums_" + l + ".geojson", function (data) {
+$.getJSON("../geo/museums_" + l + ".geojson", function (data) {
   museums.addData(data);
   map.addLayer(museumLayer);
 });
 <?php break;
 	case 2:
 ?>
-$.getJSON("data/artworks_" + l + ".geojson", function (data) {
+$.getJSON("../geo/artworks_" + l + ".geojson", function (data) {
   artworks.addData(data);
   map.addLayer(artworkLayer);
 });
@@ -516,13 +525,20 @@ $.getJSON("data/artworks_" + l + ".geojson", function (data) {
 }
 ?>
 
-map = L.map("map", {
+/*map = L.map("map", {
   zoom: 3,
   center: [20.0, 0.0],
   layers: [mapquestOSM, markerClusters, highlight],
   zoomControl: false,
   attributionControl: false
-});
+});*/
+map = L.map("map", {
+         zoom: 3,
+           center: [20.0, 0.0],
+           layers: [cartoLight, markerClusters, highlight],
+           zoomControl: false,
+          attributionControl: false
+}); 
 
 /* Layer control listeners that allow for a single markerClusters layer */
 map.on("overlayadd", function(e) {
@@ -653,9 +669,14 @@ if (document.body.clientWidth <= 767) {
   var isCollapsed = false;
 }
 
-var baseLayers = {
+/*var baseLayers = {
   "Street Map": mapquestOSM
+};*/
+var baseLayers = {
+          "Street Map": cartoLight,
+          "Aerial Imagery": usgsImagery
 };
+
 
 var groupedOverlays = {
   " ": {

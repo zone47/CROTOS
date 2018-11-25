@@ -1,5 +1,6 @@
 <?php 
 /* / */
+include "lg.php";
 $script_name="index.php";
 set_time_limit(120);
 $mode=0;
@@ -21,15 +22,6 @@ if (isset($_GET['disp']))
 		$disp=$_GET['disp'];
 	}
 
-$l="fr"; 
-if (isset($_COOKIE['l']))
-	$l=$_COOKIE['l'];
-if (isset($_GET['l']))
-	if ($_GET['l']!=""){ 
-		setcookie ("l",$_GET['l'], time() - 3600);
-		setcookie ("l",$_GET['l'], time() + 31536000, "/");
-		$l=$_GET['l'];
-	}
 $nb=20; 
 if (isset($_COOKIE['nb']))
 	$nb=$_COOKIE['nb'];

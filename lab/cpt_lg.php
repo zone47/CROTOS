@@ -4,14 +4,7 @@ include "../init.php";
 include "../traduction.php";
 include "../functions.php";
 include "../config.php";
-$l="fr";
-if (isset($_COOKIE['l']))
-	$l=$_COOKIE['l'];
-if (isset($_GET['l']))
-	if ($_GET['l']!=""){ 
-		setcookie ("l",$_GET['l'], time() + 31536000);
-		$l=$_GET['l'];
-	}
+include "../lg.php";
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 mysqli_query($link,"SET NAMES 'utf8'");
 

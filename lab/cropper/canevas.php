@@ -4,6 +4,7 @@ set_time_limit(2400);
 include "../../traduction.php";
 include "../../config.php";
 include "../../functions.php";
+include "../../lg.php";
 function label($wdq,$l){
 	global $fold_crotos;
 	$qitem_path=$fold_crotos."lab/artworks/items/Q".$wdq.".json";
@@ -33,15 +34,8 @@ function label($wdq,$l){
 }
 
 
-$lgs=array("ar","bn","br","ca","cs","cy","da","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
-$lg="fr";
-if (isset($_COOKIE['l']))
-	$lg=$_COOKIE['l'];
-if (isset($_GET['l']))
-	if ($_GET['l']!=""){ 
-		setcookie ("l",$_GET['l'], time() + 31536000);
-		$lg=$_GET['l'];
-	}
+$lgs=$lgsc;
+	
 $prop=195;	
 if (isset($_GET['p'])){
 	$prop=$_GET['p'];
@@ -55,7 +49,7 @@ if (isset($_GET['q'])){
 $q_label="";
 $nbartworks=0;
 if ($q!=""){
-	$q_label=label($q,$lg);
+	$q_label=label($q,$l);
 	$q_label_esc=str_replace("'","\\'",$q_label);
 
 }
@@ -63,7 +57,7 @@ if ($q!=""){
 <html ng-app="artworkApp">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<title><? echo translate($lg,$prop); if ($q_label!="") echo " - ".$q_label; ?> </title>
+	<title><? echo translate($l,$prop); if ($q_label!="") echo " - ".$q_label; ?> </title>
    	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../js/blue/styles.css" />
     <link rel="stylesheet" href="../styles.css">
@@ -74,7 +68,7 @@ if ($q!=""){
    	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.js"></script>
    	<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
     <script>
-var lg="<?php echo $lg ?>";
+var lg="<?php echo $l ?>";
     </script>
 	<script src="../artworks/collection.js"></script>
     <script>
@@ -104,7 +98,7 @@ jQuery(function($) {
 	echo "<div ng-init=\"dataModel = {collection:[{text:'".$q_label_esc."',attribute:'',index:0,input:'".$q_label_esc."'}]}\"></div>";
 ?>
     <h1 id="page_title"><span><?php
-    if ($lg=="fr")
+    if ($l=="fr")
 		echo "fr</a>";
 	else
 		echo "<en</a>";
@@ -117,16 +111,16 @@ jQuery(function($) {
             
           
             
-		  	<label for="lg" id="label_lg"><?php echo translate($lg,"language") ?></label>
+		  	<label for="lg" id="label_lg"><?php echo translate($l,"language") ?></label>
 				<select name="l" id="lg">
 <?php
 for ($i=0;$i<count($lgs);$i++){
-	/* Easter egg */if (($lgs[$i]=="mu")&&($lg!="mu")) echo "<!--\n ";
+	/* Easter egg */if (($lgs[$i]=="mu")&&($l!="mu")) echo "<!--\n ";
     echo "				<option value=\"".translate($lgs[$i],"lang_code")."\"";
-	if ($lg==translate($lgs[$i],"lang_code"))
+	if ($l==translate($lgs[$i],"lang_code"))
 		 echo " selected=\"selected\"";
 	echo " >".translate($lgs[$i],"lg")."</option>\n";	
-	/* Easter egg */if (($lgs[$i]=="mu")&&($lg!="mu")) echo " -->\n";
+	/* Easter egg */if (($lgs[$i]=="mu")&&($l!="mu")) echo " -->\n";
 }
 ?>
 		</select>
@@ -134,7 +128,7 @@ for ($i=0;$i<count($lgs);$i++){
     	  
        	<div id="bl_search">
 
-    	  <label for="search_wd" id="lb_search"><?php echo translate($lg,"search") ?></label>  
+    	  <label for="search_wd" id="lb_search"><?php echo translate($l,"search") ?></label>  
 
             <input type="text" ng-model="collection.text"
                   typeahead="label as label.display for label in suggestWikidata($viewValue, $index)"

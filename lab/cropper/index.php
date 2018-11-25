@@ -1,13 +1,13 @@
 <?php
-$lg="fr";
-if (isset($_COOKIE['l']))
-	$lg=$_COOKIE['l'];
-if (isset($_GET['l']))
-	if ($_GET['l']!=""){ 
-		setcookie ("l",$_GET['l'], time() - 3600);
-		setcookie ("l",$_GET['l'], time() + 31536000, "/");
-		$lg=$_GET['l'];
-	}
+include "../../lg.php";
+$q="";
+if (isset($_GET['q']))
+	if ($_GET['q']!="") 
+		$q=str_ireplace("q","",$_GET['q']);
+$fic="";
+if (isset($_GET['fic']))
+	if ($_GET['fic']!="") 
+		$fic=$_GET['fic'];
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,38 +81,46 @@ h1.entete{
 
 	<div id="container">
     <form id="lgform">
-		<h1><?php if ($lg=="fr") echo "IIIF Image Cropper pour Wikimedia Commons et Wikidata"; else echo "IIIF Image Cropper for Wikimedia Commons and Wikidata" ; ?> - <select name="l" id="lg">
+		<h1><?php if ($l=="fr") echo "IIIF Image Cropper pour Wikimedia Commons et Wikidata"; else echo "IIIF Image Cropper for Wikimedia Commons and Wikidata" ; ?> - <select name="l" id="lg">
 <?php 
 $lgs=array("en","fr");
 include "../../traduction.php";
 include "../../functions.php";
 for ($i=0;$i<count($lgs);$i++){
     echo "				<option value=\"".translate($lgs[$i],"lang_code")."\"";
-	if ($lg==$lgs[$i])
+	if ($l==$lgs[$i])
 		 echo " selected=\"selected\"";
 	echo " >".translate($lgs[$i],"lg")."</option>\n";	
 }
 ?></select></h1></form>
 <?php
-if ($lg=="fr") { ?>
+if ($l=="fr") { ?>
 <p>Outil  pour créer des fragments d'image avec URL <a href="http://www.iiif.io" target="_blank">IIIF</a> pour les fichiers image de Wikimedia Commons, et indiquer les valeurs à fournir pour la propriété Wikidata <a href="https://www.wikidata.org/wiki/Property:P2677" target="_blank">position relative dans l'image / P2677</a>. Exemples d'utilisation :<br/>
-&nbsp;- pour les fragments sur une œuvre, <a href="/crotos/lab/cropper/get.php?q=21013224">Vierge entre les vierges, Gérard David</a> – <a href="/crotos/lab/cropper/get.php?q=14619165">Galerie de vues de la Rome antique, Giovanni Paolo Panini</a>.</br>
-&nbsp;- pour un élement décrit sur plusieurs œuvres. <a href="/crotos/lab/cropper/p180iiif.php">Recherche</a>. Exemple : <a href="/crotos/lab/cropper/p180iiif.php?q=302">Jésus Christ</a></p>
+&nbsp;- pour les fragments sur une œuvre, <a href="/crotos/lab/cropper/get.php?q=21013224">Vierge entre les vierges, Gérard David</a>- <a href="/crotos/lab/cropper/get.php?q=Q1231009">Le Sacre de Napoléon, Jacques-Louis David</a> – <a href="/crotos/lab/cropper/get.php?q=14619165">Galerie de vues de la Rome antique, Giovanni Paolo Panini</a>.</br>
+&nbsp;- pour un élement décrit sur plusieurs œuvres. <a href="/crotos/lab/cropper/p180iiif.php">Recherche</a>. Exemple : <a href="/crotos/lab/cropper/p180iiif.php?q=302">Jésus Christ</a>, <a href="/crotos/lab/cropper/p180iiif.php?q=79746">bougie</a>, <a href="/crotos/lab/cropper/p180iiif.php?q=7307">baiser</a></p>
 <!--<p>Indiquer un nom de fichier de Wikimedia Commons, et ensuite cliquer-glisser pour délimiter un fragment rectangulaire.</p>-->
 <?php
 } else {?>
 <p>A simple little tool to create image fragments with <a href="http://www.iiif.io" target="_blank">IIIF</a> URL for Wikimedia Commons image files, and to provide values for the Wikidata property <a href="https://www.wikidata.org/wiki/Property:P2677" target="_blank">relative position within image / P2677</a>. Example of use:</br>
-&nbsp;- for fragments on an artwork, <a href="/crotos/lab/cropper/get.php?q=21013224">Virgin among the Virgins, Gérard David</a> – <a href="/crotos/lab/cropper/get.php?q=14619165">Ancient Rome, Giovanni Paolo Panin</a>.</br>
-&nbsp;- for an item depicted by several artworks.  <a href="/crotos/lab/cropper/p180iiif.php">Search</a>. Example: <a href="/crotos/lab/cropper/p180iiif.php?q=302">Jesus Christ</a></p>
+&nbsp;- for fragments on an artwork, <a href="/crotos/lab/cropper/get.php?q=21013224">Virgin among the Virgins, Gérard David</a>, <a href="/crotos/lab/cropper/get.php?q=Q1231009">The Coronation of Napoleon, Jacques-Louis David</a> – <a href="/crotos/lab/cropper/get.php?q=14619165">Ancient Rome, Giovanni Paolo Panin</a>.</br>
+&nbsp;- for an item depicted by several artworks.  <a href="/crotos/lab/cropper/p180iiif.php">Search</a>. Example: <a href="/crotos/lab/cropper/p180iiif.php?q=302">Jesus Christ</a>, <a href="/crotos/lab/cropper/p180iiif.php?q=79746">canddle</a>, <a href="/crotos/lab/cropper/p180iiif.php?q=7307">kiss</a></p>
  <!--(example: <a href="https://www.wikidata.org/wiki/Q21013224">Virgin among the Virgins</a> by Gerard David ; <a href="/crotos/lab/cropper/get.php?q=21013224">display</a> – <a href="/crotos/lab/cropper/get.php?q=14619165">example 2</a>)). Input the filename if Wikimedia Commons file, then click and drag on the image to crop.</p>-->
 <?php } ?>
 		
 		<div id="fields">
-			<label for="URL"><?php if ($lg=="fr") echo "Fichier Commons :"; else echo "Commons file:" ; ?></label>
-			<input type="text" id="URL" name="URL" value="David Virgin among the Virgins.jpg">
-			<button type="button" id="submit"><?php if ($lg=="fr") echo "Charger"; else echo "Load" ; ?></button>
-
-			<label for="output"><?php if ($lg=="fr") echo "Posititon relative :"; else echo "Relative position:" ; ?></label>
+			<label for="URL"><?php if ($l=="fr") echo "Fichier Commons :"; else echo "Commons file:" ; ?></label>
+			<input type="text" id="URL" name="URL" value="<?php
+            if ($fic!="")
+				echo $fic;
+			else
+				echo "Quentin_Massys_001.jpg";
+			?>">
+			<button type="button" id="submit"><?php if ($l=="fr") echo "Charger"; else echo "Load" ; ?></button>
+<?php
+            if ($q!="")
+				echo "<a href=\"https://www.wikidata.org/wiki/Q".$q."#P180\">Q".$q."</a>";
+			?>
+			<label for="output"><?php if ($l=="fr") echo "Posititon relative :"; else echo "Relative position:" ; ?></label>
 			<input type="text" name="output" id="output" readonly>
 
 			<!-- Copy to clipboad -->
@@ -123,7 +131,7 @@ if ($lg=="fr") { ?>
 				<div class="tooltip" id="copy-tip-text">Copied!</div>
 			</div>
             
-            <label for="fragment"><?php if ($lg=="fr") echo "Url IIIF :"; else echo "IIIF Url:" ; ?></label>
+            <label for="fragment"><?php if ($l=="fr") echo "Url IIIF :"; else echo "IIIF Url:" ; ?></label>
 			<input type="text" name="fragment" id="fragment" readonly>
 			<span id="linkfragment"></span>
 		</div>

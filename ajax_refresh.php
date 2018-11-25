@@ -1,5 +1,9 @@
 <?php
-$l="fr"; 
+$l="fr";
+$locale = substr(locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE']),0,2);
+$lgsc=array("ar","bn","br","ca","cs","cy","da","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
+if (in_array($locale,$lgsc)) 
+	$l=$locale;
 if (isset($_COOKIE['l']))
 	$l=$_COOKIE['l'];
 $mode=0;
@@ -629,7 +633,7 @@ if ($mode==1)
 	$img="";
 $cpt=0;
 $ls ="";
-$sql = "SELECT prop,type, qwd, label, id_art_or_prop FROM label_page WHERE lg=\"".$l."\" AND label LIKE '%".$keyword ."%' AND nb".$img."!=0 GROUP BY prop, qwd ORDER BY nb".$img." DESC LIMIT 0, 5";
+$sql = "SELECT prop,type, qwd, label, id_art_or_prop FROM label_page WHERE lg=\"".$l."\" AND label LIKE \"%".$keyword ."%\" AND nb".$img."!=0 GROUP BY prop, qwd ORDER BY nb".$img." DESC LIMIT 0, 5";
 $rep=mysqli_query($link,$sql);
 while ($rs = mysqli_fetch_assoc($rep)){
 	$cpt++;
