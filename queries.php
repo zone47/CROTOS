@@ -272,6 +272,7 @@ if ($sql!=""){
 		$rand_sel=false;
 	if ($rand_sel)
 		$sql.=" ORDER BY RAND() LIMIT 0,$nb  ";
+		//$sql.=" AND id IN (".gen_id_rand($nb).")";
 	else
 		$sql.=" ORDER BY ISNULL(year1), year1";
 }
@@ -327,7 +328,8 @@ if ($random){
 		}
 		$sql.=" ) ";
 	}
-	$sql.=" ORDER BY RAND() LIMIT 0,$nb  ";
+	$sql.=" AND id IN (".gen_id_rand("artworks",$nb).")";
+	//$sql.=" ORDER BY RAND() LIMIT 0,$nb  ";
 	$num_rows =$nb;
 }
 else {

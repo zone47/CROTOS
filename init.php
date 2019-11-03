@@ -84,7 +84,8 @@ $tab_idx = array(
 	"p608"=> "",// qwd exhibtion
 	"p921"=> "",// qwd subject heading
 	"p941"=> "",// qwd inspired by
-	"p1639"=> ""// qwd pendant of
+	"p1639"=> "",// qwd pendant of
+	"p6216"=> ""// qwd status
 );
 $tab_miss = array(
 	"m1" => "",// label

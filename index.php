@@ -283,40 +283,6 @@ include "access.php";
 </form>    
 </div>
 <?php
-if ($random){
-	//echo "<div id=\"presentation\">";
-	
-	$sql="SELECT artworks.qwd, as nbimg FROM artworks, commons_img WHERE commons_img.width_h=317 AND commons_img.id=artworks.id ORDER BY RAND() LIMIT 1";
-	$rep_nb=mysqli_query($link,$sql);
-	$data = mysqli_fetch_assoc($rep_nb);
-	$nb1=number_format(intval($data['nbimg']),0,'',' ');
-	
-	echo "<div id=\"presentation\" style=\"display:none\">";
-	echo "<a href=\"/crotos/?q=19005056\" id=\"art_pres\"><img src=\"/crotos/img/attributs.jpg\" width=\"99\" height=\"75\"></a>";
-	echo "<a href=\"/crotos/?q=19005056\" id=\"art_pres2\"><img src=\"/crotos/img/attributs.jpg\" width=\"99\" height=\"75\"></a>";
-	if ($l=="fr"){
-		echo "<p><b>Crotos</b> [ico] est un moteur de recherche et d'affichage d'œuvres d'art basé sur <a href=\"https://www.wikidata.org\"><b>Wikidata</b></a> [ico] et utilisant les fichiers de <a href=\"https://commons.wikimedia.org/\"><b>Wikimedia Commons</b></a> [ico]</p>";
-	}
-	else{
-		echo "<p><b>Crotos</b> is a search and display engine for visual artworks powered by <a href=\"https://www.wikidata.org\"><b>Wikidata</b></a> and using <a href=\"https://commons.wikimedia.org/\"><b>Wikimedia Commons</b></a> files.</p>";
-	}
-	$sql="SELECT count(id) as nbimg FROM artworks WHERE P18!=0";
-	$rep_nb=mysqli_query($link,$sql);
-	$data = mysqli_fetch_assoc($rep_nb);
-	$nb1=number_format(intval($data['nbimg']),0,'',' ');
-	$sql="SELECT count(id) as nbimg FROM artworks WHERE hd=1";
-	$rep_nb=mysqli_query($link,$sql);
-	$data = mysqli_fetch_assoc($rep_nb);
-	$nb2=number_format(intval($data['nbimg']),0,'',' ');
-	echo "<p>";
-	if ($l=="fr")
-		echo "<b>$nb1</b> œuvres d'art avec image, dont <b>$nb2</b> en HD [ico] – liées à Wikipédia [ico] ico ou autres sites [ico] – multilingue [ico] ";
-	else
-		echo "<b>$nb1</b> artworks with image, including <b>$nb2</b> in HD  – multilingual";
-	
-	echo " – <a href=\"/crotos/lab\">Lab</a> [ico]</p></div>";
-}
-
 	include "nav_index.php";
 	include "content_index.php";
 	include "nav_bot_index.php";

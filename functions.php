@@ -81,19 +81,19 @@ function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true)
 				if ($type!="listlink"){
 					if ($link){
 						if ($id_prop=="1639") //pendant of
-							$txt.=" <a href=\"?q=".$values[$i];
+							$txt.="<a href=\"?q=".$values[$i];
 						else
-							$txt.=" <a href=\"?p$id_prop=".$values[$i];
-						/*// For publication date, date added
+							$txt.="<a href=\"?p$id_prop=".$values[$i];
+						// For publication date, date added
 						if ($d!=0)
-							$txt.="&amp;d=".$d;*/
-						$txt.=$liennav;
+							$txt.="&amp;d=".$d;
+						//$txt.=$liennav;
 
-						/*For adding filters to links
+						//For adding filters to links
 						if ($mode==1)
 							foreach($tab_miss as $key=>$value)
 								if ($value!="")
-									$txt.="&amp;$key=".$value;*/
+									$txt.="&amp;$key=".$value;
 							
 						$txt.="\" ";
 						if ($type=="creator")
@@ -102,7 +102,7 @@ function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true)
 							$txt.=" class=\"interne\" ";
 						$txt.=">";
 					}
-					$txt.=label_item($values[$i],$lg);
+					$txt.=" ".label_item($values[$i],$lg);
 					if ($link)
 						$txt.="</a>";
 				}
@@ -295,4 +295,29 @@ function lb_unit($qwd,$lg){
 	/* Easter egg */if ($lg=="mu") return "Houba"; else	
 	return $label;
 }
+
+// fonction pour générer des id d'œuvres alétaoires 
+function gen_id_rand($table,$nb_q){
+	global $link ;
+	$txt="";
+	$cpt=0;
+	$id_array=array();
+	$sql="SELECT MAX(id) AS maxid from ".$table;
+	$rep=mysqli_query($link,$sql);
+	$data = mysqli_fetch_assoc($rep);
+	$max=$data["maxid"];
+    
+	while($cpt<$nb_q){
+		$newid=rand(1,$max);	
+		if (!in_array($newid,$id_array)){
+			array_push($id_array,$newid);
+			if ($txt!="") 
+				$txt.=",";
+			$txt.=$newid;
+			$cpt++;
+		}
+	}
+	return $txt;
+}
+
 ?>

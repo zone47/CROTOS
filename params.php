@@ -16,7 +16,7 @@ if (($p!=0)or($new)){ // hack if $p indicated out of range because of $nb parame
 		header("Location:http://www.zone47.com/crotos/".$new_url);
 }
 $nbpg=ceil($num_rows/$nb); // number of pages
-
+/* Disabled 20190615 Too much time
 //Suggests if home or random choice
 if (($random)||($num_rows==0)){
 	$alea_prop=array(170,135,136,180,144,921);
@@ -35,7 +35,7 @@ if (($random)||($num_rows==0)){
 	}
 	$alea_bar=translate($l,"suggest")." : ".$alea_bar;
 }
-
+*/
 // navigation link
 $liennav="";
 //if ($nb!="20") $liennav.="&amp;nb=".$nb;

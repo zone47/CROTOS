@@ -79,7 +79,8 @@ while($data = mysqli_fetch_assoc($rep)) {
 		"diameter"=> dimension($data['P2386'],2386,$l),
 		"depth"=> dimension($data['P2610'],2610,$l)
 	);
-	
+	$status=txt_prop($id_artw,6216,$l,"normal",1,0);
+	//echo "+".$status;
 	$p18=$data['P18'];
 	
 	$commons_artist="";
@@ -361,6 +362,8 @@ while($data = mysqli_fetch_assoc($rep)) {
 	}
 	if ($location!="")
 		$cartel.="\n<p>".$location."</p>";
+	if ($status!="")
+		$cartel.="\n<p>".$status."</p>";	
 		
 	if ($exhibition!=""){
 		$cartel.="\n<p>".$exhibition."</p>";		
