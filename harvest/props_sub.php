@@ -6,8 +6,8 @@ include $file_timer_begin;
 
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 mysqli_query($link,"TRUNCATE `prop_sub`");
-$tab_props=array(31,135,136,144,170,180,186,195,276,608,921,941);
-//$tab_props=array(31,135,136,144,180,186,195,276,921,941);
+$tab_props=array(31,135,136,144,170,180,186,195,276,608,921,941,6216);
+//$tab_props=array(31,135,136,144,180,186,195,276,921,941,6216);
 for ($i=0;$i<count($tab_props);$i++){
 	$prop=$tab_props[$i];
 	echo "\ntable p".$prop;

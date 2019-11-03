@@ -3,7 +3,7 @@
 set_time_limit(360000);
 error_reporting(E_ALL & ~E_NOTICE);
 
-include $fold_crotos."init.php";
+//include $fold_crotos."init.php";
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
 include $fold_crotos."functions_geo.php";
 include $file_timer_begin;
@@ -175,5 +175,5 @@ mysqli_query($link,"ALTER TABLE `label_page` DROP INDEX qwd");
 include $file_timer_end;
 
 mysqli_close($link);
-echo "den geo done";
+echo "gen geo done";
 ?>

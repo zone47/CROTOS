@@ -25,6 +25,7 @@ mysqli_query($link,"TRUNCATE `p608`");
 mysqli_query($link,"TRUNCATE `p921`");
 mysqli_query($link,"TRUNCATE `p941`");
 mysqli_query($link,"TRUNCATE `p1639`");
+mysqli_query($link,"TRUNCATE `p6216`");
 mysqli_query($link,"TRUNCATE `units`");
 mysqli_query($link,"ALTER TABLE `commons_img` ADD INDEX(`P18`)");
 $cmd="del /Q ".str_replace("/","\\",$fold_crotos)."harvest\\units\\*.*";
@@ -55,6 +56,7 @@ while($file = readdir($dir)) {
 			"m361"=> 0,// part of
 			"m921"=> 0,// subject heading
 			"m941"=> 0,// inspired by
+			"m6216"=> 0,// inspired by
 			"mw"=> 1,// wikipedia article
 			"ar"=> 0,
 			"bn"=> 0,
@@ -277,7 +279,7 @@ if ($year2==NULL)
 
 $offic_url=$tab_prop["P856"];
 if ($offic_url=="")
-	$offic_url=$tab_prop["P973"];
+	$offic_url=urlext_search($item);
 
 $publi_crea=0;
 $publi_img=0;
@@ -313,7 +315,7 @@ $id_artwork=$row['id'];
 insert_label_page(1,$item,$id_artwork);
 
 // Other properties
-$tab_multi=array(31,135,136,144,170,179,180,186,195,276,361,608,921,941,1639);	
+$tab_multi=array(31,135,136,144,170,179,180,186,195,276,361,608,921,941,1639,6216);	
 for ($i=0;$i<count($tab_multi);$i++){
 	if ($claims["P".$tab_multi[$i]])
 		foreach ($claims["P".$tab_multi[$i]] as $value){
@@ -329,10 +331,10 @@ for ($i=0;$i<count($tab_multi);$i++){
 				$found=false;
 				if (mysqli_num_rows($rep)==0){
 					//Value of property inserted
-					$p18_str=img_qwd($val);
+					/*$p18_str=img_qwd($val);
 					if ($p18_str!="")
 						$p18=id_commons($p18_str);
-					else
+					else*/
 						$p18=0;
 						
 					$sql="INSERT INTO p".$tab_multi[$i]." (qwd,P18) VALUES ($val,".$p18.")";

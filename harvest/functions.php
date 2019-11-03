@@ -41,7 +41,15 @@ function get_query($prop,$qwd){
 		else{
 			$sparqlurl=urlencode($req);
 			$req="https://query.wikidata.org/sparql?format=json&query=".$sparqlurl;
-			$res  = file_get_contents($req);
+			$opts = [
+				'http' => [
+					'method' => 'GET',
+					'user_agent' => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13',
+					'header' => ['Accept: application/sparql-results+json'],
+				],
+			];
+			$context = stream_context_create($opts);
+			$res  = file_get_contents($req,true,$context);
 			$responseArray = json_decode($res,true);
 			$items=array();
 			foreach ($responseArray["results"]["bindings"] as $key => $value)
@@ -59,6 +67,7 @@ function get_query($prop,$qwd){
 
 function insert_label_page($prop,$val_item,$id_art_or_prop){
 	global $tab_lg,$tab_miss,$link; 
+	echo "$prop , $val_item , $id_art_or_prop\n";
 	if ($prop==1)
 		$dfic=file_get_contents("items/$val_item.json",true);
 	else
@@ -195,7 +204,7 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 }
 function parent_cherche($prop,$val_prop,$id_artw,$new_ids){
 	global $link;
-	//test if ($prop=="276") echo "\n parent_cherche($prop,$val_prop,$id_artw,$new_ids)";
+	 if ($prop=="276") echo "\n parent_cherche($prop,$val_prop,$id_artw,$new_ids)"; //test
 	if ($new_ids==""){ // already exists
 		$sql="SELECT id, id_parent FROM p$prop WHERE qwd=$val_prop";
 		$rep=mysqli_query($link,$sql);
@@ -246,11 +255,11 @@ function parent_cherche($prop,$val_prop,$id_artw,$new_ids){
 				$level_found=-1;
 				if (mysqli_num_rows($rep)==0){
 					
-					//Value of property inserted
+					/*//Value of property inserted
 					$p18_str=img_qwd($nouv_qwd);
 					if ($p18_str!="")
 						$p18=id_commons($p18_str);
-					else
+					else*/
 						$p18=0;
 						
 					$sql="INSERT INTO p$prop (qwd,P18) VALUES ($nouv_qwd,".$p18.")";
@@ -401,6 +410,7 @@ function img_qwd($qwd){
 		}
 	return $p18;
 }
+
 function id_commons($p18_str){
 	global $link;
 	$p18=0;
@@ -589,6 +599,7 @@ function id_commons($p18_str){
 	return $p18;
 	
 }
+
 function label($tab_labels,$l){
 	$label="";
 	if ($tab_labels[$l]["value"])
@@ -623,7 +634,7 @@ function unit_search($qwd){
 		$claims=$varlab["claims"];
 		$labels=$varlab["labels"];
 		$latin_symbol="";
-		
+		if ($claims["P558"]){
 		foreach ($claims["P558"] as $value){
 			if (isset($value["qualifiers"]["P282"])){
 				$sys="";
@@ -644,7 +655,7 @@ function unit_search($qwd){
 						$latin_symbol=$symbol;
 				}
 			}
-		}
+		}}
 		for($k=0;$k<count($tab_lg_without);$k++)
 			$tab_lb_units[$tab_lg_without[$k]]=label($labels,$tab_lg_without[$k]);
 				 
@@ -666,5 +677,115 @@ function unit_search($qwd){
 		}
 	}
 	
+}
+function get_one_sparql($queryWD,$varWD){
+	$sparqlurl=urlencode($queryWD);
+	$req="https://query.wikidata.org/sparql?format=json&query=".$sparqlurl;
+	$opts = [
+		'http' => [
+			'method' => 'GET',
+			'user_agent' => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13',
+			'header' => ['Accept: application/sparql-results+json'],
+		],
+	];
+	$context = stream_context_create($opts);
+	$res  = file_get_contents($req,true,$context);	
+	$responseArray = json_decode($res,true);
+	$result="";
+	if ($responseArray["results"]["bindings"]){
+	foreach ($responseArray["results"]["bindings"] as $key => $value)
+		$result=$value[$varWD]["value"];
+	}
+	return $result;
+	
+}
+
+function urlext_search($qwd){
+	global $fold_crotos; 
+	$ref_path=$fold_crotos."harvest/refext/";
+	$IDcoll="";
+	$p973="";
+	$IDother="";
+	$ref_path_IDcoll=$ref_path."IDcoll/".$qwd.".txt";
+	$ref_path_p973=$ref_path."p973/".$qwd.".txt";
+	$ref_path_IDother=$ref_path."IDother/".$qwd.".txt";
+	
+	if (file_exists($ref_path_IDcoll))
+		$IDcoll=file_get_contents($ref_path_IDcoll,true);
+	else{
+		$reqsparql="SELECT (SAMPLE(?url) as ?urlext) 
+WHERE{
+  wd:Q".$qwd." p:P195 ?declarationlcoll.
+  ?declarationlcoll ps:P195 ?coll.
+  MINUS{?declarationlcoll pq:P582 [] }.
+  
+  {?Qprop wdt:P2378 ?coll.}
+  UNION{
+    ?coll  wdt:P361 ?Topcoll.
+    ?Qprop wdt:P2378 ?Topcoll. 
+  }
+  ?Qprop wdt:P31/wdt:P279* wd:Q18618644. 
+  ?Qprop wikibase:directClaim ?prop.        
+  wd:Q".$qwd." ?prop ?id .
+  ?Qprop wdt:P1630 ?formatterurl .  
+  BIND(IRI(REPLACE(?id, '^(.+)$', ?formatterurl)) AS ?url)
+} 
+";
+		sleep(1);
+		$IDcoll=get_one_sparql($reqsparql,"urlext");
+		$resfile = fopen($ref_path_IDcoll, 'w');
+		fputs($resfile, $IDcoll); 
+		fclose($resfile);
+	}
+	if (file_exists($ref_path_p973))
+		$p973=file_get_contents($ref_path_p973,true);
+	else{
+		$reqsparql="SELECT (SAMPLE(?url) as ?urlext) 
+WHERE{
+	wd:Q".$qwd." wdt:P973 ?u.
+	BIND(?u AS ?url)
+}
+
+";
+		$p973=get_one_sparql($reqsparql,"urlext");
+		$resfile = fopen($ref_path_p973, 'w');
+		fputs($resfile, $p973); 
+		fclose($resfile);
+	}
+	if (file_exists($ref_path_IDother))
+		$IDother=file_get_contents($ref_path_IDother,true);
+	else{
+		$reqsparql="SELECT (SAMPLE(?url) as ?urlext) 
+WHERE{
+  wd:Q".$qwd." p:P195 ?declarationlcoll.
+  ?declarationlcoll ps:P195 ?coll.
+  
+  ?Qprop wdt:P31/wdt:P279* wd:Q18618644. 
+  ?Qprop wikibase:directClaim ?prop.     
+  MINUS {?Qprop wdt:P2378 ?coll.}
+  wd:Q".$qwd." ?prop ?id .
+  ?Qprop wdt:P1630 ?formatterurl .  
+  BIND(IRI(REPLACE(?id, '^(.+)$', ?formatterurl)) AS ?url)
+}
+
+";
+		$IDother=get_one_sparql($reqsparql,"urlext");
+		$resfile = fopen($ref_path_IDother, 'w');
+		fputs($resfile, $IDother); 
+		fclose($resfile);
+	}
+	
+	if ($IDcoll!="")
+		return $IDcoll;
+	else{
+		if ($p973!="")
+			return $p973;
+		else{
+			if ($IDother!="")
+				return $IDother;
+			else
+				return "";
+		}
+	}
 }
 ?>
