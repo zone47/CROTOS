@@ -5,7 +5,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 
 //include $fold_crotos."init.php";
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
-include $fold_crotos."functions_geo.php";
+include $fold_harvest."functions_geo.php";
 include $file_timer_begin;
 mysqli_query($link,"ALTER TABLE `artw_prop` ADD INDEX ( `id_artw` )");
 mysqli_query($link,"ALTER TABLE `artw_prop` ADD INDEX ( `id_prop` )");

@@ -8,7 +8,7 @@ $req = mysqli_query($link,$sql);
 $data = mysqli_fetch_assoc($req);
 $nbartw = $data['id'];
 
-if ($nbartw>180000){
+if ($nbartw>10000){
     mysqli_query($link,"ALTER TABLE `artw_prop` ADD INDEX ( `id_artw` )");
     mysqli_query($link,"ALTER TABLE `artw_prop` ADD INDEX ( `id_prop` )");
     mysqli_query($link,"ALTER TABLE `label_page` ADD INDEX ( `qwd` )");

@@ -58,6 +58,7 @@ where {
 	UNION {?item wdt:P31 wd:Q221662}             # kudurru
 	MINUS {?item wdt:P31 wd:Q125191.
 	?item wdt:P195 wd:Q56677470}";
+// 	MINUS {?item wdt:P31/wdt:P279* wd:Q7897233} flags
 $sparql=$matrice."
 	
 	?item wdt:P18 [].                        # With image

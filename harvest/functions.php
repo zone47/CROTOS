@@ -67,9 +67,10 @@ function get_query($prop,$qwd){
 
 function insert_label_page($prop,$val_item,$id_art_or_prop){
 	global $tab_lg,$tab_miss,$link; 
+	global $fold_crotos;
 	echo "$prop , $val_item , $id_art_or_prop\n";
 	if ($prop==1)
-		$dfic=file_get_contents("items/$val_item.json",true);
+		$dfic=file_get_contents($fold_crotos."harvest/items/$val_item.json",true);
 	else
 		$dfic=get_WDjson($val_item);
 		
@@ -788,4 +789,85 @@ WHERE{
 		}
 	}
 }
+function urlext_search_dwynwen($qwd){
+	global $fold_crotos; 
+	$ref_path=$fold_crotos."harvest/refext/";
+	$IDcoll="";
+	$p973="";
+	$IDother="";
+	$ref_path_IDcoll=$ref_path."IDcoll/".$qwd.".txt";
+	$ref_path_p973=$ref_path."p973/".$qwd.".txt";
+	//$ref_path_IDother=$ref_path."IDother/".$qwd.".txt";
+	
+	if (file_exists($ref_path_IDcoll))
+		$IDcoll=file_get_contents($ref_path_IDcoll,true);
+	else{
+		$reqsparql="SELECT (SAMPLE(?url) as ?urlext) 
+WHERE{
+  wd:Q".$qwd." wdt:P1184 ?Handle .
+  wd:P1184 wdt:P1630 ?formatterurl .
+  BIND(IRI(REPLACE(?Handle, '^(.+)$', ?formatterurl)) AS ?url)
+}
+";
+		sleep(1);
+		$IDcoll=get_one_sparql($reqsparql,"urlext");
+		$resfile = fopen($ref_path_IDcoll, 'w');
+		fputs($resfile, $IDcoll); 
+		fclose($resfile);
+	}
+	if (file_exists($ref_path_p973))
+		$p973=file_get_contents($ref_path_p973,true);
+	else{
+		$reqsparql="SELECT (SAMPLE(?url) as ?urlext) 
+WHERE{
+	wd:Q".$qwd."  wdt:P973 ?u .
+	FILTER (regex(str(?u), \".*library.wales.*\")||(regex(str(?url), \".*llgc*\")))
+	BIND(?u AS ?url)
+}
+";
+		sleep(1);
+		$p973=get_one_sparql($reqsparql,"urlext");
+		$resfile = fopen($ref_path_p973, 'w');
+		fputs($resfile, $p973); 
+		fclose($resfile);
+	}
+		
+	if ($IDcoll!="")
+		return $IDcoll;
+	else{
+		if ($p973!="")
+			return $p973;
+		else
+			return "";
+	}
+}
+function link2_search($qwd){
+	global $fold_crotos; 
+	$ref_path=$fold_crotos."harvest/refext/";
+	$IDother="";
+	$ref_path_IDother=$ref_path."IDother/".$qwd.".txt";
+	
+	if (file_exists($ref_path_IDother))
+		$IDother=file_get_contents($ref_path_IDother,true);
+	else{
+		$reqsparql="SELECT (SAMPLE(?url) as ?urlext) 
+WHERE{
+  wd:Q".$qwd." wdt:P973 ?u .
+  FILTER ((!regex(str(?url), \".*library.wales.*\"))&&(!regex(str(?url), \".*llgc*\"))).
+  BIND(?u AS ?url)
+}
+";
+		sleep(1);
+		$IDother=get_one_sparql($reqsparql,"urlext");
+		$resfile = fopen($ref_path_IDother, 'w');
+		fputs($resfile, $IDother); 
+		fclose($resfile);
+	}
+	
+	if ($IDother!="")
+		return $IDother;
+	else
+		return "";
+}
+
 ?>

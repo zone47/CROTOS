@@ -24,6 +24,7 @@ mysqli_query($link,"TRUNCATE `p361`");
 mysqli_query($link,"TRUNCATE `p608`");
 mysqli_query($link,"TRUNCATE `p921`");
 mysqli_query($link,"TRUNCATE `p941`");
+mysqli_query($link,"TRUNCATE `p1433`");
 mysqli_query($link,"TRUNCATE `p1639`");
 mysqli_query($link,"TRUNCATE `p6216`");
 mysqli_query($link,"TRUNCATE `units`");
@@ -279,7 +280,8 @@ if ($year2==NULL)
 
 $offic_url=$tab_prop["P856"];
 if ($offic_url=="")
-	$offic_url=urlext_search($item);
+	$offic_url=urlext_search_dwynwen($item);
+$link2=link2_search($item);
 
 $publi_crea=0;
 $publi_img=0;
@@ -301,7 +303,7 @@ else{
 	$publi_img=$new_img;
 }
 
-$sql="INSERT INTO artworks (qwd,p18,hd,p214,p217,p347,p350,p373,p727,link,p1212,p2108,p2043,p2048,p2049,p2386,p2610,year1,year2,b_date,crea,img,lat,lon) VALUES ($item,".$p18.",$hd,\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$offic_url."\",\"".$tab_prop["P1212"]."\",\"".$tab_prop["P2108"]."\",\"".$tab_prop["P2043"]."\",\"".$tab_prop["P2048"]."\",\"".$tab_prop["P2049"]."\",\"".$tab_prop["P2386"]."\",\"".$tab_prop["P2610"]."\",$year1,$year2,\"".$b_date."\",".$publi_crea.",".$publi_img.",\"".$lat."\",\"".$lon."\")";
+$sql="INSERT INTO artworks (qwd,p18,hd,p214,p217,p347,p350,p373,p727,link,link2,p1212,p2108,p2043,p2048,p2049,p2386,p2610,year1,year2,b_date,crea,img,lat,lon) VALUES ($item,".$p18.",$hd,\"".$tab_prop["P214"]."\",\"".$tab_prop["P217"]."\",\"".$tab_prop["P347"]."\",\"".$tab_prop["P350"]."\",\"".$tab_prop["P373"]."\",\"".$tab_prop["P727"]."\",\"".$offic_url."\",\"".$link2."\",\"".$tab_prop["P1212"]."\",\"".$tab_prop["P2108"]."\",\"".$tab_prop["P2043"]."\",\"".$tab_prop["P2048"]."\",\"".$tab_prop["P2049"]."\",\"".$tab_prop["P2386"]."\",\"".$tab_prop["P2610"]."\",$year1,$year2,\"".$b_date."\",".$publi_crea.",".$publi_img.",\"".$lat."\",\"".$lon."\")";
 $rep=mysqli_query($link,$sql);
 
 mysqli_query($link,"UPDATE publi SET del=1 WHERE qwd=$item");
@@ -315,7 +317,7 @@ $id_artwork=$row['id'];
 insert_label_page(1,$item,$id_artwork);
 
 // Other properties
-$tab_multi=array(31,135,136,144,170,179,180,186,195,276,361,608,921,941,1639,6216);	
+$tab_multi=array(31,135,136,144,170,179,180,186,195,276,361,608,921,941,1433,1639,6216);	
 for ($i=0;$i<count($tab_multi);$i++){
 	if ($claims["P".$tab_multi[$i]])
 		foreach ($claims["P".$tab_multi[$i]] as $value){
@@ -382,7 +384,7 @@ for ($i=0;$i<count($tab_multi);$i++){
 			}
 		}
 	else
-		if (!(($tab_multi[$i]=="31")||($tab_multi[$i]=="608")||($tab_multi[$i]=="1639")))
+		if (!(($tab_multi[$i]=="31")||($tab_multi[$i]=="608")||($tab_multi[$i]=="1433")||($tab_multi[$i]=="1639")))
 			$tab_miss["m".$tab_multi[$i]]=1;
 }
 
