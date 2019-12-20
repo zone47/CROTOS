@@ -23,11 +23,11 @@ $nb=5;
 if (isset($_GET['nbres']))
 	if ($_GET['nbres']!="")
 		$nb=$_GET['nbres'];
-$thb=0;
+/*$thb=0;
 if (isset($_GET['thb']))
 	if ($_GET['thb']!="")
 		$thb=$_GET['thb'];
-$h_thumb=80;
+$h_thumb=80;*/
 ?><!doctype html>
 <html lang="en">
 <head>
@@ -86,8 +86,8 @@ for ($i=0;$i<count($tab_nb);$i++){
 }
 ?>    
         </select>
-        <label for="thb" ><?php if ($l=="fr") echo "Vignettes"; else echo "Thumbnails"; ?></label>
-        <input type="checkbox" name="thb" <?  if ($thb==1) echo " checked=\"checked\""; ?> value="1"/>
+        <!--<label for="thb" ><?php /* if ($l=="fr") echo "Vignettes"; else echo "Thumbnails"; */?></label>
+        <input type="checkbox" name="thb" <?  /*if ($thb==1) echo " checked=\"checked\""; */?> value="1"/>-->
         <input type="submit" value="<?php echo translate($l,"search") ?>" id="ok" />
     </form>
 <table id="occ" class="tablesorter ">
@@ -120,7 +120,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 	if ($data['qwd']!=0){
 		echo "<tr>\n";
 		echo "	<td>";
-		if ($thb==1){
+		/*if ($thb==1){
 			echo "	<div class=\"td_thumb\">";
 			if (intval($data['P18'])!=0){
 				$sql="SELECT P18, width, height from commons_img  WHERE id=".$data['P18'];
@@ -137,11 +137,11 @@ while($data = mysqli_fetch_assoc($rep)) {
 			}
 			echo "	</div>\n";
 			echo "<span>";
-		}
+		}*/
 		
 		echo label_item($data['qwd'],$l)." <a href=\"https://www.wikidata.org/wiki/Q".$data['qwd']."\"> (Q".$data['qwd'].")</a>";
-		if ($thb==1)
-			echo "</span>";
+		/*if ($thb==1)
+			echo "</span>";*/
 		echo "</td>\n";
 		echo "	<td class=\"artworks\">$nbartworks</td>\n";
 		echo "	<td><a href=\"/crotos/?p$prop_query=".$data['qwd']."\">";

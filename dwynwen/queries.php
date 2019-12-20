@@ -158,7 +158,7 @@ foreach($tab_check as $key=>$value){
 	}
 }
 $search_date=false;
-if (!(($y1==-40000)&&($y2==2016)))
+if (!(($y1==1000)&&($y2==2020)))
 	$search_date=true;
 $search_publi=false;
 if ($d!=0)
@@ -169,22 +169,15 @@ if (($search_query)||($optimization)||($search_date)||($search_publi)||($check_q
 	else{
 		$sql="SELECT * from artworks WHERE ";
 		$sql_c="";
-		if (count($res_s)>0)
-			$sql_c.=" id IN ( ";
 		for ($i=0;$i<count	($res_s);$i++){
-			/*if ($sql_c!="")
+			if ($sql_c!="")
 				$sql_c.=" OR ";
 			else
 				$sql_c.="(";
-			$sql_c.="id=".$res_s[$i];*/
-			if ($i!=0)
-				$sql_c.=",";
-			$sql_c.=$res_s[$i];
+			$sql_c.="id=".$res_s[$i];
 		}
-		if (count($res_s)>0)
+		if ($sql_c!="")
 			$sql_c.=")";
-		/*if ($sql_c!="")
-			$sql_c.=")";*/
 		for ($i=0;$i<count($optimiz);$i++){
 			if ($sql_c!="")
 				$sql_c.=" AND ";
@@ -271,7 +264,7 @@ if (($search_query)||($optimization)||($search_date)||($search_publi)||($check_q
 		if ($mode==0) $sql.=" AND artworks.P18!=0";
 	}
 }
-
+//echo "<!-- $sql -->";
 if ($sql!=""){
 	$repnb=mysqli_query($link,$sql);
 	$num_rows = mysqli_num_rows($repnb);
@@ -290,19 +283,12 @@ else
 			if ($mode==0) $sql.="  WHERE artworks.P18!=0 AND year1 IS NOT NULL";
 			else {
 				if ($check_query){
-					/*$sql.="  WHERE ";
+					$sql.="  WHERE ";
 					for ($i=0;$i<count	($res_s);$i++){
 						if ($i!=0)
 							$sql.=" OR ";
 						$sql.="id=".$res_s[$i];
-					}*/
-					$sql.=" WHERE id IN ( ";
-					for ($i=0;$i<count($res_s);$i++){
-						if ($i!=0)
-							$sql.=",";
-						$sql.=$res_s[$i];
 					}
-					$sql.=" ) ";
 				}
 			}
 			$sql.=" ORDER BY ISNULL(year1), year1";
@@ -332,19 +318,14 @@ if ($random){
 			}
 		}
 	}*/
+
 	$sql="SELECT * from artworks WHERE artworks.P18!=0 ";
 	if ($check_query){
-		/*$sql.=" AND ( ";
+		$sql.=" AND ( ";
 		for ($i=0;$i<count($res_s);$i++){
 			if ($i!=0)
 				$sql.=" OR ";
 			$sql.="id=".$res_s[$i];
-		}*/
-		$sql.=" AND id IN ( ";
-		for ($i=0;$i<count($res_s);$i++){
-			if ($i!=0)
-				$sql.=",";
-			$sql.=$res_s[$i];
 		}
 		$sql.=" ) ";
 	}
@@ -356,7 +337,6 @@ else {
 	if ((!$rand_sel)&&($num_rows>$nb))
 		$sql.=" LIMIT ".$deb.", ".$nb;
 }
-//echo "<!-- $sql -->";
 $rep=mysqli_query($link,$sql);
 $num_rows_ec = mysqli_num_rows($rep);
 ?>

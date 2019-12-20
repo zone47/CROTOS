@@ -1,6 +1,6 @@
 /* / */
 /* Display max 600px" */
-#global #entete #contrib,#global .nav a.nav_sec,#global .nav_sec,#global .mode_plus,#global #facets .mode_plus,#global #art_pres{
+#global #entete #contrib,#global .nav a.nav_sec,#global .mode_plus,#global #facets .mode_plus,#global #art_pres{
 	display:none;	
 }
 #global nav{

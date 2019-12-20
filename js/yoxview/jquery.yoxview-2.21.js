@@ -1510,7 +1510,7 @@
                         //target: "_blank",
                         title: currentLanguage.OriginalContext
                     });
-                    infoPanelLink.append("<img src=\"img/commons_gray.png\" alt=\"\"/>").appendTo(infoPanelContent);
+                    infoPanelLink.append("<img src=\"/crotos/img/commons_gray.png\" alt=\"\"/>").appendTo(infoPanelContent);
 					/* / */
 					/*infoLink = $("<div>", {
                         id: "labelzoom"

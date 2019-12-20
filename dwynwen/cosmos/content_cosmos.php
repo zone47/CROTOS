@@ -5,7 +5,7 @@ while($data = mysqli_fetch_assoc($rep)) {
 	$nbartworks=$data['nb'];
 	$nbimg=$data['nbimg'];
 	$qwd=$data['qwd'];
-	$lb=truncate(label_item($qwd,$l),70);
+	$lb=truncate(label_item($qwd,$l),80);
 	$where="(artw_prop.id_prop=".$id_prop;
 
 	$sql_sub="SELECT id_sub FROM prop_sub WHERE prop=".$prop." AND id_prop=".$id_prop;

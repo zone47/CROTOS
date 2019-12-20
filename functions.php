@@ -52,7 +52,7 @@ function alias_item($qwd,$lg){
 function val_prop($id_artw,$prop){
 	global $link;
 	$vals=array();
-	$sql="SELECT p".$prop.".qwd as prop_qwd from artw_prop,p".$prop." WHERE artw_prop.prop=".$prop." AND  artw_prop.id_artw=$id_artw AND  artw_prop.id_prop=p".$prop.".id";
+	$sql="SELECT distinct p".$prop.".qwd as prop_qwd from artw_prop,p".$prop." WHERE artw_prop.prop=".$prop." AND  artw_prop.id_artw=$id_artw AND  artw_prop.id_prop=p".$prop.".id";
 	$rep_prop=mysqli_query($link,$sql);
 	$i=0;
 	while ($data_prop = mysqli_fetch_assoc($rep_prop)){
@@ -73,7 +73,7 @@ function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true)
 		$values=array($id_prop);
 	if (count($values)>0){
 		if ($entitled)
-			$txt.="<span class=\"libelle\">".translate($lg,$id_prop)."</span>&nbsp;:";
+			$txt.="<span class=\"libelle\">".translate($lg,$id_prop)."</span>&nbsp;: ";
 		for ($i=0;$i<count($values);$i++){
 			if (isset($values[$i])&&($values[$i]!=0)){
 				if ($i>0)
@@ -102,7 +102,7 @@ function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true)
 							$txt.=" class=\"interne\" ";
 						$txt.=">";
 					}
-					$txt.=" ".label_item($values[$i],$lg);
+					$txt.=label_item($values[$i],$lg);
 					if ($link)
 						$txt.="</a>";
 				}
@@ -306,7 +306,6 @@ function gen_id_rand($table,$nb_q){
 	$rep=mysqli_query($link,$sql);
 	$data = mysqli_fetch_assoc($rep);
 	$max=$data["maxid"];
-    
 	while($cpt<$nb_q){
 		$newid=rand(1,$max);	
 		if (!in_array($newid,$id_array)){
@@ -319,5 +318,90 @@ function gen_id_rand($table,$nb_q){
 	}
 	return $txt;
 }
+function gen_id_rand_sql($table,$nb_q,$nb_min){
+	global $link ;
+	$txt="";
+	$id_array=array();
+	$sql="SELECT id from ".$table." WHERE id IN (SELECT id from ".$table." WHERE nbimg >= ".$nb_min.")  ORDER BY RAND()  LIMIT $nb_q" ;
+	$rep=mysqli_query($link,$sql);
+	while ($data = mysqli_fetch_assoc($rep)){
+		if ($txt!="") 
+			$txt.=",";
+		$txt.=$data["id"];
+	}
+	
+	return $txt;
+}
+// Dwynwen
+function test_coll($id_art,$id_prop){
+	$coll=false;
+	$tab_coll=array(11019402,21561323,21731178,23817605);
+	$values=val_prop($id_art,$id_prop);
+	$values=array_unique($values);	
+	if (count($values)>0)
+		for ($i=0;$i<count($values);$i++)
+			if (in_array($values[$i], $tab_coll))
+				$coll=true;
+	return $coll;
+}
+function val_0_dwynwen($id_artw,$id_prop,$lg) {
+	global $link,$d;
+	$sql="SELECT p".$id_prop.".qwd as prop_qwd from artw_prop,p".$id_prop." WHERE p".$id_prop.".qwd!=666063 AND artw_prop.prop=".$id_prop." AND  artw_prop.id_artw=".$id_artw." AND artw_prop.id_prop=p".$id_prop.".id";
+	$rep=mysqli_query($link,$sql);
+	if (mysqli_num_rows($rep)==0)
+		return "";
+	else{
+		$row = mysqli_fetch_assoc($rep);
+		if ($d!=0)
+			return "<a href=\"?p$id_prop=".$row["prop_qwd"]."&amp;d=$d\" class=\"interne\">".label_item($row["prop_qwd"],$lg)."</a>";
+		else
+			return "<a href=\"?p$id_prop=".$row["prop_qwd"]."\" class=\"interne\">".label_item($row["prop_qwd"],$lg)."</a>";
+	}
+}
+function txt_prop_dwynwen($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true){
+	global $mode,$l,$d,$liennav;//,$tab_miss;
+	$txt="";
+	$cpt=0;
+	if ($id_art!=0){
+		$values=val_prop($id_art,$id_prop);
+		$values=array_unique($values);	
+	}
+	else
+		$values=array($id_prop);
+	if (count($values)>0){
+		if ($entitled)
+			$txt.="<span class=\"libelle\">".translate($lg,$id_prop)."</span>&nbsp;: ";
+		for ($i=0;$i<count($values);$i++){
+			if (isset($values[$i])&&($values[$i]!=0)&&($values[$i]!=666063)){
+				$cpt++;
+				if ($cpt>1)
+					$txt.=" - ";
+				if ($link){
+					$txt.="<a href=\"?p$id_prop=".$values[$i];
+					// For publication date, date added
+					if ($d!=0)
+						$txt.="&amp;d=".$d;
+					//$txt.=$liennav;
 
+					//For adding filters to links
+					if ($mode==1)
+						foreach($tab_miss as $key=>$value)
+							if ($value!="")
+								$txt.="&amp;$key=".$value;
+						
+					$txt.="\" ";
+					if ($type=="creator")
+						$txt.=" class=\"lien_aut\" ";
+					if ($type=="internal")
+						$txt.=" class=\"interne\" ";
+					$txt.=">";
+				}
+				$txt.=label_item($values[$i],$lg);
+				if ($link)
+					$txt.="</a>";
+			}
+		}
+	}
+	return $txt;
+}
 ?>
