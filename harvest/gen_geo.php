@@ -11,7 +11,7 @@ mysqli_query($link,"ALTER TABLE `artw_prop` ADD INDEX ( `id_artw` )");
 mysqli_query($link,"ALTER TABLE `artw_prop` ADD INDEX ( `id_prop` )");
 mysqli_query($link,"ALTER TABLE `label_page` ADD INDEX ( `qwd` )");
 
-$lgs=array("ar","bn","br","ca","cs","cy","da","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nb","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
+$lgs=array("ar","bn","br","ca","cs","cy","da","de","el","en","eo","es","eu","fa","fi","fr","he","hi","id","it","ja","jv","ko","mu","nb","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 //$lgs=array("tr","uk","vi","zh");
 for ($i=0;$i<count($lgs);$i++){
 $l=$lgs[$i];

@@ -1,0 +1,31 @@
+#presentation{
+	padding:10px;
+	margin:10px 20px 10px 0;
+	font-size:15px;
+	min-height:77px;
+	border-radius:10px;
+	min-height: 98px;
+}
+#pres_img{
+	float:left;
+	min-width:100px;
+	text-align:center;
+}
+#pres_txt{
+	min-height:100px;	
+}
+#presentation p{
+	margin-top:1px;
+	margin-bottom:4px;
+}
+#presentation .pres_detail{
+	margin-bottom:1px;
+}
+#art_pres{
+	float:none;
+	display:inherit;
+}
+#search{margin-top:7px}
+#cosmos{margin-top:0px}	
+#search,#callisto,#cosmos{margin-left:127px;font-size:120%;}
+.item {min-width:212px;}

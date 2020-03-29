@@ -1,7 +1,7 @@
 <?php
 /* / */
 /* Harvest WD */
-set_time_limit(480000);
+set_time_limit(0);
 error_reporting(E_ALL ^ E_NOTICE);
 include "functions.php";
 include "config_harvest.php";

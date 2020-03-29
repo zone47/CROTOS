@@ -52,12 +52,29 @@ function alias_item($qwd,$lg){
 function val_prop($id_artw,$prop){
 	global $link;
 	$vals=array();
-	$sql="SELECT distinct p".$prop.".qwd as prop_qwd from artw_prop,p".$prop." WHERE artw_prop.prop=".$prop." AND  artw_prop.id_artw=$id_artw AND  artw_prop.id_prop=p".$prop.".id";
+
+	$sql="SELECT distinct p".$prop.".qwd as prop_qwd,artw_prop.id as id from artw_prop,p".$prop." WHERE artw_prop.prop=".$prop." AND  artw_prop.id_artw=$id_artw AND  artw_prop.id_prop=p".$prop.".id";
 	$rep_prop=mysqli_query($link,$sql);
 	$i=0;
 	while ($data_prop = mysqli_fetch_assoc($rep_prop)){
-		$vals[$i]=intval($data_prop['prop_qwd']);
-		$i++;
+		if ($prop==170){
+			//echo "<br>+<br>+";
+			$qual="|0";
+			$sql="SELECT value from q170 WHERE idaff=".$data_prop['id'];
+			//echo "<br>+<br>+".$sql;
+			$rep_attrib=mysqli_query($link,$sql);
+			if (mysqli_num_rows($rep_attrib)>0)
+				while ($data_atttrib = mysqli_fetch_assoc($rep_attrib))
+					$qual="|".$data_atttrib["value"];
+
+		}
+		if (!(($prop==276)&&(intval($data_prop['prop_qwd']==1376)))){
+			if ($prop!=170)
+				$vals[$i]=intval($data_prop['prop_qwd']);
+			else
+				$vals[$i]=intval($data_prop['prop_qwd']).$qual;
+			$i++;
+		}
 	}
 	return $vals;
 }
@@ -78,6 +95,14 @@ function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true)
 			if (isset($values[$i])&&($values[$i]!=0)){
 				if ($i>0)
 					$txt.=" - ";
+				$qualif="";
+				if ($id_prop==170){
+					$val_quaf=explode("|",$values[$i]);
+					$values[$i]=$val_quaf[0];
+					if ($val_quaf[1]=="1")
+						$qualif=" (".translate($lg,"attribution").")";
+				}
+				
 				if ($type!="listlink"){
 					if ($link){
 						if ($id_prop=="1639") //pendant of
@@ -105,13 +130,39 @@ function txt_prop($id_art,$id_prop,$lg,$type="normal",$entitled=true,$link=true)
 					$txt.=label_item($values[$i],$lg);
 					if ($link)
 						$txt.="</a>";
+					$txt.=$qualif;
 				}
 				else
-					$txt.="<a href=\"?q=".$values[$i]."&p".$id_prop."\">".label_item($values[$i],$lg)."</a>";
+					$txt.="<a href=\"?q=".$values[$i]."&p".$id_prop."\">".label_item($values[$i],$lg)."</a>".$qualif;
 			}
 		}
 	}
 	return $txt;
+}
+function inscript($id_artw,$lg){
+	global $link;
+	$txt="";
+	$sql="SELECT distinct p1684.text, p1684.lang from artw_prop,p1684 WHERE artw_prop.prop=1684 AND  artw_prop.id_artw=$id_artw AND  artw_prop.id_prop=p1684.id";
+	$rep_prop=mysqli_query($link,$sql);
+	if (mysqli_num_rows($rep_prop)>0){
+		$txt="<span class=\"libelle\">".translate($lg,1684)."</span>&nbsp;: ";
+		while ($data_prop = mysqli_fetch_assoc($rep_prop)){
+			$txt.="<br/>".$data_prop["text"]."&nbsp;<b>[".$data_prop["lang"]."]</b>";
+		}
+	}
+	return $txt;
+}
+function link3D($id_artw){
+	global $link;
+	$tab3d=array();
+	$sql="SELECT distinct p4896.link from artw_prop,p4896 WHERE artw_prop.prop=4896 AND  artw_prop.id_artw=$id_artw AND  artw_prop.id_prop=p4896.id";
+	$rep_prop=mysqli_query($link,$sql);
+	if (mysqli_num_rows($rep_prop)>0){
+		while ($data_prop = mysqli_fetch_assoc($rep_prop)){
+			$tab3d[]=$data_prop["link"];
+		}
+	}
+	return $tab3d;
 }
 function loc_val($qwd,$prop){
 	global $link;

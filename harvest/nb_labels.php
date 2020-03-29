@@ -5,7 +5,7 @@ echo "\nNb labels";
 include $file_timer_begin;
 
 $link = mysqli_connect ($host,$user,$pass,$db) or die ('Erreur : '.mysqli_error());
-$tab_props=array(31,135,136,144,170,179,180,186,195,608,921,941);
+$tab_props=array(31,135,136,144,170,179,180,186,195,276,608,921,941);
 
 $sql="ALTER TABLE `label_page` ADD INDEX(`id_art_or_prop`)";
 $rep=mysqli_query($link,$sql);

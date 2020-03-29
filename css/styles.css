@@ -712,8 +712,25 @@ footer.marge{
 	color:#FFFFFF;
 	font-size:150%;
 }
+.bandeau608{
+	top:117px;
+}
+.bandeau p{
+	margin:0.2em 0 0 1em;
+line-height:1.2;
+font-size:65%;
+color:#C7C7C7;
+}
 .bandeau div{
 	padding:3px 0 3px 15px;
+}
+.expolink{
+	font-size:90%;
+	color:#9A9A9A;
+	line-height:1em;
+}
+.expolink:link,.expolink:visited,.expolink:focus,.expolink:hover,.expolink:active{
+	color:#9A9A9A;	
 }
 .link_qwd{
 	position:absolute;

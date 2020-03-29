@@ -31,7 +31,7 @@ mysqli_query($link,"ALTER TABLE `commons_img` ADD INDEX(`P18`)");
 $cmd="del /Q ".str_replace("/","\\",$fold_crotos)."harvest\\units\\*.*";
 exec($cmd);
 
-$tab_lg=array("ar","bn","br","ca","cs","cy","da","de","el","en","eo","es","fa","fi","fr","he","hi","id","it","ja","jv","ko","nb","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
+$tab_lg=array("ar","bn","br","ca","cs","cy","da","de","el","en","eo","es","eu","fa","fi","fr","he","hi","id","it","ja","jv","ko","nb","nl","pa","pl","pt","ru","sw","sv","te","th","tr","uk","vi","zh");
 
 $dirname = $fold_crotos.'harvest/items/';
 $dir = opendir($dirname); 
@@ -63,12 +63,13 @@ while($file = readdir($dir)) {
 			"br"=> 0,
 			"ca"=> 0,
 			"cs"=> 0,
-            "cy"=> 0,
+			"cy"=> 0,
 			"da"=> 0,
 			"de"=> 0,
 			"el"=> 0,
 			"en"=> 0,
 			"eo"=> 0,
+			"eu"=> 0,
 			"es"=> 0,
 			"fa"=> 0,
 			"fi"=> 0,

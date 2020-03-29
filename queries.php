@@ -271,7 +271,7 @@ if (($search_query)||($optimization)||($search_date)||($search_publi)||($check_q
 		if ($mode==0) $sql.=" AND artworks.P18!=0";
 	}
 }
-
+//echo $sql;
 if ($sql!=""){
 	$repnb=mysqli_query($link,$sql);
 	$num_rows = mysqli_num_rows($repnb);

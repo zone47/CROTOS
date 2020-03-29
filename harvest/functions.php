@@ -1,6 +1,6 @@
 <?php
 /* / */
-set_time_limit(480000);
+set_time_limit(0);
 if ( !function_exists('json_decode') ){
 	require_once ('JSON.php');
 	function json_decode($content, $assoc=false){
@@ -24,14 +24,19 @@ function get_WDjson($qitem){
 }
 function get_query($prop,$qwd){
 	global $fold_crotos;
-	if (($prop==31)||($prop==136)||($prop==186))
-		$req="SELECT distinct ?item WHERE { ?item wdt:P279* wd:Q".$qwd." }";
-	elseif (($prop==195))
-		$req="SELECT distinct ?item WHERE { ?item wdt:P361* wd:Q".$qwd." }";
+	if (($prop==31)||($prop==136)||($prop==186)||($prop==2079))
+		$req="SELECT distinct ?item WHERE { ?item wdt:P279* wd:Q".$qwd.". FILTER regex(str(?item), \"entity/Q\")}";
+	elseif ($prop==195)
+		$req="SELECT distinct ?item WHERE { ?item wdt:P361* wd:Q".$qwd.". FILTER regex(str(?item), \"entity/Q\") }";
 	elseif ($prop==276)
-		$req="SELECT distinct ?item WHERE {{ ?item wdt:P361* wd:Q".$qwd." }UNION{ ?item wdt:P276* wd:Q".$qwd."}}";
+		$req="SELECT distinct ?item WHERE {{ ?item wdt:P361* wd:Q".$qwd." }UNION{ ?item wdt:P276* wd:Q".$qwd."}  FILTER regex(str(?item), \"entity/Q\")}";
+	//elseif ($prop==189)
+		//$req="SELECT distinct ?item WHERE {{ ?item wdt:P131* wd:Q".$qwd." }UNION{ ?item wdt:P276* wd:Q".$qwd."} FILTER regex(str(?item), \"entity/Q\")}";
+		//$req="SELECT distinct ?item WHERE { ?item wdt:P276* wd:Q".$qwd." FILTER regex(str(?item), \"entity/Q\")}";
+	elseif (($prop==189)||($prop==1071))
+		$req="SELECT distinct ?item WHERE {{ ?item wdt:P131* wd:Q".$qwd." }UNION{ ?item wdt:P276* wd:Q".$qwd."} FILTER regex(str(?item), \"entity/Q\")}";
 	elseif (($prop==135)||($prop==144)||($prop==180)||($prop==921)||($prop==941))
-		$req="SELECT distinct ?item WHERE {{ ?item wdt:P279* wd:Q".$qwd." }UNION{ ?item wdt:P361* wd:Q".$qwd."}}";
+		$req="SELECT distinct ?item WHERE {{ ?item wdt:P279* wd:Q".$qwd." }UNION{ ?item wdt:P361* wd:Q".$qwd."} FILTER regex(str(?item), \"entity/Q\")}";
 	else 
 		$req="";
 	if ($req!=""){
@@ -52,8 +57,11 @@ function get_query($prop,$qwd){
 			$res  = file_get_contents($req,true,$context);
 			$responseArray = json_decode($res,true);
 			$items=array();
-			foreach ($responseArray["results"]["bindings"] as $key => $value)
-				$items[]=str_replace("http://www.wikidata.org/entity/Q","",$value["item"]["value"]);;
+			if (is_array($responseArray["results"]["bindings"]))
+			foreach ($responseArray["results"]["bindings"] as $key => $value){
+				//if(strpos($value["item"]["value"],"http://www.wikidata.org/entity/Q",0) !== false)
+					$items[]=str_replace("http://www.wikidata.org/entity/Q","",$value["item"]["value"]);
+			}
 			$js_res=json_encode($items);
 			$resfile = fopen($query_path, 'w');
 			fputs($resfile, $js_res); 
@@ -110,32 +118,39 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 		}
 	}
 	// if 276 ou 195 update site
-	if (($prop==276)||($prop==195)){
-		if ($ent_qwd["claims"]["P856"]){
-			$site="";
-			$tab856=$ent_qwd["claims"]["P856"];
-			foreach ($tab856 as $value){
-				if ($site==""){
-					$site=$value["mainsnak"]["datavalue"]["value"];
-					$sql="UPDATE p".$prop." SET site=\"".$site."\" WHERE qwd=$val_item";
-					$rep=mysqli_query($link,$sql);
+	if (($prop==276)||($prop==195)||($prop==189)||($prop==1071)){
+		if (($prop==276)||($prop==195)){
+			if ($ent_qwd["claims"]["P856"]){
+				$site="";
+				$tab856=$ent_qwd["claims"]["P856"];
+				foreach ($tab856 as $value){
+					if ($site==""){
+						$site=$value["mainsnak"]["datavalue"]["value"];
+						$sql="UPDATE p".$prop." SET site=\"".$site."\" WHERE qwd=$val_item";
+						$rep=mysqli_query($link,$sql);
+					}
+				}
+			}
+			if ($ent_qwd["claims"]["P373"]){
+				$cat="";
+				$tab373=$ent_qwd["claims"]["P373"];
+				foreach ($tab373 as $value){
+					if ($site==""){
+						$site=$value["mainsnak"]["datavalue"]["value"];
+						$sql="UPDATE p".$prop." SET commonscategory=\"".$site."\" WHERE qwd=$val_item";
+						$rep=mysqli_query($link,$sql);
+					}
 				}
 			}
 		}
-		if ($ent_qwd["claims"]["P373"]){
-			$cat="";
-			$tab373=$ent_qwd["claims"]["P373"];
-			foreach ($tab373 as $value){
-				if ($site==""){
-					$site=$value["mainsnak"]["datavalue"]["value"];
-					$sql="UPDATE p".$prop." SET commonscategory=\"".$site."\" WHERE qwd=$val_item";
-					$rep=mysqli_query($link,$sql);
-				}
-			}
-		}
+		
 		if ($ent_qwd["claims"]["P625"]){
 			$coord=$ent_qwd["claims"]["P625"];
 			foreach ($coord as $value){
+				if ($val_item==5077){
+					$value["mainsnak"]["datavalue"]["value"]["latitude"]=44.1460;
+					$value["mainsnak"]["datavalue"]["value"]["longitude"]=0.6451;
+				}
 				$latitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["latitude"],10,'.',''),"0");
 				if ($latitem{strlen($latitem)-1}==".") $latitem.="0";
 				$lonitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["longitude"],10,'.',''),"0");
@@ -150,6 +165,10 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 	   if ($ent_qwd["claims"]["P625"]){
 			$coord=$ent_qwd["claims"]["P625"];
 			foreach ($coord as $value){
+				if ($val_item==5077){
+					$value["mainsnak"]["datavalue"]["value"]["latitude"]=44.1460;
+					$value["mainsnak"]["datavalue"]["value"]["longitude"]=0.6451;
+				}
 				$latitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["latitude"],10,'.',''),"0");
 				if ($latitem{strlen($latitem)-1}==".") $latitem.="0";
 				$lonitem=rtrim(number_format($value["mainsnak"]["datavalue"]["value"]["longitude"],10,'.',''),"0");
@@ -202,10 +221,92 @@ function insert_label_page($prop,$val_item,$id_art_or_prop){
 			$rep=mysqli_query($link,$sql);
 		}
 	}
+	if ($prop==608){
+		$datebeg=$ent_qwd["claims"]["P580"];
+		if ($datebeg){
+			foreach ($datebeg as $value){
+				$time=$value["mainsnak"]["datavalue"]["value"]["time"];
+				if ($time){
+					$year=intval(substr($time,1,4));
+					$month=intval(substr($time,6,2));
+					$day=intval(substr($time,9,2));
+					$sql="UPDATE p608 SET dbegin=".$day.",mbegin=".$month.",ybegin=".$year." WHERE qwd=$val_item";
+					$rep=mysqli_query($link,$sql);
+				}
+			}
+		}else{
+			if ($ent_qwd["claims"]["P276"]){
+				$tab276=$ent_qwd["claims"]["P276"];
+				foreach ($tab276 as $value){
+					if(intval($value["mainsnak"]["datavalue"]["value"]["numeric-id"])==1376){
+						if (isset($value["qualifiers"]["P580"])){
+							foreach ($value["qualifiers"]["P580"] as $value_date){
+								$time=$value_date["datavalue"]["value"]["time"];
+								if ($time){
+									$year=intval(substr($time,1,4));
+									$month=intval(substr($time,6,2));
+									$day=intval(substr($time,9,2));
+									$sql="UPDATE p608 SET dbegin=".$day.",mbegin=".$month.",ybegin=".$year." WHERE qwd=$val_item";
+									$rep=mysqli_query($link,$sql);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		$dateend=$ent_qwd["claims"]["P582"];
+		if ($dateend){
+			foreach ($dateend as $value){
+				$time=$value["mainsnak"]["datavalue"]["value"]["time"];
+				if ($time){
+					$year=intval(substr($time,1,4));
+					$month=intval(substr($time,6,2));
+					$day=intval(substr($time,9,2));
+					$sql="UPDATE p608 SET dend=".$day.",mend=".$month.",yend=".$year." WHERE qwd=$val_item";
+					$rep=mysqli_query($link,$sql);
+				}
+			}
+		}else{
+			if ($ent_qwd["claims"]["P276"]){
+				$tab276=$ent_qwd["claims"]["P276"];
+				foreach ($tab276 as $value){
+					if(intval($value["mainsnak"]["datavalue"]["value"]["numeric-id"])==1376){
+						if (isset($value["qualifiers"]["P582"])){
+							foreach ($value["qualifiers"]["P582"] as $value_date){
+								$time=$value_date["datavalue"]["value"]["time"];
+								if ($time){
+									$year=intval(substr($time,1,4));
+									$month=intval(substr($time,6,2));
+									$day=intval(substr($time,9,2));
+									$sql="UPDATE p608 SET dend=".$day.",mend=".$month.",yend=".$year." WHERE qwd=$val_item";
+									$rep=mysqli_query($link,$sql);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if ($ent_qwd["claims"]["P856"]){
+			$site="";
+			$tab856=$ent_qwd["claims"]["P856"];
+			foreach ($tab856 as $value){
+				if ($site==""){
+					$site=$value["mainsnak"]["datavalue"]["value"];
+					$sql="UPDATE p608 SET link=\"".$site."\" WHERE qwd=$val_item";
+					$rep=mysqli_query($link,$sql);
+				}
+			}
+		}
+	}
 }
 function parent_cherche($prop,$val_prop,$id_artw,$new_ids){
 	global $link;
-	 if ($prop=="276") echo "\n parent_cherche($prop,$val_prop,$id_artw,$new_ids)"; //test
+	//test en cas de boucle infinie 
+	//if ($prop=="276") echo "\n parent_cherche($prop,$val_prop,$id_artw,$new_ids)";  
+	
 	if ($new_ids==""){ // already exists
 		$sql="SELECT id, id_parent FROM p$prop WHERE qwd=$val_prop";
 		$rep=mysqli_query($link,$sql);
@@ -841,6 +942,34 @@ WHERE{
 			return "";
 	}
 }
+function urlext_search_MSR($qwd,$claims_MSR){
+
+	$lien="";
+	if ($claims_MSR["P973"]){
+		foreach ($claims_MSR["P973"] as $value){
+			$val973=$value["mainsnak"]["datavalue"]["value"];
+			echo "+".$val973."\n";
+			$pos = strpos($val973,"villachiragan");
+			if ($pos !== false){
+				$lien=$val973;
+				break;
+			}
+			$pos = strpos($val973,"saintraymond.toulouse.fr");
+			if ($pos !== false){
+				$lien=$val973;
+				break;
+			}
+			$pos = strpos($val973,"2000ans2000images");
+			if ($pos !== false){
+				$lien=$val973;
+				break;
+			}
+		}
+	}		
+	return $lien;
+
+}
+
 function link2_search($qwd){
 	global $fold_crotos; 
 	$ref_path=$fold_crotos."harvest/refext/";
@@ -869,5 +998,15 @@ WHERE{
 	else
 		return "";
 }
-
+function test_expoMSR($idexpo){
+	$MSRexp=false;
+	$dfic=get_WDjson($idexpo);
+	$data_item=json_decode($dfic,true);
+	$claims_qwd=$data_item["entities"]["Q".$idexpo]["claims"];
+	if ($claims_qwd["P276"])
+		foreach ($claims_qwd["P276"] as $val)
+			if ($val["mainsnak"]["datavalue"]["value"]["numeric-id"]==1376)
+				$MSRexp=true;
+	return $MSRexp;
+}
 ?>

@@ -1,7 +1,7 @@
 <?php
 $host = '***';
 $user = '***';
-$pass = '***7';
+$pass = '***';
 $db = '***';
 $fold_crotos="/***/crotos/dwynwen/";
 ?>
